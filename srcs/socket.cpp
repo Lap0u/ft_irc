@@ -9,8 +9,8 @@ void    launch_serv(std::string port, std::string password)
     int n = 0;
 
     struct sockaddr_in  servaddr;
-    uint8_t             recvline[MAXLINE + 1];
-    uint8_t             buff[MAXLINE + 1];
+    char                recvline[MAXLINE + 1];
+    char                buff[MAXLINE + 1];
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     if (listenfd < 0)
@@ -41,7 +41,7 @@ void    launch_serv(std::string port, std::string password)
         }
         if (n < 0)
             exit(1);
-        snprintf((char*)buff, sizeof(buff), "HTTP/1.0 200 OK\r\n\r\nHello   ");
+        snprintf((char*)buff, sizeof(buff), "HTTP/1.0 200 OK\r\n\r\n001   ");
         write(conffd, (char*)buff, strlen((char *)buff));
         close(conffd);
     }
