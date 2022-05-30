@@ -1,19 +1,9 @@
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <signal.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <string.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "../headers/irc.h"
 
-#define SERVER_PORT 6667
-#define MAXLINE 4096
-#define SA struct sockaddr
-
-int main()
+void    launch_serv(std::string port, std::string password)
 {
+    (void)password; // on en fait quoi????
+
     int listenfd;
     int conffd;
     int n = 0;
@@ -28,7 +18,7 @@ int main()
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family         = AF_INET;
     servaddr.sin_addr.s_addr    = htonl(INADDR_ANY);
-    servaddr.sin_port           = htons(SERVER_PORT);
+    servaddr.sin_port           = htons(atoi(port.c_str()));
 
     if ((bind(listenfd, (SA *) &servaddr, sizeof(servaddr))) < 0)
         exit(1);
