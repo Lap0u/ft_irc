@@ -10,7 +10,7 @@
 #include <iostream>
 
 #define SERVER_PORT 6667
-#define MAXLINE 4096
+#define MAXLINE 4096 // buffer pour les messages
 #define SA struct sockaddr
 
 #define COUT std::cout <<
