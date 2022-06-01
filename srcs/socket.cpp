@@ -21,28 +21,44 @@ void    launch_serv(std::string port, std::string password)
     servaddr.sin_port           = htons(atoi(port.c_str()));
 
     if ((bind(listenfd, (SA *) &servaddr, sizeof(servaddr))) < 0)
-        exit(1);
-    if ((listen(listenfd, 10)) < 0)
-        exit(1);
-    while(1)
     {
-        // struct sockaddr_in addr;
-        // socklen_t   addr_len;
+        fprintf(stdout, "bind\n");
+        exit(1);
+    }
+
+    if ((listen(listenfd, 10)) < 0)
+    {
+        fprintf(stdout, "listen\n");
+        exit(1);
+    };
+    while(1)
+    {        
         printf("Waiting\n");fflush(stdout);
         conffd = accept(listenfd, (SA*) NULL, NULL);
 
         memset(recvline, 0, MAXLINE);
-        while ((n = read(conffd, recvline, MAXLINE -1)) > 0)
+        while (1)
         {
-            fprintf(stdout, "\n%s\n", recvline);
-            if (recvline[n - 1] == '\n')
-                break;
-            memset(recvline, 0, MAXLINE);
+            while ((n = recv(conffd, recvline, MAXLINE -1, 0)) > 0) //flag MSG_DONTWAIT? 
+            {
+                fprintf(stdout, "\n%s\n", recvline);
+                if (recvline[n - 1] == '\n')
+                    break;
+            }
+            memset(recvline, 0, MAXLINE);           
+            if (n < 0)
+            {
+                fprintf(stdout, "Connection closed\n");
+                exit(1);
+            }
+            snprintf((char*)buff, sizeof(buff), "HTTP/1.0 200 OK\r\n\r\n001   ");
+            if (send(conffd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
+            {
+                fprintf(stdout, "send\n");
+                exit(1);
+            }
+            fprintf(stdout, "we sent\n");
         }
-        if (n < 0)
-            exit(1);
-        snprintf((char*)buff, sizeof(buff), "HTTP/1.0 200 OK\r\n\r\n001   ");
-        write(conffd, (char*)buff, strlen((char *)buff));
         close(conffd);
     }
 }
