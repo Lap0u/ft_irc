@@ -37,6 +37,7 @@ void    launch_serv(std::string port, std::string password)
         conffd = accept(listenfd, (SA*) NULL, NULL);
 
         memset(recvline, 0, MAXLINE);
+        int i = 0;
         while (1)
         {
             while ((n = recv(conffd, recvline, MAXLINE -1, 0)) > 0) //flag MSG_DONTWAIT? 
@@ -51,10 +52,13 @@ void    launch_serv(std::string port, std::string password)
                 fprintf(stdout, "Connection closed\n");
                 exit(1);
             }
-            snprintf((char*)buff, sizeof(buff), "HTTP/1.0 200 OK\r\n\r\n001   ");
+            snprintf((char*)buff, sizeof(buff), "001\r\nWelcome to irc\r\n002\r\nYour host is blabla\r\n003\r\nThis server was created today\r\n004\r\nAll server infos\r\n");
+            if (i == 1)
+                sleep(2);
+            i = 1;
             if (send(conffd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
             {
-                fprintf(stdout, "send\n");
+                fprintf(stdout, "send failed\n");
                 exit(1);
             }
             fprintf(stdout, "we sent\n");
