@@ -5,24 +5,27 @@
 #include <map>
 #include <vector>
 #include <utility>
-#include "user.h"
 
+#include "Irc.hpp"
+#include "User.hpp"
+#include <poll.h>
+
+typedef struct pollfd t_pollfd;
 
 class Server
 {
 private:
-	// std::vector<int>	_socket;
-
-	std::map<User, int>	_user;
+	std::vector<t_pollfd>	_socket_tab;
+	std::vector<User*>		_user_tab;
 
 public:
 	Server( void );
 	virtual ~Server( void );
-	Server(Server const & src);
-	Server& operator=(Server const & rhs);
 
 	Server( std::string type );
-		
+
+	bool    isUserUnique(User* user) const;
+	bool	addUser(User* user, int socket);
 };
 
 #endif

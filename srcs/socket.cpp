@@ -1,4 +1,4 @@
-#include "../headers/irc.h"
+#include "../headers/Irc.hpp"
 
 void    launch_serv(std::string port, std::string password)
 {

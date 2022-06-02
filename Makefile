@@ -1,15 +1,20 @@
 NAME		=	ircserv
+
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS		+= -g3 -fsanitize=address
 
-SRC			=	main.cpp srcs/socket.cpp \
+SRC			=	main.cpp \
+				srcs/socket.cpp \
+				srcs/User.cpp \
+				srcs/Server.cpp
 
 OBJ			=	$(SRC:%.cpp=%.o)
 
 all:		$(NAME)
 
 $(NAME):	$(OBJ)
-			$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
+			$(CXX) $(CXXFLAGS) -MMD $(OBJ) -o $(NAME)
 
 clean:
 			rm -rf $(OBJ)
