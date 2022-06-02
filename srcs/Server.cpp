@@ -38,3 +38,15 @@ bool	Server::addUser(User* user, int socket)
 	_socket_tab.push_back(temp);
 	return true;
 }
+
+t_pollfd*	Server::getSocketTab(void)
+{
+	if (_socket_tab.empty())
+		return (NULL);
+	return (&_socket_tab[0]);
+}
+
+nfds_t		Server::getSockeSize(void) const
+{
+	return _socket_tab.size();
+}

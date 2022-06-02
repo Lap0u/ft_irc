@@ -26,6 +26,10 @@ public:
 
 	bool    isUserUnique(User* user) const;
 	bool	addUser(User* user, int socket);
+
+	t_pollfd*	getSocketTab(void);
+	nfds_t		getSockeSize(void) const;
+
 };
 
 #endif
