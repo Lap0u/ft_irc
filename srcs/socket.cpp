@@ -22,13 +22,11 @@ void    launch_serv(std::string port, std::string password)
 		if (server.getSocketSize())
 		{
 			if (poll(server.getSocketTab(), server.getSocketSize(), 5000) > 0)
-			// if (1 > 0)
 			{
-				COUT "rentre" ENDL;
 				while ((n = recv(temp_fd, recvline, MAXLINE -1, 0)) > 0) //flag MSG_DONTWAIT? 
 				{
 					fprintf(stdout, "\n%s\n", recvline);
-					if (recvline[n - 1] == '\n')
+					if (recvline[n - 1] == '\n' && recvline[n - 2] == '\r')
 						break;
 				}
 				memset(recvline, 0, MAXLINE);           
