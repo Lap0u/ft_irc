@@ -1,18 +1,37 @@
 #include "../headers/Server.hpp"
 
-Server::Server( void )
+Server::Server(int port, std::string pass)
 {
-	// COUT "Construct Server " << this->_user ENDL;
+	COUT "Server waiting on port " << port ENDL;
+
+	struct sockaddr_in  servaddr;
+
+	_server_password = pass;
+	_main_socket = socket(AF_INET, SOCK_STREAM, 0);
+	if (_main_socket < 0)
+		exit(1);
+	bzero(&servaddr, sizeof(servaddr));
+	servaddr.sin_family         = AF_INET;
+	servaddr.sin_addr.s_addr    = htonl(INADDR_ANY);
+	servaddr.sin_port           = htons(port);
+
+	if ((bind(_main_socket, (SA *) &servaddr, sizeof(servaddr))) < 0)
+	{
+		fprintf(stdout, "bind\n");
+		exit(1);
+	}
+
+	if ((listen(_main_socket, 10)) < 0)
+	{
+		fprintf(stdout, "listen\n");
+		exit(1);
+	};
 }
-// Server::Server( std::string user ) : _user(user)
-// {
-//     COUT "Construct Server " << this->_user ENDL;
-// }
+
 Server::~Server( void )
 {
 	COUT "Destruct Server." ENDL;
 }
-
 
 bool    Server::isUserUnique(User* user) const
 {
@@ -33,7 +52,7 @@ bool	Server::addUser(User* user, int socket)
 
 	_user_tab.push_back(user);
 	temp.fd = socket;
-	temp.events = 0;
+	temp.events = POLLIN;
 	temp.revents = 0;
 	_socket_tab.push_back(temp);
 	return true;
@@ -46,7 +65,12 @@ t_pollfd*	Server::getSocketTab(void)
 	return (&_socket_tab[0]);
 }
 
-nfds_t		Server::getSockeSize(void) const
+nfds_t		Server::getSocketSize(void) const
 {
 	return _socket_tab.size();
+}
+
+int	Server::getMainSocket(void)const
+{
+	return _main_socket;
 }

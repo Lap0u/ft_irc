@@ -7,7 +7,7 @@
 
 class User
 {
-private:
+public:
 	bool		_operator;
 	int			_socket;
 	std::string	_nick;

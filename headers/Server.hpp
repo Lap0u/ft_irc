@@ -17,19 +17,19 @@ class Server
 private:
 	std::vector<t_pollfd>	_socket_tab;
 	std::vector<User*>		_user_tab;
+	int						_main_socket;
+	std::string				_server_password;
 
 public:
-	Server( void );
+	Server(int port, std::string pass);
 	virtual ~Server( void );
-
-	Server( std::string type );
 
 	bool    isUserUnique(User* user) const;
 	bool	addUser(User* user, int socket);
 
 	t_pollfd*	getSocketTab(void);
-	nfds_t		getSockeSize(void) const;
-
+	nfds_t		getSocketSize(void) const;
+	int			getMainSocket(void) const;
 };
 
 #endif
