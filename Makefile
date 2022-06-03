@@ -2,7 +2,13 @@ NAME		=	ircserv
 
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
-CXXFLAGS		+= -g3 -fsanitize=address
+
+
+ifeq ($(DEBUG), 2)
+    CXXFLAGS += -g3 -fsanitize=address -D DEBUG=2
+else ifeq ($(DEBUG), 1)
+    CXXFLAGS += -g3 -fsanitize=address    
+endif
 
 SRC			=	main.cpp \
 				srcs/socket.cpp \

@@ -74,3 +74,27 @@ int	Server::getMainSocket(void)const
 {
 	return _main_socket;
 }
+
+void	Server::setup_connection(int new_fd)
+{
+	char buffer[MAXLINE + 1];
+	t_pollfd fd_tab[1];
+
+	fd_tab[0].fd = new_fd;
+	fd_tab[0].events = POLLIN;
+	fd_tab[0].revents = 0;
+	if (poll(fd_tab, 1, 10000) < 0)
+	{
+		if (DEBUG == 2)
+			COUT "Too slow to establish connection, aborted" ENDL;
+		return;
+	}
+	if (recv(new_fd, buffer, MAXLINE - 1, 0) < 0)
+	{
+		CERR "Error while reading" ENDL;
+	}
+	COUT buffer ENDL; //parser buffer pour ajouter un user ou non
+
+	// User user1(0, "nom1", "nom1", "nom1", "nom1");
+
+}

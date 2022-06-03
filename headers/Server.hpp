@@ -30,6 +30,8 @@ public:
 	t_pollfd*	getSocketTab(void);
 	nfds_t		getSocketSize(void) const;
 	int			getMainSocket(void) const;
+
+	void		setup_connection(int temp_fd);
 };
 
 #endif

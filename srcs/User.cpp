@@ -2,7 +2,8 @@
 
 User::User( void )
 {
-	COUT "Construct User " << this->_socket ENDL;
+	if (DEBUG == 2)
+		COUT "Construct User " << this->_socket ENDL;
 	_operator = false;
 }
 User::User( int socket, std::string nick, std::string name,
@@ -10,7 +11,8 @@ User::User( int socket, std::string nick, std::string name,
 		: _socket(socket), _nick(nick), _name(name),
 			_pass(pass), _mode(mode) 
 			{
-				COUT "Construct User " << this->_nick ENDL;
+				if (DEBUG == 2)
+					COUT "Construct User " << this->_nick ENDL;
 			}
 
 User::~User( void )

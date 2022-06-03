@@ -1,5 +1,11 @@
 #ifndef IRC_HPP
 # define IRC_HPP
+
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+
+
 # include <sys/socket.h>
 # include <sys/types.h>
 # include <signal.h>

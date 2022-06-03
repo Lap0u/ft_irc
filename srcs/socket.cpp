@@ -4,7 +4,6 @@
 void    launch_serv(std::string port, std::string password)
 {
 	Server server(atoi(port.c_str()), password);
-	User user1(0, "nom1", "nom1", "nom1", "nom1");
 
 	int 				temp_fd;
 	int					n = 0;
@@ -16,13 +15,13 @@ void    launch_serv(std::string port, std::string password)
 	{        
 		temp_fd = accept(server.getMainSocket(), (SA*) NULL, NULL);
 		memset(recvline, 0, MAXLINE);
-		user1._socket = temp_fd;
-		server.addUser(&user1, temp_fd);
-		// setup_connection(server, temp_fd);
+		// user1._socket = temp_fd;
+		// server.addUser(&user1, temp_fd);
+		server.setup_connection(temp_fd);
 		if (server.getSocketSize())
 		{
 			if (poll(server.getSocketTab(), server.getSocketSize(), 5000) > 0)
-			{
+			{//il faudra lire sur les fd qui ont ete modifie dans recv, pas juste temp_fd
 				while ((n = recv(temp_fd, recvline, MAXLINE -1, 0)) > 0) //flag MSG_DONTWAIT? 
 				{
 					fprintf(stdout, "\n%s\n", recvline);
