@@ -24,14 +24,15 @@ public:
 	Server(int port, std::string pass);
 	virtual ~Server( void );
 
-	bool    isUserUnique(User* user) const;
-	bool	addUser(User* user, int socket);
+	bool		isUserUnique(User* user) const;
+	bool		addUser(User* user, int socket);
 
 	t_pollfd*	getSocketTab(void);
 	nfds_t		getSocketSize(void) const;
 	int			getMainSocket(void) const;
 
-	void		setup_connection(int temp_fd);
+	void		addServerSocket(void);
+	void		acceptingRequest(void);
 };
 
 #endif

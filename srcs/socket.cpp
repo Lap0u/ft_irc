@@ -5,43 +5,71 @@ void    launch_serv(std::string port, std::string password)
 {
 	Server server(atoi(port.c_str()), password);
 
-	int 				temp_fd;
+	int					ret_poll;
 	int					n = 0;
-
 	char                recvline[MAXLINE + 1];
 	char                buff[MAXLINE + 1];
-	
+
+	struct sockaddr_storage client_saddr;
+
 	while(1)
-	{        
-		temp_fd = accept(server.getMainSocket(), (SA*) NULL, NULL);
-		memset(recvline, 0, MAXLINE);
-		// user1._socket = temp_fd;
-		// server.addUser(&user1, temp_fd);
-		server.setup_connection(temp_fd);
-		if (server.getSocketSize())
+	{
+		ret_poll = poll(server.getSocketTab(), server.getSocketSize(), 15000);
+		if (ret_poll == 0)
+			COUT "This server had timeout little buddy" ENDL;
+		else if (ret_poll == -1)
+			COUT "A poll error occurs little buddy" ENDL;
+		for (nfds_t i = 0; i < server.getSocketSize(); i++)
 		{
-			if (poll(server.getSocketTab(), server.getSocketSize(), 5000) > 0)
-			{//il faudra lire sur les fd qui ont ete modifie dans recv, pas juste temp_fd
-				while ((n = recv(temp_fd, recvline, MAXLINE -1, 0)) > 0) //flag MSG_DONTWAIT? 
+			t_pollfd*	current_socket = server.getSocketTab() + i;
+
+			// fd == 0 is not expected, as there are socket fds and not stdin
+			if (current_socket->fd <= 0)
+				continue ;
+			
+			// fd is ready for reading
+			if ((current_socket->revents & POLLIN) == POLLIN)
+			{
+				int fd_new;
+				// request for connection
+				if (current_socket->fd == server.getMainSocket())
 				{
-					fprintf(stdout, "\n%s\n", recvline);
-					if (recvline[n - 1] == '\n' && recvline[n - 2] == '\r')
-						break;
+					char *str = NULL;
+					socklen_t addrlen = sizeof(struct sockaddr_storage);
+
+					fd_new = accept(server.getMainSocket(), (SA*) &client_saddr, &addrlen);
+					User user_new(fd_new, "nick", "name", "pass", "mode");
+					server.addUser(&user_new, fd_new);
+
+					// print IP address of the new client
+					struct sockaddr_in  *ptr = (struct sockaddr_in  *) &client_saddr;
+					inet_ntop (AF_INET, &(ptr -> sin_addr), str, sizeof(str));
 				}
-				memset(recvline, 0, MAXLINE);           
-				if (n < 0)
+			}
+			else // data from an existing connection, recieve it
+			{
+				memset(recvline, 0, MAXLINE);
+				n = recv(current_socket->fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
+				if (n == -1)
+					COUT "error recv" ENDL;
+				else if (n == 0)
 				{
-					fprintf(stdout, "Connection closed\n");
-					exit(1);
+					COUT "Socket close by client" ENDL;
+					close(current_socket->fd);
+					current_socket->fd *= -1;
 				}
+				fprintf(stdout, "\n%s\n", recvline);
+				if (recvline[n - 1] == '\n' && recvline[n - 2] == '\r')
+					break;
+				memset(recvline, 0, MAXLINE);
 				snprintf((char*)buff, sizeof(buff), "001\r\nWelcome to irc\r\n002\r\nYour host is blabla\r\n003\r\nThis server was created today\r\n004\r\nAll server infos\r\n");
-				if (send(temp_fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
+				if (send(current_socket->fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
 				{
 					fprintf(stdout, "send failed\n");
 					exit(1);
 				}
-			}
+			}	
 		}
 	}
-	close(temp_fd);//
+	// close(temp_fd);//
 }
