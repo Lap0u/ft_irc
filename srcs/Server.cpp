@@ -87,6 +87,18 @@ void	Server::addServerSocket(void)
 }
 void	Server::acceptingRequest(void)
 {
+	int		fd_new;
+	char	*str = NULL;
+	struct sockaddr_storage client_saddr;
+	socklen_t addrlen = sizeof(struct sockaddr_storage);
 
+	fd_new = accept(getMainSocket(), (SA*) &client_saddr, &addrlen);
+	User user_new(fd_new, "nick", "name", "pass", "mode");
+	addUser(&user_new, fd_new);
+
+	// print IP address of the new client
+	struct sockaddr_in  *ptr = (struct sockaddr_in  *) &client_saddr;
+	inet_ntop (AF_INET, &(ptr -> sin_addr), str, sizeof(str));
 }
 
+// Server::handlingExistingConnection()

@@ -10,13 +10,14 @@ void    launch_serv(std::string port, std::string password)
 	char                recvline[MAXLINE + 1];
 	char                buff[MAXLINE + 1];
 
-	struct sockaddr_storage client_saddr;
-
 	while(1)
 	{
 		ret_poll = poll(server.getSocketTab(), server.getSocketSize(), 15000);
 		if (ret_poll == 0)
+		{
 			COUT "This server had timeout little buddy" ENDL;
+			exit (1); // need a clean exit closing all fds
+		}
 		else if (ret_poll == -1)
 			COUT "A poll error occurs little buddy" ENDL;
 		for (nfds_t i = 0; i < server.getSocketSize(); i++)
@@ -30,20 +31,11 @@ void    launch_serv(std::string port, std::string password)
 			// fd is ready for reading
 			if ((current_socket->revents & POLLIN) == POLLIN)
 			{
-				int fd_new;
+				
 				// request for connection
 				if (current_socket->fd == server.getMainSocket())
 				{
-					char *str = NULL;
-					socklen_t addrlen = sizeof(struct sockaddr_storage);
-
-					fd_new = accept(server.getMainSocket(), (SA*) &client_saddr, &addrlen);
-					User user_new(fd_new, "nick", "name", "pass", "mode");
-					server.addUser(&user_new, fd_new);
-
-					// print IP address of the new client
-					struct sockaddr_in  *ptr = (struct sockaddr_in  *) &client_saddr;
-					inet_ntop (AF_INET, &(ptr -> sin_addr), str, sizeof(str));
+					server.acceptingRequest();
 				}
 			}
 			else // data from an existing connection, recieve it
