@@ -93,8 +93,10 @@ void	Server::acceptingRequest(void)
 	socklen_t addrlen = sizeof(struct sockaddr_storage);
 
 	fd_new = accept(getMainSocket(), (SA*) &client_saddr, &addrlen);
-	User user_new(fd_new, "nick", "name", "pass", "mode");
-	addUser(&user_new, fd_new);
+	if (fd_new == -1)
+		CERR "error accept() : " << strerror( errno ) ENDL;
+	User* user_new = new User(fd_new, "nick", "name", "pass", "mode");
+	addUser(user_new, fd_new);
 
 	// print IP address of the new client
 	struct sockaddr_in  *ptr = (struct sockaddr_in  *) &client_saddr;
