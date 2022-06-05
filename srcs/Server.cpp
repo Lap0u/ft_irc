@@ -44,18 +44,11 @@ bool    Server::isUserUnique(User* user) const
 	return true;
 }
 
-bool	Server::addUser(User* user, int socket)
+bool	Server::addUser(User* user)
 {
-	t_pollfd    temp;
-
 	if (!_user_tab.empty() && !isUserUnique(user))
 		return false;
-
 	_user_tab.push_back(user);
-	temp.fd = socket;
-	temp.events = POLLIN;
-	temp.revents = 0;
-	_socket_tab.push_back(temp);
 	return true;
 }
 
@@ -93,7 +86,7 @@ void	Server::acceptingRequest(void)
 	if (fd_new == -1)
 		CERR "error accept() : " << strerror( errno ) ENDL;
 	User* user_new = new User(fd_new, "nick", "name", "pass", "mode");
-	addUser(user_new, fd_new);
+	addUser(user_new);
 	addSocket(fd_new, POLLIN);
 }
 

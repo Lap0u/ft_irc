@@ -25,7 +25,7 @@ public:
 	virtual ~Server( void );
 
 	bool		isUserUnique(User* user) const;
-	bool		addUser(User* user, int socket);
+	bool		addUser(User* user);
 
 	t_pollfd*	getSocketTab(void);
 	nfds_t		getSocketSize(void) const;
