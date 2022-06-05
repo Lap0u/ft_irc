@@ -31,7 +31,7 @@ public:
 	nfds_t		getSocketSize(void) const;
 	int			getMainSocket(void) const;
 
-	void		addServerSocket(void);
+	void		addSocket(int fd, short events);
 	void		acceptingRequest(void);
 };
 

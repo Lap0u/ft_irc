@@ -26,7 +26,7 @@ Server::Server(int port, std::string pass)
 		fprintf(stdout, "listen\n");
 		exit(1);
 	};
-	addServerSocket();
+	addSocket(_main_socket, POLLIN);
 }
 
 Server::~Server( void )
@@ -76,31 +76,25 @@ int	Server::getMainSocket(void) const
 	return _main_socket;
 }
 
-void	Server::addServerSocket(void)
+void	Server::addSocket(int fd, short events)
 {
-	t_pollfd main_fd;
+	t_pollfd fd_new;
 
-	main_fd.fd = _main_socket;
-	main_fd.events = POLLIN;
-	main_fd.revents = 0;
-	_socket_tab.push_back(main_fd);
+	fd_new.fd = fd;
+	fd_new.events = events;
+	fd_new.revents = 0;
+	_socket_tab.push_back(fd_new);
 }
 void	Server::acceptingRequest(void)
 {
 	int		fd_new;
-	char	*str = NULL;
-	struct sockaddr_storage client_saddr;
-	socklen_t addrlen = sizeof(struct sockaddr_storage);
 
-	fd_new = accept(getMainSocket(), (SA*) &client_saddr, &addrlen);
+	fd_new = accept(getMainSocket(), (SA*) NULL, NULL);
 	if (fd_new == -1)
 		CERR "error accept() : " << strerror( errno ) ENDL;
 	User* user_new = new User(fd_new, "nick", "name", "pass", "mode");
 	addUser(user_new, fd_new);
-
-	// print IP address of the new client
-	struct sockaddr_in  *ptr = (struct sockaddr_in  *) &client_saddr;
-	inet_ntop (AF_INET, &(ptr -> sin_addr), str, sizeof(str));
+	addSocket(fd_new, POLLIN);
 }
 
 // Server::handlingExistingConnection()
