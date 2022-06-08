@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <iostream>
 # include <algorithm>
+# include <errno.h>
 
 # define SERVER_PORT 6667
 # define MAXLINE 4096

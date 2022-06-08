@@ -5,43 +5,65 @@ void    launch_serv(std::string port, std::string password)
 {
 	Server server(atoi(port.c_str()), password);
 
-	int 				temp_fd;
-	int					n = 0;
+	int			ret_poll;
+	int			n = 0;
+	char		recvline[MAXLINE + 1];
+	char		buff[MAXLINE + 1];
+	t_pollfd	*sock_tab;
 
-	char                recvline[MAXLINE + 1];
-	char                buff[MAXLINE + 1];
-	
 	while(1)
-	{        
-		temp_fd = accept(server.getMainSocket(), (SA*) NULL, NULL);
-		memset(recvline, 0, MAXLINE);
-		// user1._socket = temp_fd;
-		// server.addUser(&user1, temp_fd);
-		server.setup_connection(temp_fd);
-		if (server.getSocketSize())
+	{
+		sock_tab = server.getSocketTab();
+
+		ret_poll = poll(sock_tab, server.getSocketSize(), 15000);
+		if (ret_poll == -1)
 		{
-			if (poll(server.getSocketTab(), server.getSocketSize(), 5000) > 0)
-			{//il faudra lire sur les fd qui ont ete modifie dans recv, pas juste temp_fd
-				while ((n = recv(temp_fd, recvline, MAXLINE -1, 0)) > 0) //flag MSG_DONTWAIT? 
+			perror("poll");
+			exit (1); // need a clean exit closing all fds
+		}
+		else if (ret_poll > 0)
+		{
+			for (nfds_t i = 0; i < server.getSocketSize(); i++)
+			{
+				// fd is ready for reading
+				if (sock_tab[i].revents == POLLIN)
 				{
-					fprintf(stdout, "\n%s\n", recvline);
-					if (recvline[n - 1] == '\n' && recvline[n - 2] == '\r')
-						break;
-				}
-				memset(recvline, 0, MAXLINE);           
-				if (n < 0)
-				{
-					fprintf(stdout, "Connection closed\n");
-					exit(1);
-				}
-				snprintf((char*)buff, sizeof(buff), "001\r\nWelcome to irc\r\n002\r\nYour host is blabla\r\n003\r\nThis server was created today\r\n004\r\nAll server infos\r\n");
-				if (send(temp_fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
-				{
-					fprintf(stdout, "send failed\n");
-					exit(1);
+					// request for connection
+					if (i == 0)
+					{
+						server.connectionRequest();
+					}
+					else // data from an existing connection, recieve it
+					{
+						CERR "sortie 4" ENDL;
+						memset(recvline, 0, MAXLINE);
+						n = recv(sock_tab[i].fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
+						if (n == -1)
+						{
+							perror("recv");
+							exit(1);
+						}
+						else if (n == 0)
+						{
+							CERR "-->Socket close by client" ENDL;
+							close(sock_tab[i].fd);
+							sock_tab[i].fd = -1;
+						}
+						fprintf(stdout, "\n-->%s\n", recvline);
+						// if (recvline[n - 1] == '\n' && recvline[n - 2] == '\r')
+						// 	break;
+						memset(recvline, 0, MAXLINE);
+						snprintf((char*)buff, sizeof(buff), "salut\r\n");
+						CERR "sortie 3" ENDL;
+						if (send(sock_tab[i].fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
+						{
+							perror("send");
+							exit(1);
+						}
+					}
 				}
 			}
 		}
 	}
-	close(temp_fd);//
+	// close(temp_fd);//
 }
