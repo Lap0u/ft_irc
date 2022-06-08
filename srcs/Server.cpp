@@ -81,27 +81,19 @@ void	Server::addSocket(int fd, short events)
 
 int		Server::parseRecv(char recv[])
 {
-	// fprintf(stderr, "tour %s\n", recv);
-	// std::string str(recv);
-	// COUT str[str.size() - 1] ENDL;
-	std::string s(recv);
+	std::string str(recv);
+	std::string token;
+	size_t pos = 0;
 
-	CERR "calls " ENDL;
-	for (int i = 0; i < 4; i++)
+	pos = str.find("\r\n", pos);
+	while (pos != std::string::npos)
 	{
-		size_t found = s.find("\r\n");
-		if (found == std::string::npos || found == 0)
-			return (2);
-		std::string token = s.substr(0, found);
-		CERR token ENDL;
-		if (token.compare(0, 5, "USER ") == 0)
-		{
-			CERR "USER found!" ENDL;
-			return (1);
-		}
-		s.erase(0, found);
+		token = str.substr(0, pos);
+		CERR "==> " << token ENDL;
+		str.erase(0, pos + 2);
+		pos = str.find("\r\n");
 	}
-	return (2);
+	return 0;
 }
 
 int		Server::setConnection(int fd)

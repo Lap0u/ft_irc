@@ -24,8 +24,9 @@
 # define SA struct sockaddr
 
 # define COUT std::cout <<
-# define ENDL << std::endl
 # define CERR std::cerr <<
+# define ENDL << std::endl
+# define NL std::cout << std::endl;
 
 typedef enum e_rpl {
     RPL_WELCOME = 001,
