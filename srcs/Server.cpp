@@ -7,7 +7,7 @@ Server::Server(int port, std::string pass)
 	struct sockaddr_in  servaddr;
 
 	_server_password = pass;
-	_main_socket = socket(AF_INET, SOCK_STREAM, 0);
+	_main_socket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	if (_main_socket < 0)
 		exit(1);
 	bzero(&servaddr, sizeof(servaddr));
@@ -34,6 +34,23 @@ Server::~Server( void )
 	COUT "Destruct Server." ENDL;
 }
 
+t_pollfd*	Server::getSocketTab(void)
+{
+	if (_socket_tab.empty())
+		return (NULL);
+	return (&_socket_tab[0]);
+}
+
+nfds_t		Server::getSocketSize(void) const
+{
+	return _socket_tab.size();
+}
+
+int	Server::getMainSocket(void) const
+{
+	return _main_socket;
+}
+
 bool    Server::isUserUnique(User* user) const
 {
 	for (std::vector<User*>::const_iterator it = _user_tab.begin(); it != _user_tab.end(); it++)
@@ -52,23 +69,6 @@ bool	Server::addUser(User* user)
 	return true;
 }
 
-t_pollfd*	Server::getSocketTab(void)
-{
-	if (_socket_tab.empty())
-		return (NULL);
-	return (&_socket_tab[0]);
-}
-
-nfds_t		Server::getSocketSize(void) const
-{
-	return _socket_tab.size();
-}
-
-int	Server::getMainSocket(void) const
-{
-	return _main_socket;
-}
-
 void	Server::addSocket(int fd, short events)
 {
 	t_pollfd fd_new;
@@ -78,16 +78,96 @@ void	Server::addSocket(int fd, short events)
 	fd_new.revents = 0;
 	_socket_tab.push_back(fd_new);
 }
-void	Server::acceptingRequest(void)
+
+int		Server::parseRecv(char recv[])
+{
+	// fprintf(stderr, "tour %s\n", recv);
+	// std::string str(recv);
+	// COUT str[str.size() - 1] ENDL;
+	std::string s(recv);
+
+	CERR "calls " ENDL;
+	for (int i = 0; i < 4; i++)
+	{
+		size_t found = s.find("\r\n");
+		if (found == std::string::npos || found == 0)
+			return (2);
+		std::string token = s.substr(0, found);
+		CERR token ENDL;
+		if (token.compare(0, 5, "USER ") == 0)
+		{
+			CERR "USER found!" ENDL;
+			return (1);
+		}
+		s.erase(0, found);
+	}
+	return (2);
+}
+
+int		Server::setConnection(int fd)
+{
+	int		n = 0;
+	int 	ret = 0;
+	char	recvline[MAXLINE + 1];
+	char	buff[MAXLINE + 1];
+
+	for (int i = 0; i < 4; i++)
+	{
+		memset(recvline, 0, MAXLINE);
+
+		n = recv(fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
+		if (n == -1)
+		{
+			perror("recv");
+			exit(1);
+		}
+		else if (n == 0)
+		{
+			CERR "Socket close by client" ENDL;
+			close(fd);
+			fd = -1;
+			return (-1);
+		}
+		ret = parseRecv(recvline);
+		if (ret == -1)
+		{
+			CERR "Mauvais mdp" ENDL;
+			return (-1);
+		}
+		else if (ret == 1)
+			break ;
+		// fprintf(stdout, "\n%s\n", recvline);
+
+	}
+	CERR "sorti" ENDL;
+	memset(recvline, 0, MAXLINE);
+	snprintf((char*)buff, sizeof(buff), "001\r\nWelcome to irc\r\n002\r\nYour host is blabla\r\n003\r\nThis server was created today\r\n004\r\nAll server infos\r\n");
+	if (send(fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
+	{
+		perror("send");
+		exit(1);
+	}
+
+	User* user_new = new User(fd, "nick", "name", "pass", "mode");
+	addUser(user_new);
+	addSocket(fd, POLLIN);
+	CERR "sorti2" ENDL;
+	return(0);
+}
+
+void	Server::connectionRequest(void)
 {
 	int		fd_new;
 
 	fd_new = accept(getMainSocket(), (SA*) NULL, NULL);
 	if (fd_new == -1)
-		CERR "error accept() : " << strerror( errno ) ENDL;
-	User* user_new = new User(fd_new, "nick", "name", "pass", "mode");
-	addUser(user_new);
-	addSocket(fd_new, POLLIN);
+	{
+		perror("accept");
+		exit(1);
+	}
+	if (setConnection(fd_new) == -1)
+		return ;
 }
 
 // Server::handlingExistingConnection()
+

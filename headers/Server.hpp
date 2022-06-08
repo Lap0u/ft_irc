@@ -32,7 +32,9 @@ public:
 	int			getMainSocket(void) const;
 
 	void		addSocket(int fd, short events);
-	void		acceptingRequest(void);
+	void		connectionRequest(void);
+	int			setConnection(int fd);
+	int			parseRecv(char buf[]);
 };
 
 #endif
