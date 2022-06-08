@@ -34,11 +34,11 @@ Server::~Server( void )
 	COUT "Destruct Server." ENDL;
 }
 
-t_pollfd*	Server::getSocketTab(void)
+t_pollfd*	Server::getSocket(nfds_t i)
 {
 	if (_socket_tab.empty())
 		return (NULL);
-	return (&_socket_tab[0]);
+	return (&_socket_tab[i]);
 }
 
 nfds_t		Server::getSocketSize(void) const
@@ -79,7 +79,18 @@ void	Server::addSocket(int fd, short events)
 	_socket_tab.push_back(fd_new);
 }
 
-int		Server::parseRecv(char recv[])
+int		Server::connectionSuccess(void)
+{
+	return (1);
+}
+
+int		Server::connectionFailure(void)
+{
+	return (0);
+}
+
+
+int		Server::parseRecv(int fd, char recv[])
 {
 	std::string str(recv);
 	std::string token;
@@ -90,10 +101,17 @@ int		Server::parseRecv(char recv[])
 	{
 		token = str.substr(0, pos);
 		CERR "==> " << token ENDL;
+		if (token.compare(0, 5, "USER ") == 0)
+		{
+			User* user_new = new User(fd, "nick", "name", "pass", "mode");
+			addUser(user_new);
+			addSocket(fd, POLLIN);
+			return (connectionSuccess());
+		}
 		str.erase(0, pos + 2);
 		pos = str.find("\r\n");
 	}
-	return 0;
+	return (connectionFailure());
 }
 
 int		Server::setConnection(int fd)
@@ -117,19 +135,14 @@ int		Server::setConnection(int fd)
 		{
 			CERR "Socket close by client" ENDL;
 			close(fd);
-			fd = -1;
+			_socket_tab.pop_back();
+			_user_tab.pop_back();
 			return (-1);
 		}
-		ret = parseRecv(recvline);
-		if (ret == -1)
-		{
-			CERR "Mauvais mdp" ENDL;
-			return (-1);
-		}
-		else if (ret == 1)
+		ret = parseRecv(fd, recvline);
+		if (ret == 1)
 			break ;
 		// fprintf(stdout, "\n%s\n", recvline);
-
 	}
 	CERR "sorti" ENDL;
 	memset(recvline, 0, MAXLINE);
@@ -139,27 +152,28 @@ int		Server::setConnection(int fd)
 		perror("send");
 		exit(1);
 	}
-
-	User* user_new = new User(fd, "nick", "name", "pass", "mode");
-	addUser(user_new);
-	addSocket(fd, POLLIN);
 	CERR "sorti2" ENDL;
 	return(0);
 }
 
 void	Server::connectionRequest(void)
 {
-	int		fd_new;
+	int		fd;
 
-	fd_new = accept(getMainSocket(), (SA*) NULL, NULL);
-	if (fd_new == -1)
+	fd = accept(getMainSocket(), (SA*) NULL, NULL);
+	if (fd == -1)
 	{
 		perror("accept");
 		exit(1);
 	}
-	if (setConnection(fd_new) == -1)
+	if (setConnection(fd) == -1)
 		return ;
 }
 
 // Server::handlingExistingConnection()
 
+void		Server::deleteUserSocket(nfds_t i)
+{
+	_socket_tab.erase(_socket_tab.begin() + i);
+	_user_tab.erase(_user_tab.begin() + i - 1);
+}

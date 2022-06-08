@@ -34,6 +34,6 @@ int main(int argc, char **argv)
 	// serv.addUser(&user2, 2);
 	// serv.addUser(&user3, 3);
 	// serv.addUser(&user4, 4);
-	// poll(serv.getSocketTab(), serv.getSocketSize(), 5000);
+	// poll(serv.getSocket(), serv.getSocketSize(), 5000);
 	// return 0;
 }

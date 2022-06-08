@@ -6,9 +6,9 @@ User::User( void )
 		COUT "Construct User " << this->_socket ENDL;
 	_operator = false;
 }
-User::User( int socket, std::string nick, std::string name,
+User::User( int socket, std::string nick, std::string user,
 		std::string pass, std::string mode)
-		: _socket(socket), _nick(nick), _name(name),
+		: _socket(socket), _nick(nick), _user(user),
 			_pass(pass), _mode(mode) 
 			{
 				if (DEBUG == 2)
@@ -34,9 +34,9 @@ const std::string	User::getNick(void) const
 {
 	return this->_nick;
 }
-const std::string	User::getName(void) const
+const std::string	User::getUser(void) const
 {
-	return this->_name;
+	return this->_user;
 }
 const std::string	User::getPass(void) const
 {
@@ -51,9 +51,9 @@ void	User::setNick(std::string nick)
 {
 	_nick = nick;
 }
-void	User::setName(std::string name)
+void	User::setUser(std::string user)
 {
-	_name = name;
+	_user = user;
 }
 void	User::setPass(std::string pass)
 {

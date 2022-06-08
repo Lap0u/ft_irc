@@ -1,13 +1,13 @@
 NAME		=	ircserv
 
 CXX			=	c++
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g3
 
 
 ifeq ($(DEBUG), 2)
-    CXXFLAGS += -g3 -fsanitize=address -D DEBUG=2
+    CXXFLAGS += -fsanitize=address -D DEBUG=2
 else ifeq ($(DEBUG), 1)
-    CXXFLAGS += -g3 -fsanitize=address    
+    CXXFLAGS += -fsanitize=address    
 endif
 
 SRC			=	main.cpp \

@@ -13,7 +13,7 @@ void    launch_serv(std::string port, std::string password)
 
 	while(1)
 	{
-		sock_tab = server.getSocketTab();
+		sock_tab = server.getSocket(0);
 
 		ret_poll = poll(sock_tab, server.getSocketSize(), 15000);
 		if (ret_poll == -1)
@@ -26,7 +26,7 @@ void    launch_serv(std::string port, std::string password)
 			for (nfds_t i = 0; i < server.getSocketSize(); i++)
 			{
 				// fd is ready for reading
-				if (sock_tab[i].revents == POLLIN)
+				if (server.getSocket(i)->revents == POLLIN)
 				{
 					// request for connection
 					if (i == 0)
@@ -37,7 +37,7 @@ void    launch_serv(std::string port, std::string password)
 					{
 						CERR "sortie 4" ENDL;
 						memset(recvline, 0, MAXLINE);
-						n = recv(sock_tab[i].fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
+						n = recv(server.getSocket(i)->fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
 						if (n == -1)
 						{
 							perror("recv");
@@ -46,8 +46,8 @@ void    launch_serv(std::string port, std::string password)
 						else if (n == 0)
 						{
 							CERR "-->Socket close by client" ENDL;
-							close(sock_tab[i].fd);
-							sock_tab[i].fd = -1;
+							close(server.getSocket(i)->fd);
+							server.deleteUserSocket(i);
 						}
 						fprintf(stdout, "\n-->%s\n", recvline);
 						// if (recvline[n - 1] == '\n' && recvline[n - 2] == '\r')
@@ -55,7 +55,7 @@ void    launch_serv(std::string port, std::string password)
 						memset(recvline, 0, MAXLINE);
 						snprintf((char*)buff, sizeof(buff), "salut\r\n");
 						CERR "sortie 3" ENDL;
-						if (send(sock_tab[i].fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
+						if (send(server.getSocket(i)->fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
 						{
 							perror("send");
 							exit(1);

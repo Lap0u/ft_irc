@@ -27,14 +27,17 @@ public:
 	bool		isUserUnique(User* user) const;
 	bool		addUser(User* user);
 
-	t_pollfd*	getSocketTab(void);
+	t_pollfd*	getSocket(nfds_t i);
 	nfds_t		getSocketSize(void) const;
 	int			getMainSocket(void) const;
 
 	void		addSocket(int fd, short events);
 	void		connectionRequest(void);
 	int			setConnection(int fd);
-	int			parseRecv(char buf[]);
+	int			parseRecv(int fd, char buf[]);
+	int			connectionSuccess(void);
+	int			connectionFailure(void);
+	void		deleteUserSocket(nfds_t i);
 };
 
 #endif
