@@ -13,7 +13,8 @@ endif
 SRC			=	main.cpp \
 				srcs/socket.cpp \
 				srcs/User.cpp \
-				srcs/Server.cpp
+				srcs/Server.cpp \
+				srcs/Message.cpp
 
 OBJ			=	$(SRC:%.cpp=%.o)
 

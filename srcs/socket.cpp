@@ -35,7 +35,7 @@ void    launch_serv(std::string port, std::string password)
 					}
 					else // data from an existing connection, recieve it
 					{
-						CERR "sortie 4" ENDL;
+						DEB "sortie 4" ENDL;
 						memset(recvline, 0, MAXLINE);
 						n = recv(server.getSocket(i)->fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
 						if (n == -1)
@@ -54,7 +54,7 @@ void    launch_serv(std::string port, std::string password)
 						// 	break;
 						memset(recvline, 0, MAXLINE);
 						snprintf((char*)buff, sizeof(buff), "salut\r\n");
-						CERR "sortie 3" ENDL;
+						DEB "sortie 3" ENDL;
 						if (send(server.getSocket(i)->fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
 						{
 							perror("send");

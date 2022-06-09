@@ -142,17 +142,17 @@ int		Server::setConnection(int fd)
 		ret = parseRecv(fd, recvline);
 		if (ret == 1)
 			break ;
-		// fprintf(stdout, "\n%s\n", recvline);
 	}
-	CERR "sorti" ENDL;
+	DEB "sorti" ENDL;
 	memset(recvline, 0, MAXLINE);
 	snprintf((char*)buff, sizeof(buff), "001\r\nWelcome to irc\r\n002\r\nYour host is blabla\r\n003\r\nThis server was created today\r\n004\r\nAll server infos\r\n");
+	// snprintf((char*)buff, sizeof(buff), "Welcome to irc\r\nYour host is blabla\r\nThis server was created today\r\nAll server infos\r\n");
 	if (send(fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
 	{
 		perror("send");
 		exit(1);
 	}
-	CERR "sorti2" ENDL;
+	DEB "sorti2" ENDL;
 	return(0);
 }
 
