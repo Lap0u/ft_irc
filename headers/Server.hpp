@@ -5,9 +5,11 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 #include "Irc.hpp"
 #include "User.hpp"
+#include "Commands.hpp"
 #include <poll.h>
 
 typedef struct pollfd t_pollfd;
@@ -15,27 +17,27 @@ typedef struct pollfd t_pollfd;
 class Server
 {
 public:
-	typedef void (Server::*commandFunction)(void); // function pointer type
+	
 	typedef std::map<std::string, commandFunction>		commandMap;
 	typedef std::map<int, std::string>					repliesMap;
 	typedef	std::vector<t_pollfd>						pollfdVector;
 	typedef	std::vector<User*>							userVector;
 
 private:
-	int							_main_socket;
-	std::string					_server_password;
-	std::string					_server_name;
+	int				_main_socket;
+	std::string		_server_password;
+	std::string		_server_name;
 
-	pollfdVector				_socket_tab;
-	userVector					_user_tab;
-	repliesMap					_replies;
+	pollfdVector	_socket_tab;
+	userVector		_user_tab;
 
+	commandMap		_commands;
+	repliesMap		_replies;
+	
 	void			initReplies(void);
 	void			initCommands(void);
 
 public:
-	commandMap					_commands;
-	void	pass(void);
 	Server(int port, std::string pass);
 	virtual ~Server( void );
 
@@ -54,6 +56,12 @@ public:
 	int				connectionSuccess(void);
 	int				connectionFailure(void);
 	void			deleteUserSocket(nfds_t i);
+
+	std::string		findMatchingUser(int fd);
+	
 };
+
+bool	operator==(const t_pollfd &pollfd1, const t_pollfd &pollfd2);
+
 
 #endif

@@ -26,6 +26,7 @@ Server::Server(int port, std::string pass) : _server_password(pass), _server_nam
 		exit(1);
 	};
 	addSocket(_main_socket, POLLIN);
+	addUser(new User(_main_socket, "Server", "Server", "Server", "Server"));
 	initReplies();
 	initCommands();
 }
@@ -35,14 +36,13 @@ void	Server::initReplies(void)
 	_replies[0] = "RPL_WELCOME";
 }
 
-void	Server::pass(void)
-{
-	COUT "Pointeuir fonction" ENDL;
-}
-
 void	Server::initCommands(void)
 {
-	_commands["PASS"] = &Server::pass;
+	_commands["PASS"] = pass;
+	_commands["NICK"] = nick;
+	_commands["OPER"] = oper;
+	_commands["USER"] = user;
+
 }
 
 Server::~Server( void )
@@ -174,6 +174,7 @@ int		Server::setConnection(int fd)
 		exit(1);
 	}
 	DEB "sorti2" ENDL;
+	COUT findMatchingUser(fd) ENDL;
 	return(0);
 }
 
@@ -196,5 +197,24 @@ void	Server::connectionRequest(void)
 void		Server::deleteUserSocket(nfds_t i)
 {
 	_socket_tab.erase(_socket_tab.begin() + i);
-	_user_tab.erase(_user_tab.begin() + i - 1);
+	_user_tab.erase(_user_tab.begin() + i);
+}
+
+std::string	Server::findMatchingUser(int socket)
+{
+	pollfdVector::const_iterator res;
+	t_pollfd temp;
+
+	temp.fd = socket;
+
+	res = find(_socket_tab.begin(), _socket_tab.end(), temp);
+	if (res == _socket_tab.end())
+		CERR "not found" ENDL;
+
+	return _user_tab[res - _socket_tab.begin()]->getUser();
+}
+
+bool	operator==(const t_pollfd &pollfd1, const t_pollfd &pollfd2)
+{
+	return (pollfd1.fd == pollfd2.fd);
 }

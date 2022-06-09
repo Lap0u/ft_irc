@@ -10,9 +10,6 @@ void    launch_serv(std::string port, std::string password)
 	char		recvline[MAXLINE + 1];
 	char		buff[MAXLINE + 1];
 	
-	// Server::commandMap::iterator ite = server._commands.find("PASS");
-	// COUT (ite->first) ENDL;
-	// (*(ite->second))();
 	while(1)
 	{
 		ret_poll = poll(server.getSocket(0), server.getSocketSize(), 15000);

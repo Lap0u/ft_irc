@@ -1,6 +1,6 @@
 #include "../headers/Message.hpp"
 
-Message::Message(std::string send, std::string receiv, std::string paquet, int fd) : 
+Message::Message(std::string send, std::string receiv, std::string paquet, int fd) :
     _sender(send), _receiver(receiv), _socket(fd)
 {
     _command = std::string(paquet.begin(), paquet.begin() + paquet.find(" "));

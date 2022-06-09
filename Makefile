@@ -3,10 +3,11 @@ NAME		=	ircserv
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g3
 
-
-ifeq ($(DEBUG), 2)
+ifeq ($(D), 3)
+	CXXFLAGS += -D DEBUG=2
+else ifeq ($(D), 2)
     CXXFLAGS += -fsanitize=address -D DEBUG=2
-else ifeq ($(DEBUG), 1)
+else ifeq ($(D), 1)
     CXXFLAGS += -fsanitize=address    
 endif
 
@@ -14,7 +15,8 @@ SRC			=	main.cpp \
 				srcs/socket.cpp \
 				srcs/User.cpp \
 				srcs/Server.cpp \
-				srcs/Message.cpp
+				srcs/Message.cpp \
+				srcs/Commands.cpp \
 
 OBJ			=	$(SRC:%.cpp=%.o)
 
