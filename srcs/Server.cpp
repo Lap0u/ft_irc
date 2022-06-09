@@ -1,12 +1,11 @@
 #include "../headers/Server.hpp"
 
-Server::Server(int port, std::string pass)
+Server::Server(int port, std::string pass) : _server_password(pass), _server_name("Our_IRC")
 {
 	COUT "Server waiting on port " << port ENDL;
 
 	struct sockaddr_in  servaddr;
 
-	_server_password = pass;
 	_main_socket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	if (_main_socket < 0)
 		exit(1);
@@ -27,6 +26,23 @@ Server::Server(int port, std::string pass)
 		exit(1);
 	};
 	addSocket(_main_socket, POLLIN);
+	initReplies();
+	initCommands();
+}
+
+void	Server::initReplies(void)
+{
+	_replies[0] = "RPL_WELCOME";
+}
+
+void	Server::pass(void)
+{
+	COUT "Pointeuir fonction" ENDL;
+}
+
+void	Server::initCommands(void)
+{
+	_commands["PASS"] = &Server::pass;
 }
 
 Server::~Server( void )
@@ -49,6 +65,11 @@ nfds_t		Server::getSocketSize(void) const
 int	Server::getMainSocket(void) const
 {
 	return _main_socket;
+}
+
+std::string Server::getServerName(void) const
+{
+	return _server_name;
 }
 
 bool    Server::isUserUnique(User* user) const

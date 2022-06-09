@@ -10,9 +10,6 @@
 
 int main(int argc, char **argv)
 {
-	// (void)argc;(void)argv;
-	// Message lol("Moi", "Serveur", "PASS bidule", 12);
-	// lol.display();
 	(void)argv;
 	if (argc != 3)
 	{

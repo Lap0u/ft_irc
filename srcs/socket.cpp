@@ -9,13 +9,13 @@ void    launch_serv(std::string port, std::string password)
 	int			n = 0;
 	char		recvline[MAXLINE + 1];
 	char		buff[MAXLINE + 1];
-	t_pollfd	*sock_tab;
-
+	
+	// Server::commandMap::iterator ite = server._commands.find("PASS");
+	// COUT (ite->first) ENDL;
+	// (*(ite->second))();
 	while(1)
 	{
-		sock_tab = server.getSocket(0);
-
-		ret_poll = poll(sock_tab, server.getSocketSize(), 15000);
+		ret_poll = poll(server.getSocket(0), server.getSocketSize(), 15000);
 		if (ret_poll == -1)
 		{
 			perror("poll");
