@@ -17,6 +17,7 @@ SRC			=	main.cpp \
 				srcs/Server.cpp \
 				srcs/Message.cpp \
 				srcs/Commands.cpp \
+				srcs/MessageBuilder.cpp
 
 OBJ			=	$(SRC:%.cpp=%.o)
 

@@ -29,12 +29,12 @@
 # define ENDL << std::endl
 # define NL std::cout << std::endl;
 
-typedef enum e_rpl {
-    RPL_WELCOME = 001,
-    RPL_YOURHOST = 002,
-    RPL_CREATED = 003,
-    RPL_MYINFO = 004
-} t_rpl;
+// typedef enum e_rpl {
+//     RPL_WELCOME = 001,
+//     RPL_YOURHOST = 002,
+//     RPL_CREATED = 003,
+//     RPL_MYINFO = 004
+// } t_rpl;
 
 /*  srcs/socket.cpp */
 void    launch_serv(std::string port, std::string password);
