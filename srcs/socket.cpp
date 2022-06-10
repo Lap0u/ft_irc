@@ -8,7 +8,6 @@ void    launch_serv(std::string port, std::string password)
 	int			ret_poll;
 	int			n = 0;
 	char		recvline[MAXLINE + 1];
-	char		buff[MAXLINE + 1];
 	
 	while(1)
 	{
@@ -49,14 +48,15 @@ void    launch_serv(std::string port, std::string password)
 						fprintf(stdout, "\n-->%s\n", recvline);
 						// if (recvline[n - 1] == '\n' && recvline[n - 2] == '\r')
 						// 	break;
-						memset(recvline, 0, MAXLINE);
-						snprintf((char*)buff, sizeof(buff), "salut\r\n");
-						DEB "sortie 3" ENDL;
-						if (send(server.getSocket(i)->fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
-						{
-							perror("send");
-							exit(1);
-						}
+						server.send_reply(server.getSocket(i)->fd, 221, "irewrrqr", "suis", "une", "reponse");
+						// memset(recvline, 0, MAXLINE);
+						// snprintf((char*)buff, sizeof(buff), "salut\r\n");
+						// DEB "sortie 3" ENDL;
+						// if (send(server.getSocket(i)->fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
+						// {
+						// 	perror("send");
+						// 	exit(1);
+						// }
 					}
 				}
 			}

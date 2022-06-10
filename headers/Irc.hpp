@@ -25,7 +25,7 @@
 
 # define COUT std::cout <<
 # define CERR std::cerr <<
-# define DEB if (DEBUG <= 2) std::cerr << 
+# define DEB if (DEBUG == 2) std::cerr << 
 # define ENDL << std::endl
 # define NL std::cout << std::endl;
 
