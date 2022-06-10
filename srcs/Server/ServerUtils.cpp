@@ -16,10 +16,7 @@ bool    Server::isUserUnique(User* user) const
 bool	Server::addUser(User* user)
 {
 	if (!_user_tab.empty() && !isUserUnique(user))
-	{
-
 		return false;
-	}
 	_user_tab.push_back(user);
 	return true;
 }
@@ -57,6 +54,19 @@ std::string	Server::findMatchingUser(int socket)
 	}
 	DEB res - _socket_tab.begin() ENDL;
 	return _user_tab[res - _socket_tab.begin()]->getUser();
+}
+
+int	Server::findMatchingSocket(std::string user)
+{
+	userVector::const_iterator	it = _user_tab.begin();
+	int							i = 0;
+
+	for (; it != _user_tab.end(); it++, i++)
+	{
+		if ((*it)->getNick() == user)
+				break;
+	}
+	return _socket_tab[i].fd;
 }
 
 std::string	getPaquet(int fd)

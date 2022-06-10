@@ -2,7 +2,13 @@
 
 void	Server::parseCmd(std::string line, int fd)
 {
-	(void)line;
+	std::string cmd (line.begin(), line.begin() + line.find(" "));
+
+	commandMap::iterator it = _commands.find(cmd);
+	if (it != _commands.end())
+		it->second(line, fd, *this);
+	else
+		CERR "Command not found" ENDL;
 	send_reply(fd, 221, "irewrrqr", "suis", "une", "reponse");
 }
 

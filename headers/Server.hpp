@@ -12,7 +12,10 @@
 #include "Commands.hpp"
 #include <poll.h>
 
+class Server;
+
 typedef struct pollfd t_pollfd;
+typedef int (*commandFunction)(const std::string &line, int fd, Server& server); // function pointer type
 
 class Server
 {
@@ -58,6 +61,7 @@ public:
 	void			deleteUserSocket(nfds_t i);
 
 	std::string		findMatchingUser(int fd);
+	int				findMatchingSocket(std::string user);
 
 	void			parseCmd(std::string line, int fd);
 

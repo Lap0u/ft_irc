@@ -47,7 +47,6 @@ void	Server::initCommands(void)
 	_commands["NICK"] = nick;
 	_commands["OPER"] = oper;
 	_commands["USER"] = user;
-
-	_commands["MODE"] = user;
+	_commands["MODE"] = usermod;
 }
 

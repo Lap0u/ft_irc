@@ -1,19 +1,45 @@
 #include "../headers/Commands.hpp"
 
-void	pass(void)
+int		pass(const std::string &line, int fd, Server& server)
 {
-	COUT "Pointeur fonction" ENDL;
+	(void)line;
+	(void)fd;
+	(void)server;
+	COUT "Pointeur pass fonction" ENDL;
+	return 2;
 }
-void	nick(void)
+int		nick(const std::string &line, int fd, Server& server)
 {
+	(void)line;
+	(void)fd;
+	(void)server;
 	COUT "Pointeur fonction" ENDL;
+	return 2;
 }
-void	oper(void)
+int		oper(const std::string &line, int fd, Server& server)
 {
+	(void)line;
+	(void)fd;
+	(void)server;
 	COUT "Pointeur fonction" ENDL;
+	return 2;
 }
-void	user(void)
+int		user(const std::string &line, int fd, Server& server)
 {
+	(void)line;
+	(void)fd;
+	(void)server;
 	COUT "Pointeur fonction" ENDL;
+	return 2;
+}
+
+int    usermod(const std::string &line, int fd, Server& server)
+{
+	(void)line;
+	(void)fd;
+	(void)server;
+	COUT "Pointeur usermod" ENDL;
+
+    return 2;
 }
 
