@@ -77,7 +77,10 @@ bool    Server::isUserUnique(User* user) const
 	for (std::vector<User*>::const_iterator it = _user_tab.begin(); it != _user_tab.end(); it++)
 	{
 		if ((*it)->getNick() == user->getNick())
+		{
+			DEB "NICK EQUAL: "<< (*it)->getNick() ENDL;
 			return false;
+		}
 	}
 	return true;
 }
@@ -85,7 +88,10 @@ bool    Server::isUserUnique(User* user) const
 bool	Server::addUser(User* user)
 {
 	if (!_user_tab.empty() && !isUserUnique(user))
+	{
+
 		return false;
+	}
 	_user_tab.push_back(user);
 	return true;
 }
@@ -121,12 +127,14 @@ int		Server::parseRecv(int fd, char recv[])
 	while (pos != std::string::npos)
 	{
 		token = str.substr(0, pos);
-		CERR "==> " << token ENDL;
+		DEB "==> " << token ENDL;
 		if (token.compare(0, 5, "USER ") == 0)
 		{
 			User* user_new = new User(fd, "nick", "name", "pass", "mode");
-			addUser(user_new);
-			addSocket(fd, POLLIN);
+			if (addUser(user_new) == true)
+				addSocket(fd, POLLIN);
+			else
+				delete user_new;
 			return (connectionSuccess());
 		}
 		str.erase(0, pos + 2);
@@ -164,8 +172,8 @@ int		Server::setConnection(int fd)
 		if (ret == 1)
 			break ;
 	}
-	DEB "sorti" ENDL;
 	memset(recvline, 0, MAXLINE);
+	
 	snprintf((char*)buff, sizeof(buff), "001\r\nWelcome to irc\r\n002\r\nYour host is blabla\r\n003\r\nThis server was created today\r\n004\r\nAll server infos\r\n");
 	// snprintf((char*)buff, sizeof(buff), "Welcome to irc\r\nYour host is blabla\r\nThis server was created today\r\nAll server infos\r\n");
 	if (send(fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
@@ -173,8 +181,7 @@ int		Server::setConnection(int fd)
 		perror("send");
 		exit(1);
 	}
-	DEB "sorti2" ENDL;
-	COUT findMatchingUser(fd) ENDL;
+	findMatchingUser(fd);
 	return(0);
 }
 
@@ -209,8 +216,11 @@ std::string	Server::findMatchingUser(int socket)
 
 	res = find(_socket_tab.begin(), _socket_tab.end(), temp);
 	if (res == _socket_tab.end())
+	{
 		CERR "not found" ENDL;
-
+		return (std::string ());
+	}
+	DEB res - _socket_tab.begin() ENDL;
 	return _user_tab[res - _socket_tab.begin()]->getUser();
 }
 

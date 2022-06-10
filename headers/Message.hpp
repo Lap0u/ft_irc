@@ -27,6 +27,6 @@ public:
     void            setPaylod(std::string Paylod);
     void            setSocket(int fd);
 
-    void display(void) const;
+    void            display(void) const;
 };
 #endif
