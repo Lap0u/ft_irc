@@ -14,12 +14,13 @@ std::string    build_reply(int code, std::string arg1, std::string arg2, std::st
         case 4:
             return message + RPL_MYINFO(arg1, arg2, arg3, arg4);
     }
+    return ("");
 }
 
 void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4)
 {
     std::string message = build_reply(code, arg1, arg2, arg3, arg4);
-    // message = ": " + server.getServName() + " " + message; passer le serveur
+    // message = ": " + server.getServName() + " " + message + "\r\n"; passer le serveur
     COUT message ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
