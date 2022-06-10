@@ -59,6 +59,8 @@ public:
 
 	std::string		findMatchingUser(int fd);
 
+	void			parseCmd(std::string line, int fd);
+
 	void			send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
 	
 };
