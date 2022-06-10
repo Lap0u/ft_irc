@@ -14,7 +14,11 @@ endif
 SRC			=	main.cpp \
 				srcs/socket.cpp \
 				srcs/User.cpp \
-				srcs/Server.cpp \
+				srcs/Server/Server.cpp \
+				srcs/Server/ServerConnection.cpp \
+				srcs/Server/ServerGetters.cpp \
+				srcs/Server/ServerParser.cpp \
+				srcs/Server/ServerUtils.cpp \
 				srcs/Message.cpp \
 				srcs/Commands.cpp \
 				srcs/MessageBuilder.cpp

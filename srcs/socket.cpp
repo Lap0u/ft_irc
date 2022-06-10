@@ -3,11 +3,9 @@
 
 void    launch_serv(std::string port, std::string password)
 {
-	Server server(atoi(port.c_str()), password);
-
+	Server		server(atoi(port.c_str()), password);
 	int			ret_poll;
-	int			n = 0;
-	char		recvline[MAXLINE + 1];
+	std::string	recvline;
 	
 	while(1)
 	{
@@ -17,30 +15,18 @@ void    launch_serv(std::string port, std::string password)
 			perror("poll");
 			exit (1); // need a clean exit closing all fds
 		}
-		else if (ret_poll > 0)
+		else if (ret_poll == 0)
+			continue ;
+		for (nfds_t i = 0; i < server.getSocketSize(); i++)
 		{
-			for (nfds_t i = 0; i < server.getSocketSize(); i++)
+			if (server.getSocket(i)->revents == POLLIN)
 			{
-				// fd is ready for reading
-				if (server.getSocket(i)->revents == POLLIN)
+				if (i == 0)
+					server.connectionRequest();
+				else
 				{
-					// request for connection
-					if (i == 0)
-					{
-						server.connectionRequest();
-					}
-					else // data from an existing connection, recieve it
-					{
-						memset(recvline, 0, MAXLINE);
-						n = recv(server.getSocket(i)->fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
-						if (n == -1)
-						{
-							perror("recv");
-							exit(1);
-						}
-						server.parseCmd(recvline, server.getSocket(i)->fd);
-						
-					}
+					recvline = getPaquet(server.getSocket(i)->fd);
+					server.parseCmd(recvline, server.getSocket(i)->fd);
 				}
 			}
 		}
