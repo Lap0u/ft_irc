@@ -35,7 +35,7 @@ int		user(const std::string &line, int fd, Server& server)
 
 int    mode(const std::string &line, int fd, Server& server)
 {
-	(void)line;
+	COUT line ENDL;
 	(void)fd;
 	(void)server;
 	COUT "Pointeur mode" ENDL;

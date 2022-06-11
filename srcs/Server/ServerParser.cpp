@@ -9,7 +9,7 @@ void	Server::parseCmd(std::string line, int fd)
 		it->second(line, fd, *this);
 	else
 		CERR "Command not found" ENDL;
-	send_reply(fd, 221, "irewrrqr", "suis", "une", "reponse");
+	send_reply(fd, 221, "Je", "suis", "une", "reponse");
 }
 
 int		Server::parseRecv(int fd, std::string recv)
