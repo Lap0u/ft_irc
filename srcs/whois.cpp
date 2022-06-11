@@ -20,34 +20,62 @@
 
 #define ERR_NONICKNAMEGIVEN 431                        
 
-int    count_words(const std::string string, char delimiter)
+int find_a_delimiter(std::string tosplit, std::string delimiter)
 {
-    int count = 1;
-    const char * str = string.c_str();
-    int length = strlen(string.c_str());
-    for (int i = 0; i < length; i++)
+    for (unsigned int i = 0; i < tosplit.length(); i++)
     {
-        if (str[i] == delimiter)
+        for (unsigned int j = 0; j < delimiter.length(); j++)
         {
-            COUT "str[i] ==      " << delimiter ENDL;
-            COUT "i ==           " << i ENDL;
-            COUT "length ==      " << length ENDL;
-            count++;
+            if (delimiter[j] == tosplit[i])
+                return i;
         }
     }
-    return count;
+    return -1;
+}
+
+int find_a_delimiter_at_beginning(std::string tosplit, std::string delimiter)
+{
+    for (unsigned int j = 0; j < delimiter.length(); j++)
+    {
+		if (delimiter[j] == tosplit[0])
+        	return j;
+    }
+    return -1;
+}
+
+std::vector<std::string> ft_split(std::string tosplit, std::string delimiter)
+{
+    std::vector<std::string>res;
+
+    while(!tosplit.empty())
+    {
+        int pos = find_a_delimiter(tosplit, delimiter);
+
+        if (pos == -1)
+            pos = tosplit.size();
+        res.push_back(std::string(tosplit.begin(), tosplit.begin() + pos));
+        tosplit.erase(0, pos);
+        while (find_a_delimiter_at_beginning(tosplit, delimiter) != -1 && !tosplit.empty())
+        {
+            tosplit.erase(0, 1);
+        }
+    }
+    return res;
 }
 
 int    whois(const std::string &line, int fd, Server& server)
 {
-	(void)line;
+	// (void)line;
 	(void)fd;
 	(void)server;
 
-	COUT "Pointeur whois" ENDL;
-	COUT line.c_str() << "!" ENDL;
+    std::vector<std::string> tab = ft_split(line, " ;/!?");
 
-    int count = count_words(line, ' ');
-    COUT "nb words == " << count ENDL;
+	COUT "Pointeur whois" ENDL;
+	COUT "line == " << line ENDL;
+    for (unsigned int i = 0; i < tab.size(); i++)
+        COUT "tab == " << tab[i] << " size == " << tab.size() ENDL;
+
+	std::cout << std::endl;
     return RPL_ENDOFWHOIS;
 }
