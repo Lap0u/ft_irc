@@ -69,7 +69,19 @@ int	Server::findMatchingSocket(std::string user)
 	return _socket_tab[i].fd;
 }
 
-std::string	getPaquet(int fd)
+int	Server::findPosSocket(int fd)
+{
+	size_t pos = 0;
+
+	for (; pos < _socket_tab.size(); pos++)
+	{
+		if (_socket_tab[pos].fd == fd)
+			break ;
+	}
+	return pos;
+}
+
+std::string	Server::getPackage(int fd)
 {
 	char		recvline[MAXLINE + 1];
 	int			n = 0;
@@ -80,6 +92,14 @@ std::string	getPaquet(int fd)
 	{
 		perror("recv");
 		exit(1);
+	}
+	else if (n == 0)
+	{
+		CERR "Socket close by client" ENDL;
+		close(fd);
+		_socket_tab.erase(_socket_tab.begin() + findPosSocket(fd));
+		_user_tab.erase(_user_tab.begin() + findPosSocket(fd));
+		return ("");
 	}
 	return (std::string (recvline));
 }

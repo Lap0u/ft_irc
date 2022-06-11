@@ -12,16 +12,15 @@ void	Server::parseCmd(std::string line, int fd)
 	send_reply(fd, 221, "irewrrqr", "suis", "une", "reponse");
 }
 
-int		Server::parseRecv(int fd, char recv[])
+int		Server::parseRecv(int fd, std::string recv)
 {
-	std::string str(recv);
 	std::string token;
 	size_t pos = 0;
 
-	pos = str.find("\r\n", pos);
+	pos = recv.find("\r\n", pos);
 	while (pos != std::string::npos)
 	{
-		token = str.substr(0, pos);
+		token = recv.substr(0, pos);
 		DEB "==> " << token ENDL;
 		if (token.compare(0, 5, "USER ") == 0)
 		{
@@ -32,8 +31,8 @@ int		Server::parseRecv(int fd, char recv[])
 				delete user_new;
 			return (connectionSuccess());
 		}
-		str.erase(0, pos + 2);
-		pos = str.find("\r\n");
+		recv.erase(0, pos + 2);
+		pos = recv.find("\r\n");
 	}
 	return (connectionFailure());
 }

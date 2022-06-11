@@ -2,30 +2,16 @@
 
 int		Server::setConnection(int fd)
 {
-	int		n = 0;
-	int		ret = 0;
-	char	recvline[MAXLINE + 1];
-	char	buff[MAXLINE + 1];
+	int			n = 0;
+	int			ret = 0;
+	std::string	recvline;
+	char		buff[MAXLINE + 1];
 
 	for (int i = 0; i < 4; i++)
 	{
-		memset(recvline, 0, MAXLINE);
-
-		n = recv(fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
-		if (n == -1)
-		{
-			perror("recv");
-			exit(1);
-		}
-		else if (n == 0)
-		{
-			CERR "Socket close by client" ENDL;
-			close(fd);
-			_socket_tab.pop_back();
-			_user_tab.pop_back();
-			return (-1);
-		}
-		ret = parseRecv(fd, recvline);
+		recvline = getPackage(fd);
+		if (!recvline.empty())
+			ret = parseRecv(fd, recvline);
 		if (ret == 1)
 			break ;
     }
