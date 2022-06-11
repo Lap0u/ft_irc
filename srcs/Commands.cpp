@@ -1,5 +1,24 @@
 #include "../headers/Commands.hpp"
 
+std::vector<std::string> ft_split(std::string tosplit, char delimiter)
+{
+    std::vector<std::string>res;
+
+    while(!tosplit.empty())
+    {
+        size_t pos = tosplit.find(delimiter);
+
+        if (pos == std::string::npos)
+            pos = tosplit.size();
+        res.push_back(std::string(tosplit.begin(), tosplit.begin() + pos));
+        tosplit.erase(0, pos);
+        while (tosplit[0] == delimiter && !tosplit.empty())
+            tosplit.erase(0, 1);
+    }
+    return res;
+}
+
+
 int		pass(const std::string &line, int fd, Server& server)
 {
 	(void)line;
@@ -35,12 +54,46 @@ int		user(const std::string &line, int fd, Server& server)
 
 int    mode(const std::string &line, int fd, Server& server)
 {
-	(void)line;
+	// a - user is flagged as away;
+	// i - marks a users as invisible;
+	// w - user receives wallops;
+	// r - restricted user connection;
+	// o - operator flag;
+	// O - local operator flag;
+	// s - marks a user for receipt of server notices.
+	std::string user_mode("aiwroOs");
+
 	(void)fd;
 	(void)server;
-	COUT "Pointeur mode" ENDL;
+	
+	std::vector<std::string> word = ft_split(line, ' ');
+	if (word.size() != 2)
+	{
+		COUT "YO1" ENDL;
+		for (std::vector<std::string>::iterator it = word.begin(); it != word.end(); ++it)
+		{
+			std::cout << *it << std::endl;
+		}
 
-    return 2;
+		return (461); //ERR_NEEDMOREPARAMS
+	}
+	if ((*word[1].begin() != '+' && *word[1].begin() != '-')
+		|| word[1].size() < 2)
+		{
+			COUT "YO2" ENDL;
+			return (501); //ERR_UMODEUNKNOWNFLAG;
+		}
+	for (std::string::iterator it = word[1].begin() + 1; it != word[1].end(); ++it)
+	{
+		COUT "-> "<< user_mode.find(*it) ENDL;
+		if (user_mode.find(*it) == std::string::npos)
+			return (501); //ERR_UMODEUNKNOWNFLAG
+	}
+
+	// ERR_UMODEUNKNOWNFLAG 501
+	// ERR_USERSDONTMATCH 502
+	COUT "nickel" ENDL;
+    return 221; //RPL_UMODEIS
 }
 
 int    whois(const std::string &line, int fd, Server& server)

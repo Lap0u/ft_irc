@@ -15,5 +15,4 @@ int     whois(const std::string &line, int fd, Server& server);
 int     ping(const std::string &line, int fd, Server& server);
 
 
-
 #endif

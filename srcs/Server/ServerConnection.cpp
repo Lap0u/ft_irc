@@ -36,7 +36,7 @@ int		Server::setConnection(int fd)
 		perror("send");
 		exit(1);
 	}
-	findMatchingUser(fd);
+	// findMatchingUser(fd);
 	return(0);
 }
 
