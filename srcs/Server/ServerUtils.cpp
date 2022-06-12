@@ -56,6 +56,21 @@ std::string	Server::findMatchingUser(int socket)
 	return _user_tab[res - _socket_tab.begin()]->getUser();
 }
 
+std::string Server::findMatchingUser(std::string user)
+{
+	userVector::const_iterator	it = _user_tab.begin();
+
+	for (; it != _user_tab.end(); it++)
+	{
+		COUT "get nick == " << (*it)->getNick() << "!" ENDL;
+		COUT "get user == " << user.c_str() << "!" ENDL;
+		if ((*it)->getNick() == user)
+			return (*it)->getNick();
+	}
+	COUT "return" ENDL;
+	return std::string ();
+}
+
 int	Server::findMatchingSocket(std::string user)
 {
 	userVector::const_iterator	it = _user_tab.begin();

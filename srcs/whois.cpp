@@ -67,15 +67,20 @@ int    whois(const std::string &line, int fd, Server& server)
 {
 	// (void)line;
 	(void)fd;
-	(void)server;
+	// (void)server;
 
-    std::vector<std::string> tab = ft_split(line, " ;/!?");
+    std::vector<std::string> tab = ft_split(line, "\n");
 
-	COUT "Pointeur whois" ENDL;
-	COUT "line == " << line ENDL;
+	// COUT "Pointeur whois" ENDL;
+	COUT "line == " << line << "!" ENDL;
     for (unsigned int i = 0; i < tab.size(); i++)
         COUT "tab == " << tab[i] << " size == " << tab.size() ENDL;
 
-	std::cout << std::endl;
+    std::string nick = tab[1];
+    if (server.findMatchingUser(nick) == std::string())
+    {
+        COUT "no such nick" ENDL;
+        return ERR_NOSUCHNICK; 
+    }
     return RPL_ENDOFWHOIS;
 }
