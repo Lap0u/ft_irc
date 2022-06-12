@@ -16,6 +16,12 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_MYINFO(arg1, arg2, arg3, arg4);
         case 221:
             return RPL_UMODEIS(arg1);
+        case 409:
+            return ERR_NOORIGIN;
+        case 1000:
+            return RPL_PONG(arg1, arg2);
+        default:
+            COUT "This response is not into the switch yet(find_reply function)" ENDL;
     }
     return ("");
 }
