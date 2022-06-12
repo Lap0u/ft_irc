@@ -26,6 +26,7 @@ void    launch_serv(std::string port, std::string password)
 				else
 				{
 					recvline = getPaquet(server.getSocket(i)->fd);
+					std::cout << "recvline: |" << recvline << "|"<< std::endl;
 					server.parseCmd(recvline, server.getSocket(i)->fd);
 				}
 			}

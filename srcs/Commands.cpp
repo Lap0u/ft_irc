@@ -69,30 +69,36 @@ int    mode(const std::string &line, int fd, Server& server)
 	std::vector<std::string> word = ft_split(line, ' ');
 	if (word.size() != 2)
 	{
-		COUT "YO1" ENDL;
+		COUT "Paquet complet (MODE + WHOIS)" ENDL;
 		for (std::vector<std::string>::iterator it = word.begin(); it != word.end(); ++it)
 		{
-			std::cout << *it << std::endl;
+			std::cout << "boucle1: "<< *it << std::endl;
 		}
-
 		return (461); //ERR_NEEDMOREPARAMS
 	}
 	if ((*word[1].begin() != '+' && *word[1].begin() != '-')
 		|| word[1].size() < 2)
-		{
-			COUT "YO2" ENDL;
-			return (501); //ERR_UMODEUNKNOWNFLAG;
-		}
+	{
+		return (501); //ERR_UMODEUNKNOWNFLAG;
+	}
+	COUT "Paquet partiel (MODE)" ENDL;
+	COUT "word[1].size(): " << word[1].size() ENDL;
 	for (std::string::iterator it = word[1].begin() + 1; it != word[1].end(); ++it)
 	{
-		COUT "-> "<< user_mode.find(*it) ENDL;
-		if (user_mode.find(*it) == std::string::npos)
+		COUT "user_mode.find(*it): "<< user_mode.find(*it) ENDL;
+		COUT "*it: "<< *it ENDL;
+		if (it != word[1].end() && *(it + 1))
+			COUT "*(it + 1): |" << *(it + 1) << "|" ENDL;
+		if (it != word[1].end() && user_mode.find(*it) == std::string::npos)
+		{
+			COUT "501" ENDL;
 			return (501); //ERR_UMODEUNKNOWNFLAG
+		}
 	}
 
 	// ERR_UMODEUNKNOWNFLAG 501
 	// ERR_USERSDONTMATCH 502
-	COUT "nickel" ENDL;
+	COUT "REPL 221" ENDL;
     return 221; //RPL_UMODEIS
 }
 
