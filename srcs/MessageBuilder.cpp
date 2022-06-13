@@ -16,6 +16,12 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_MYINFO(arg1, arg2, arg3, arg4);
         case 221:
             return RPL_UMODEIS(arg1);
+        case 409:
+            return ERR_NOORIGIN;
+        case 1000:
+            return SPE_PONG(arg1, arg2);
+        default:
+            COUT "This response is not into the switch yet(find_reply function)" ENDL;
     }
     return ("");
 }
@@ -37,6 +43,17 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
         perror("send reply");
+        exit(1);
+    }
+}
+
+void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const
+{
+    std::string message = find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
+    DEB "reply sent " << message ENDL;
+    if (send(fd, message.c_str(), message.length(), 0) < 0)
+    {
+        perror("send");
         exit(1);
     }
 }
