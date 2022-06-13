@@ -57,8 +57,8 @@ public:
 	int				setConnection(int fd);
 	void			deleteUserSocket(nfds_t i);
 
-	std::string		findMatchingUser(int fd);
-	int				findMatchingSocket(std::string user);
+	User*			findMatchingUser(int fd);
+	t_pollfd		findMatchingSocket(std::string user);
 	int				findPosSocket(int fd);
 
 	void			parseCmd(std::string line, int fd);

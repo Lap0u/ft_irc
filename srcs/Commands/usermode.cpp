@@ -6,6 +6,5 @@ int    mode(const std::string &line, int fd, Server& server)
 	(void)fd;
 	(void)server;
 	COUT "Pointeur mode" ENDL;
-
     return 2;
 }

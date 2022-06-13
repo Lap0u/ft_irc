@@ -1,6 +1,6 @@
 #include "../../headers/Server.hpp"
 
-bool    Server::isUserUnique(User* user) const
+bool    	Server::isUserUnique(User* user) const
 {
 	for (std::vector<User*>::const_iterator it = _user_tab.begin(); it != _user_tab.end(); it++)
 	{
@@ -13,7 +13,7 @@ bool    Server::isUserUnique(User* user) const
 	return true;
 }
 
-bool	Server::addUser(User* user)
+bool		Server::addUser(User* user)
 {
 	if (!_user_tab.empty() && !isUserUnique(user))
 		return false;
@@ -21,7 +21,7 @@ bool	Server::addUser(User* user)
 	return true;
 }
 
-void	Server::addSocket(int fd, short events)
+void		Server::addSocket(int fd, short events)
 {
 	t_pollfd fd_new;
 
@@ -37,10 +37,10 @@ void		Server::deleteUserSocket(nfds_t i)
 	_user_tab.erase(_user_tab.begin() + i);
 }
 
-std::string	Server::findMatchingUser(int socket)
+User*		Server::findMatchingUser(int socket)
 {
-	pollfdVector::const_iterator res;
-	t_pollfd temp;
+	pollfdVector::const_iterator	res;
+	t_pollfd 						temp;
 
 	temp.fd = socket;
 
@@ -48,13 +48,12 @@ std::string	Server::findMatchingUser(int socket)
 	if (res == _socket_tab.end())
 	{
 		CERR "not found" ENDL;
-		return (std::string ());
+		return (NULL);
 	}
-	DEB res - _socket_tab.begin() ENDL;
-	return _user_tab[res - _socket_tab.begin()]->getUser();
+	return _user_tab[res - _socket_tab.begin()];
 }
 
-int	Server::findMatchingSocket(std::string user)
+t_pollfd	Server::findMatchingSocket(std::string user)
 {
 	userVector::const_iterator	it = _user_tab.begin();
 	int							i = 0;
@@ -64,10 +63,10 @@ int	Server::findMatchingSocket(std::string user)
 		if ((*it)->getNick() == user)
 				break;
 	}
-	return _socket_tab[i].fd;
+	return _socket_tab[i];
 }
 
-int	Server::findPosSocket(int fd)
+int			Server::findPosSocket(int fd)
 {
 	size_t pos = 0;
 

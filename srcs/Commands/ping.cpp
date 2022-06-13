@@ -10,6 +10,5 @@ int    ping(const std::string &line, int fd, Server& server)
 		return 1;		
 	}
 	server.send_reply_no_header(fd, 1000, server.getServerName(), parsedLine[1], "", "");
-
     return 2;
 }
