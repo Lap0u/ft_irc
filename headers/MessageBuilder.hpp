@@ -9,9 +9,12 @@
 # define RPL_CREATED(date) ("This server was created " + date)
 # define RPL_MYINFO(servername, version, usr_mod, chan_mod) (servername + version + usr_mod + chan_mod)
 # define RPL_UMODEIS(usr_mod) (usr_mod)
-# define RPL_PONG(sender, receiver) ("PONG " + arg1 + " " + arg2)
+# define SPE_PONG(sender, receiver) ("PONG " + arg1 + " " + arg2)
 
-#define ERR_NOORIGIN ":No origin specified"
+# define ERR_NOORIGIN ":No origin specified"
+
+
+# define SPE_PONG(sender, receiver) ("PONG " + arg1 + " " + arg2)
 
 void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 
