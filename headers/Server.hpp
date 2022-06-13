@@ -55,15 +55,14 @@ public:
 	void			addSocket(int fd, short events);
 	void			connectionRequest(void);
 	int				setConnection(int fd);
-	int				parseRecv(int fd, char buf[]);
-	int				connectionSuccess(void);
-	int				connectionFailure(void);
 	void			deleteUserSocket(nfds_t i);
 
 	std::string		findMatchingUser(int fd);
 	int				findMatchingSocket(std::string user);
+	int				findPosSocket(int fd);
 
 	void			parseCmd(std::string line, int fd);
+	std::string     getPackage(int fd, bool registered);
 
 	void			send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
 	

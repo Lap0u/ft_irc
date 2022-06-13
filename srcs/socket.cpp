@@ -1,6 +1,8 @@
 #include "../headers/Irc.hpp"
 #include "../headers/Server.hpp"
 
+
+
 void    launch_serv(std::string port, std::string password)
 {
 	Server		server(atoi(port.c_str()), password);
@@ -24,9 +26,19 @@ void    launch_serv(std::string port, std::string password)
 				if (i == 0)
 					server.connectionRequest();
 				else
-				{
-					recvline = getPaquet(server.getSocket(i)->fd);
-					server.parseCmd(recvline, server.getSocket(i)->fd);
+				{					
+					while (1)
+					{
+						recvline = server.getPackage(server.getSocket(i)->fd, true);
+						if (recvline.empty())
+							break ;
+						while (recvline.find("\r\n") != std::string::npos)
+						{
+							server.parseCmd(recvline, server.getSocket(i)->fd);
+							recvline.erase(0, recvline.find("\r\n") + 2);
+						}
+						recvline.clear();
+					}
 				}
 			}
 		}
