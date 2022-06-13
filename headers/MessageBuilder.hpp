@@ -9,7 +9,7 @@
 # define RPL_CREATED(date) ("This server was created " + date)
 # define RPL_MYINFO(servername, version, usr_mod, chan_mod) (servername + " " + version + " " + usr_mod + " " + chan_mod)
 # define RPL_UMODEIS(usr_mod) (usr_mod)
-# define RPL_NONICKNAMEGIVEN ":No nickname given"
+# define ERR_NONICKNAMEGIVEN ":No nickname given"
 # define ERR_ERRONEUSNICKNAME (nick) nick + " :Erroneous nickname"
 # define ERR_NICKNAMEINUSE (nick) nick + " :Nickname is already in use"
 # define ERR_UNAVAILRESOURCE (nick) nick + " :Nick is temporarily unavailable"
