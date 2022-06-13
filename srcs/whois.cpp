@@ -69,7 +69,7 @@ int    whois(const std::string &line, int fd, Server& server)
 	(void)fd;
 	// (void)server;
 
-    std::vector<std::string> tab = ft_split(line, "\n");
+    std::vector<std::string> tab = ft_split(line, " \n");
 
 	// COUT "Pointeur whois" ENDL;
 	COUT "line == " << line << "!" ENDL;
