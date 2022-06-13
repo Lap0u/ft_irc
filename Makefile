@@ -21,7 +21,14 @@ SRC			=	main.cpp \
 				srcs/Server/ServerUtils.cpp \
 				srcs/Message.cpp \
 				srcs/Commands.cpp \
-				srcs/MessageBuilder.cpp
+				srcs/MessageBuilder.cpp \
+				srcs/Commands/cap.cpp \
+				srcs/Commands/nick.cpp \
+				srcs/Commands/oper.cpp \
+				srcs/Commands/pass.cpp \
+				srcs/Commands/ping.cpp \
+				srcs/Commands/user.cpp \
+				srcs/Commands/usermode.cpp
 
 OBJ			=	$(SRC:%.cpp=%.o)
 
