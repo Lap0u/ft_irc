@@ -7,7 +7,7 @@
 # define RPL_WELCOME(nick) ("Welcome to the Internet Relay Network " + nick)
 # define RPL_YOURHOST(servername, ver) ("Your host is " + servername + " running version " + ver)
 # define RPL_CREATED(date) ("This server was created " + date)
-# define RPL_MYINFO(servername, version, usr_mod, chan_mod) (servername + version + usr_mod + chan_mod)
+# define RPL_MYINFO(servername, version, usr_mod, chan_mod) (servername + " " + version + " " + usr_mod + " " + chan_mod)
 # define RPL_UMODEIS(usr_mod) (usr_mod)
 # define SPE_PONG(sender, receiver) ("PONG " + arg1 + " " + arg2)
 
