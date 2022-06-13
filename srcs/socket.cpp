@@ -25,7 +25,7 @@ void    launch_serv(std::string port, std::string password)
 					server.connectionRequest();
 				else
 				{
-					recvline = server.getPackage(server.getSocket(i)->fd);
+					recvline = server.getPackage(server.getSocket(i)->fd, true);
 					while (recvline.find("\r\n") != std::string::npos)
 					{
 						server.parseCmd(recvline, server.getSocket(i)->fd);

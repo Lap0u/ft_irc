@@ -83,7 +83,7 @@ int	Server::findPosSocket(int fd)
 	return pos;
 }
 
-std::string	Server::getPackage(int fd)
+std::string	Server::getPackage(int fd, bool registered)
 {
 	char		recvline[MAXLINE + 1];
 	int			n = 0;
@@ -99,7 +99,7 @@ std::string	Server::getPackage(int fd)
 	{
 		CERR "Socket close by client" ENDL;
 		close(fd);
-		if (findPosSocket(fd) > 0)
+		if (registered)
 		{
 			_socket_tab.erase(_socket_tab.begin() + findPosSocket(fd));
 			_user_tab.erase(_user_tab.begin() + findPosSocket(fd));

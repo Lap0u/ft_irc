@@ -6,7 +6,7 @@ int		Server::setConnection(int fd)
 
 	while (1)
 	{
-		recvline = getPackage(fd);
+		recvline = getPackage(fd, false);
 		if (recvline.empty())
 			break ;
 		while (recvline.find("\r\n") != std::string::npos)

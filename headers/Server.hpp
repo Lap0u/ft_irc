@@ -65,7 +65,7 @@ public:
 	int				findPosSocket(int fd);
 
 	void			parseCmd(std::string line, int fd);
-	std::string     getPackage(int fd);
+	std::string     getPackage(int fd, bool registered);
 
 	void			send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
 	
