@@ -1,7 +1,8 @@
-#include "../headers/Commands.hpp"
+n#include "../headers/Commands.hpp"
 
 std::vector<std::string> ft_split(std::string tosplit, char delimiter)
 {
+    tosplit.erase(tosplit.size() - 2, 2);
     std::vector<std::string>res;
 
     while(!tosplit.empty())
@@ -18,124 +19,12 @@ std::vector<std::string> ft_split(std::string tosplit, char delimiter)
     return res;
 }
 
-
-int		cap(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur cap fonction" ENDL;
-	return 2;
-}
-int		pass(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur pass fonction" ENDL;
-	return 2;
-}
-int		nick(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur nick fonction" ENDL;
-	return 2;
-}
-int		user(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur user fonction" ENDL;
-	User* user_new = new User(fd, "nick", "name", "pass", "mode");
-	if (server.addUser(user_new) == true)
-		server.addSocket(fd, POLLIN);
-	else
-		delete user_new;
-	server.send_reply(fd, 001, "nick", "", "", "");
-	server.send_reply(fd, 002, "servername", "ver", "", "");
-	server.send_reply(fd, 003, "Date", "", "", "");
-	server.send_reply(fd, 004, "servername", "version", "usr_mod", "chan_mod");
-	return 2;
-}
-
-int		oper(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur oper fonction" ENDL;
-	return 2;
-}
-
-int    mode(const std::string &line, int fd, Server& server)
-{
-	// a - user is flagged as away;
-	// i - marks a users as invisible;
-	// w - user receives wallops;
-	// r - restricted user connection;
-	// o - operator flag;
-	// O - local operator flag;
-	// s - marks a user for receipt of server notices.
-	std::string user_mode("aiwroOs");
-
-	(void)fd;
-	(void)server;
-	
-	std::vector<std::string> word = ft_split(line, ' ');
-	if (word.size() != 2)
-	{
-		COUT "Paquet complet (MODE + WHOIS)" ENDL;
-		for (std::vector<std::string>::iterator it = word.begin(); it != word.end(); ++it)
-		{
-			std::cout << "boucle1: "<< *it << std::endl;
-		}
-		return (461); //ERR_NEEDMOREPARAMS
-	}
-	if ((*word[1].begin() != '+' && *word[1].begin() != '-')
-		|| word[1].size() < 2)
-	{
-		return (501); //ERR_UMODEUNKNOWNFLAG;
-	}
-	COUT "Paquet partiel (MODE)" ENDL;
-	COUT "word[1].size(): " << word[1].size() ENDL;
-	for (std::string::iterator it = word[1].begin() + 1; it != word[1].end(); ++it)
-	{
-		COUT "user_mode.find(*it): "<< user_mode.find(*it) ENDL;
-		COUT "*it: "<< *it ENDL;
-		if (it != word[1].end() && *(it + 1))
-			COUT "*(it + 1): |" << *(it + 1) << "|" ENDL;
-		if (it != word[1].end() && user_mode.find(*it) == std::string::npos)
-		{
-			COUT "501" ENDL;
-			return (501); //ERR_UMODEUNKNOWNFLAG
-		}
-	}
-
-	// ERR_UMODEUNKNOWNFLAG 501
-	// ERR_USERSDONTMATCH 502
-	COUT "REPL 221" ENDL;
-    return 221; //RPL_UMODEIS
-}
-
 int    whois(const std::string &line, int fd, Server& server)
 {
 	(void)line;
 	(void)fd;
 	(void)server;
 	COUT "Pointeur whois" ENDL;
-
-    return 2;
-}
-
-int    ping(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur ping" ENDL;
 
     return 2;
 }

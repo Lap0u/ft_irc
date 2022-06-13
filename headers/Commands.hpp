@@ -6,6 +6,8 @@
 
 class Server;
 
+std::vector<std::string> ft_split(std::string tosplit, char delimiter);
+
 int		cap(const std::string &line, int fd, Server& server);
 int     pass(const std::string &line, int fd, Server& server);
 int     nick(const std::string &line, int fd, Server& server);
