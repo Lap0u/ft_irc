@@ -2,7 +2,6 @@
 
 std::vector<std::string> ft_split(std::string tosplit, char delimiter)
 {
-    tosplit.erase(tosplit.size() - 2, 2);
     std::vector<std::string>res;
 
     while(!tosplit.empty())

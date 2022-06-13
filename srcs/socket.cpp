@@ -8,6 +8,7 @@ void    launch_serv(std::string port, std::string password)
 	Server		server(atoi(port.c_str()), password);
 	int			ret_poll;
 	std::string	recvline;
+	std::string	separatedline;
 	
 	while(1)
 	{
@@ -34,7 +35,8 @@ void    launch_serv(std::string port, std::string password)
 							break ;
 						while (recvline.find("\r\n") != std::string::npos)
 						{
-							server.parseCmd(recvline, server.getSocket(i)->fd);
+							separatedline = recvline.substr(0, recvline.find("\r\n"));
+							server.parseCmd(separatedline, server.getSocket(i)->fd);
 							recvline.erase(0, recvline.find("\r\n") + 2);
 						}
 						recvline.clear();

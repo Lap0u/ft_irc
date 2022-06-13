@@ -3,6 +3,7 @@
 int		Server::setConnection(int fd)
 {
 	std::string	recvline;
+	std::string	separatedline;
 
 	while (1)
 	{
@@ -11,7 +12,8 @@ int		Server::setConnection(int fd)
 			break ;
 		while (recvline.find("\r\n") != std::string::npos)
 		{
-			parseCmd(recvline, fd);
+			separatedline = recvline.substr(0, recvline.find("\r\n"));
+			parseCmd(separatedline, fd);
 			recvline.erase(0, recvline.find("\r\n") + 2);
 		}
 		recvline.clear();
