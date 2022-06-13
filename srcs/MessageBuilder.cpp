@@ -27,7 +27,7 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
         default:
             COUT "This response is not into the switch yet(find_reply function)" ENDL;
     }
-    return ("");
+    return (ES);
 }
 
 void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const

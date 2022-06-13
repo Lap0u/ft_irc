@@ -23,6 +23,7 @@
 # define MAXLINE 4096
 # define SA struct sockaddr
 
+# define ES std::string()
 # define COUT std::cout <<
 # define CERR std::cerr <<
 # define DEB if (DEBUG == 2) std::cerr << 
