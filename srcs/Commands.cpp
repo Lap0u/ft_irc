@@ -33,6 +33,8 @@ int		user(const std::string &line, int fd, Server& server)
 	User* user_new = new User(fd, "nick", "name", "pass", "mode");
 	if (server.addUser(user_new) == true)
 		server.addSocket(fd, POLLIN);
+	else
+		delete user_new;
 	server.send_reply(fd, 001, "nick", "", "", "");
 	server.send_reply(fd, 002, "servername", "ver", "", "");
 	server.send_reply(fd, 003, "Date", "", "", "");

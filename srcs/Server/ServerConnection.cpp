@@ -32,13 +32,3 @@ void	Server::connectionRequest(void)
 	if (setConnection(fd) == -1)
 		return ;
 }
-
-int		Server::connectionSuccess(void)
-{
-	return (1);
-}
-
-int		Server::connectionFailure(void)
-{
-	return (0);
-}

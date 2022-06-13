@@ -55,9 +55,6 @@ public:
 	void			addSocket(int fd, short events);
 	void			connectionRequest(void);
 	int				setConnection(int fd);
-	int				parseRecv(int fd, std::string recv);
-	int				connectionSuccess(void);
-	int				connectionFailure(void);
 	void			deleteUserSocket(nfds_t i);
 
 	std::string		findMatchingUser(int fd);
