@@ -31,8 +31,6 @@ void	Server::addSocket(int fd, short events)
 	_socket_tab.push_back(fd_new);
 }
 
-// Server::handlingExistingConnection()
-
 void		Server::deleteUserSocket(nfds_t i)
 {
 	_socket_tab.erase(_socket_tab.begin() + i);
@@ -73,8 +71,6 @@ int	Server::findPosSocket(int fd)
 {
 	size_t pos = 0;
 
-	if (_socket_tab.size() == 0)
-		return (-1);
 	for (; pos < _socket_tab.size(); pos++)
 	{
 		if (_socket_tab[pos].fd == fd)
@@ -98,13 +94,10 @@ std::string	Server::getPackage(int fd, bool registered)
 	else if (n == 0)
 	{
 		CERR "Socket close by client" ENDL;
-		close(fd);
 		if (registered)
-		{
-			_socket_tab.erase(_socket_tab.begin() + findPosSocket(fd));
-			_user_tab.erase(_user_tab.begin() + findPosSocket(fd));
-		}
-		return ("");
+			deleteUserSocket(findPosSocket(fd));
+		close(fd);
+		return (std::string ());
 	}
 	return (std::string (recvline));
 }
