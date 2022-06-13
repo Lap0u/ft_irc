@@ -73,6 +73,8 @@ int	Server::findPosSocket(int fd)
 {
 	size_t pos = 0;
 
+	if (_socket_tab.size() == 0)
+		return (-1);
 	for (; pos < _socket_tab.size(); pos++)
 	{
 		if (_socket_tab[pos].fd == fd)
@@ -97,8 +99,11 @@ std::string	Server::getPackage(int fd)
 	{
 		CERR "Socket close by client" ENDL;
 		close(fd);
-		_socket_tab.erase(_socket_tab.begin() + findPosSocket(fd));
-		_user_tab.erase(_user_tab.begin() + findPosSocket(fd));
+		if (findPosSocket(fd) > 0)
+		{
+			_socket_tab.erase(_socket_tab.begin() + findPosSocket(fd));
+			_user_tab.erase(_user_tab.begin() + findPosSocket(fd));
+		}
 		return ("");
 	}
 	return (std::string (recvline));
