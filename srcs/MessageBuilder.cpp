@@ -36,7 +36,7 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
     DEB "reply sent " << message ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
-        perror("send");
+        perror("send replyq");
         exit(1);
     }
 }

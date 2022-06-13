@@ -43,6 +43,7 @@ void	Server::initReplies(void)
 
 void	Server::initCommands(void)
 {
+	_commands["CAP"] = cap;
 	_commands["PASS"] = pass;
 	_commands["NICK"] = nick;
 	_commands["OPER"] = oper;

@@ -1,5 +1,13 @@
 #include "../headers/Commands.hpp"
 
+int		cap(const std::string &line, int fd, Server& server)
+{
+	(void)line;
+	(void)fd;
+	(void)server;
+	COUT "Pointeur cap fonction" ENDL;
+	return 2;
+}
 int		pass(const std::string &line, int fd, Server& server)
 {
 	(void)line;
@@ -13,15 +21,7 @@ int		nick(const std::string &line, int fd, Server& server)
 	(void)line;
 	(void)fd;
 	(void)server;
-	COUT "Pointeur fonction" ENDL;
-	return 2;
-}
-int		oper(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur fonction" ENDL;
+	COUT "Pointeur nick fonction" ENDL;
 	return 2;
 }
 int		user(const std::string &line, int fd, Server& server)
@@ -29,7 +29,23 @@ int		user(const std::string &line, int fd, Server& server)
 	(void)line;
 	(void)fd;
 	(void)server;
-	COUT "Pointeur fonction" ENDL;
+	COUT "Pointeur user fonction" ENDL;
+	User* user_new = new User(fd, "nick", "name", "pass", "mode");
+	if (server.addUser(user_new) == true)
+		server.addSocket(fd, POLLIN);
+	server.send_reply(fd, 001, "nick", "", "", "");
+	server.send_reply(fd, 002, "servername", "ver", "", "");
+	server.send_reply(fd, 003, "Date", "", "", "");
+	server.send_reply(fd, 004, "servername", "version", "usr_mod", "chan_mod");
+	return 2;
+}
+
+int		oper(const std::string &line, int fd, Server& server)
+{
+	(void)line;
+	(void)fd;
+	(void)server;
+	COUT "Pointeur oper fonction" ENDL;
 	return 2;
 }
 

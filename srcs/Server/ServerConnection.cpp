@@ -2,25 +2,20 @@
 
 int		Server::setConnection(int fd)
 {
-	int			ret = 0;
 	std::string	recvline;
-	char		buff[MAXLINE + 1];
 
-	for (int i = 0; i < 4; i++)
+	while (1)
 	{
 		recvline = getPackage(fd);
-		if (!recvline.empty())
-			ret = parseRecv(fd, recvline);
-		if (ret == 1)
+		if (recvline.empty())
 			break ;
+		while (recvline.find("\r\n") != std::string::npos)
+		{
+			parseCmd(recvline, fd);
+			recvline.erase(0, recvline.find("\r\n") + 2);
+		}
 		recvline.clear();
     }
-	snprintf((char*)buff, sizeof(buff), "001\r\nWelcome to irc\r\n002\r\nYour host is blabla\r\n003\r\nThis server was created today\r\n004\r\nAll server infos\r\n");
-	if (send(fd, (char*)buff, strlen((char *)buff), 0) < 0) //flag MSG_DONTWAIT?
-	{
-		perror("send");
-		exit(1);
-	}
 	return(0);
 }
 
