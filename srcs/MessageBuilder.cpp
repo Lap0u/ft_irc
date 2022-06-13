@@ -18,6 +18,10 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_UMODEIS(arg1);
         case 409:
             return ERR_NOORIGIN;
+        case 461:
+            return ERR_NEEDMOREPARAMS(arg1);
+        case 462:
+            return ERR_ALREADYREGISTRED;
         case 1000:
             return SPE_PONG(arg1, arg2);
         default:

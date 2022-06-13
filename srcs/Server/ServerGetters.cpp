@@ -21,3 +21,8 @@ std::string Server::getServerName(void) const
 {
 	return _server_name;
 }
+
+std::string Server::getServerPassword(void) const
+{
+	return _server_password;
+}
