@@ -11,6 +11,8 @@
 # define RPL_UMODEIS(usr_mod) (usr_mod)
 # define SPE_PONG(sender, receiver) ("PONG " + arg1 + " " + arg2)
 
+# define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
+# define ERR_ALREADYREGISTRED ":Unauthorized command (already registered)"
 # define ERR_NOORIGIN ":No origin specified"
 
 

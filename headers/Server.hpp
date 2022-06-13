@@ -51,6 +51,7 @@ public:
 	nfds_t			getSocketSize(void) const;
 	int				getMainSocket(void) const;
 	std::string		getServerName(void) const;
+	std::string		getServerPassword(void) const;
 
 	void			addSocket(int fd, short events);
 	void			connectionRequest(void);
