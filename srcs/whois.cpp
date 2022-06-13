@@ -69,18 +69,26 @@ int    whois(const std::string &line, int fd, Server& server)
 	(void)fd;
 	// (void)server;
 
-    std::vector<std::string> tab = ft_split(line, " \r\n");
+    std::vector<std::string> tab = ft_split(line, " \r\n,");
 
 	// COUT "Pointeur whois" ENDL;
 	COUT "line == " << line << "!" ENDL;
-    for (unsigned int i = 0; i < tab.size(); i++)
-        COUT "tab == " << tab[i] << " size == " << tab.size() ENDL;
-
-    std::string nick = tab[1];
-    if (server.findMatchingUser(nick) == std::string())
+    // for (unsigned int i = 0; i < tab.size(); i++)
+    // {
+    //     COUT "tab == " << tab[i] << " size == " << tab.size() ENDL;
+    // }
+    if (tab.size() == 1)
     {
-        COUT "no such nick" ENDL;
-        return ERR_NOSUCHNICK; 
+        return ERR_NONICKNAMEGIVEN;
+    }
+    for (unsigned int i = 1; i < tab.size(); i++)
+    {
+        COUT "tab i == " << tab[i] ENDL;
+        if (server.findMatchingUser(tab[i]) == std::string())
+        {
+            COUT "no such nick" ENDL;
+            return ERR_NOSUCHNICK; 
+        }
     }
     return RPL_ENDOFWHOIS;
 }
