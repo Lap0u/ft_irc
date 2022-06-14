@@ -87,16 +87,20 @@ int    whois(const std::string &line, int fd, Server& server)
         }
         else
         {
-			server.send_reply(fd, WI_RPL_WHOISUSER, std::string(), std::string(), std::string(), std::string());
-    		server.send_reply(fd, WI_RPL_WHOISOPERATOR, std::string(), std::string(), std::string(), std::string());
-    		server.send_reply(fd, WI_RPL_WHOISIDLE, std::string(), std::string(), std::string(), std::string());
-    		server.send_reply(fd, WI_RPL_WHOISCHANNELS, std::string(), std::string(), std::string(), std::string());
+			server.send_reply(fd, WI_RPL_WHOISUSER, user->getNick(), user->getUserName(), "localhost", user->getUserName());
+			server.send_reply(fd, WI_RPL_WHOISSERVER, user->getNick(), server.getServerName(), std::string(), std::string());
+    		if (user->isOperator())
+            {
+                server.send_reply(fd, WI_RPL_WHOISOPERATOR, user->getNick(), std::string(), std::string(), std::string());
+            }
+    		server.send_reply(fd, WI_RPL_WHOISIDLE, user->getNick(), std::string(), std::string(), std::string());
+    		server.send_reply(fd, WI_RPL_WHOISCHANNELS, user->getNick(), std::string(), std::string(), std::string());
             if (user->getMode() == "a")
             {
-    		    server.send_reply(fd, WI_RPL_AWAY, std::string(), std::string(), std::string(), std::string());
+    		    server.send_reply(fd, WI_RPL_AWAY, user->getNick(), "is away", std::string(), std::string());
             }
         }
     }
-    server.send_reply(fd, WI_RPL_ENDOFWHOIS, std::string(), std::string(), std::string(), std::string());
+    server.send_reply(fd, WI_RPL_ENDOFWHOIS, tab[1], std::string(), std::string(), std::string());
     return 0;
 }
