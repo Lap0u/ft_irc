@@ -25,6 +25,22 @@ bool    is_in_set(const std::string& str, const std::string& str2)
 		if (str2.find(*it) == std::string::npos)
 			return false;
 	}
+    {
+        if (str2.find(*it) == std::string::npos)
+            return false;
+    }
+    return true;
+}
+
+bool    is_in_set(const std::string& str, const std::string& str2, size_t size)
+{
+    size_t i = 0;
+
+    for (std::string::const_iterator it = str.begin(); it != str.end() && i < size; ++it)
+    {
+        if (str2.find(*it) == std::string::npos)
+            return false;
+    }
     return true;
 }
 

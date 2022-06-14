@@ -13,6 +13,19 @@ bool    	Server::isUserUnique(User* user) const
 	return true;
 }
 
+bool    	Server::isUserUnique(const std::string &nick) const
+{
+	for (std::vector<User*>::const_iterator it = _user_tab.begin(); it != _user_tab.end(); it++)
+	{
+		if ((*it)->getNick() == nick)
+		{
+			DEB "NICK EQUAL: "<< (*it)->getNick() ENDL;
+			return false;
+		}
+	}
+	return true;
+}
+
 bool		Server::addUser(User* user)
 {
 	if (!_user_tab.empty() && !isUserUnique(user))

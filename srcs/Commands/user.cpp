@@ -11,9 +11,9 @@ int		user(const std::string &line, int fd, Server& server)
 		server.addSocket(fd, POLLIN);
 	else
 		delete user_new;
-	server.send_reply(fd, 001, "nick", "", "", "");
-	server.send_reply(fd, 002, "servername", "ver", "", "");
-	server.send_reply(fd, 003, "Date", "", "", "");
+	server.send_reply(fd, 001, "nick", ES, ES, ES);
+	server.send_reply(fd, 002, "servername", "ver", ES, ES);
+	server.send_reply(fd, 003, "Date", ES, ES, ES);
 	server.send_reply(fd, 004, "servername", "version", "usr_mod", "chan_mod");
 	return 2;
 }
