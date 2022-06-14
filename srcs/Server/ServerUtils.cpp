@@ -53,6 +53,21 @@ User*		Server::findMatchingUser(int socket)
 	return _user_tab[res - _socket_tab.begin()];
 }
 
+User*		Server::findMatchingUser(std::string user)
+{
+	userVector::const_iterator	it = _user_tab.begin();
+
+	for (; it != _user_tab.end(); it++)
+	{
+		COUT "get nick == " << (*it)->getNick() << "!" ENDL;
+		COUT "get user == " << user.c_str() << "!" ENDL;
+		if ((*it)->getNick() == user)
+			return *it;
+	}
+	COUT "return" ENDL;
+	return NULL;
+}
+
 t_pollfd	Server::findMatchingSocket(std::string user)
 {
 	userVector::const_iterator	it = _user_tab.begin();
