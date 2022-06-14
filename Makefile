@@ -29,7 +29,7 @@ SRC			=	main.cpp \
 				srcs/Commands/ping.cpp \
 				srcs/Commands/user.cpp \
 				srcs/Commands/usermode.cpp \
-				srcs/whois.cpp \
+				srcs/Commands/whois.cpp \
 
 OBJ			=	$(SRC:%.cpp=%.o)
 
