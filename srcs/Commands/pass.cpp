@@ -6,12 +6,12 @@ int		pass(const std::string &line, int fd, Server& server)
 	std::vector<std::string>parsedLine = ft_split(line, ' ');
 	if (parsedLine.size() < 2)
 	{
-		server.send_reply(fd, 461, "PASS", "", "", "");
+		server.send_reply(fd, 461, "PASS", ES, ES, ES);
 		return 1;		
 	}
 	if (server.findMatchingUser(fd) != NULL)
 	{
-		server.send_reply(fd, 462, "", "", "", "");
+		server.send_reply(fd, 462, ES, ES, ES, ES);
 		return 1;
 	}
 	if (parsedLine[1] != server.getServerPassword())

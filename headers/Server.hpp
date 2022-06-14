@@ -45,6 +45,7 @@ public:
 	virtual ~Server( void );
 
 	bool			isUserUnique(User* user) const;
+	bool			isUserUnique(const std::string &nick) const;
 	bool			addUser(User* user);
 
 	t_pollfd*		getSocket(nfds_t i);
