@@ -6,7 +6,7 @@ int		user(const std::string &line, int fd, Server& server)
 	(void)fd;
 	(void)server;
 	COUT "Pointeur user fonction" ENDL;
-	User* user_new = new User(fd, "Nick", "name", "pass", std::string());
+	User* user_new = new User(fd, "nick", "name", "pass", std::string());
 	if (server.addUser(user_new) == true)
 		server.addSocket(fd, POLLIN);
 	else
