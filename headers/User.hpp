@@ -25,7 +25,7 @@ public:
 	int		getSocket(void) const;
 	bool	isOperator(void) const;
 
-	const std::string	getNick(void) constpass(pass(;
+	const std::string	getNick(void) const;
 	const std::string	getUserName(void) const;
 	const std::string	getPass(void) const;
 	const std::string	getMode(void) const;
