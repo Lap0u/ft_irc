@@ -59,9 +59,9 @@ void	User::setPass(std::string pass)
 {
 	_pass = pass;
 }
-void	User::setMode(std::string mode)
+void	User::updateMode(std::string mode)
 {
-	_mode = mode;
+	
 }
 
 bool	User::operator==(User* user) const

@@ -2,7 +2,7 @@
 
 bool    	Server::isUserUnique(User* user) const
 {
-	for (std::vector<User*>::const_iterator it = _user_tab.begin(); it != _user_tab.end(); it++)
+	for (userVector::const_iterator it = _user_tab.begin(); it != _user_tab.end(); it++)
 	{
 		if ((*it)->getNick() == user->getNick())
 		{
@@ -61,9 +61,9 @@ t_pollfd	Server::findMatchingSocket(std::string user)
 	for (; it != _user_tab.end(); it++, i++)
 	{
 		if ((*it)->getNick() == user)
-				break;
+			return _socket_tab[i];
 	}
-	return _socket_tab[i];
+	return _socket_tab[0];
 }
 
 int			Server::findPosSocket(int fd)

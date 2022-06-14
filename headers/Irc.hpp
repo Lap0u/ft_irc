@@ -22,6 +22,8 @@
 # define SERVER_PORT 6667
 # define MAXLINE 4096
 # define SA struct sockaddr
+# define OP_PASS "oppass"
+# define USER_MODE "aiwroOs"
 
 # define COUT std::cout <<
 # define CERR std::cerr <<

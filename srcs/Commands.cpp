@@ -18,6 +18,16 @@ std::vector<std::string> ft_split(std::string tosplit, char delimiter)
     return res;
 }
 
+bool    is_in_set(const std::string& str, const std::string& str2)
+{
+    for (std::string::const_iterator it = str.begin(); it != str.end(); ++it)
+	{
+		if (str2.find(*it) == std::string::npos)
+			return false;
+	}
+    return true;
+}
+
 int    whois(const std::string &line, int fd, Server& server)
 {
 	(void)line;

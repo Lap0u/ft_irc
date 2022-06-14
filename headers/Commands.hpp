@@ -7,6 +7,7 @@
 class Server;
 
 std::vector<std::string> ft_split(std::string tosplit, char delimiter);
+bool    is_in_set(const std::string& str, const std::string& str2);
 
 int		cap(const std::string &line, int fd, Server& server);
 int     pass(const std::string &line, int fd, Server& server);
