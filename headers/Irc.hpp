@@ -22,6 +22,8 @@
 # define SERVER_PORT 6667
 # define MAXLINE 4096
 # define SA struct sockaddr
+# define NICK_CHAR "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[]\\`_^{|}"
+# define NICK_LAST_CHAR "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[]\\`_^{|}1234567890-"
 
 # define ES std::string()
 # define COUT std::cout <<

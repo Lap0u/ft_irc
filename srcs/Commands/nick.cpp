@@ -2,7 +2,9 @@
 
 int	checkNickInSet(const std::string &nick)
 {
-	if (nick == "Pierre")
+	if (nick.size() > 9)
+		return 1;
+	if (is_in_set(nick, NICK_CHAR, 8) == false || is_in_set(&nick[8], NICK_LAST_CHAR, 1) == false)
 		return 1;
 	return 0;
 }
@@ -12,23 +14,28 @@ int	checkNickDoublon(const std::string &nick, Server& server)
 	return (!server.isUserUnique(nick));
 }
 
-int	checkNickDelay(const std::string &nick, Server& server)
+int	checkNickDelay(User *newUser)
 {
-	if (nick == "Pierre")
-		return 1;
+	if (newUser == NULL)
+		return 0;
+	//check le delay du USER
 	return 0;
 }
 
-int	checkNickRestricted(const std::string &nick, Server& server)
+int	checkNickRestricted(User *newUser)
 {
-	if (nick == "Pierre")
+	if (newUser == NULL)
+		return 0;
+	std::string mode = newUser->getMode();
+	if (!(mode.find('r') == std::string::npos))
 		return 1;
 	return 0;
 }
 
 int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 {
-	if (size < 2)//nick provided
+	User* newly = server.findMatchingUser(fd);
+	if (size < 2)//nick not provided
 	{
 		server.send_reply(fd, 431, ES, ES, ES, ES);
 		return 1;
@@ -43,23 +50,24 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 		server.send_reply(fd, 433, nick, ES, ES, ES);
 		return 1;
 	}
-	if (checkNickDelay(nick, server) == -1)//user has no delay to change nick again
+	if (checkNickDelay(newly) == -1)//user has no delay to change nick again
 	{
 		server.send_reply(fd, 437, nick, ES, ES, ES);
 		return 1;
 	}
-	if (checkNickRestricted(nick, server) == -1)//user is allowed to change (mode)
+	if (checkNickRestricted(newly) == -1)//user is allowed to change (mode)
 	{
-		server.send_reply(fd, 484, ES, ES, ES);
+		server.send_reply(fd, 484, ES, ES, ES, ES);
 		return 1;
 	}
+	//add user to server if not in yet
 	return 0;
 }
 
 int		nick(const std::string &line, int fd, Server& server)
 {
 	std::vector<std::string>splited = ft_split(line, ' ');
-	if (checkNickErrors(splited[1], fd, server) == 1, splited.size())
+	if (checkNickErrors(splited[1], fd, server, splited.size()) == 1)
 		return 1;
 	COUT "Pointeur nick fonction" ENDL;
 	server.send_reply(fd, 431, ES, ES, ES, ES);
