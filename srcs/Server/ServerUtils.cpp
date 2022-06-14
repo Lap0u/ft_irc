@@ -1,6 +1,6 @@
 #include "../../headers/Server.hpp"
 
-bool    Server::isUserUnique(User* user) const
+bool    	Server::isUserUnique(User* user) const
 {
 	for (std::vector<User*>::const_iterator it = _user_tab.begin(); it != _user_tab.end(); it++)
 	{
@@ -13,7 +13,7 @@ bool    Server::isUserUnique(User* user) const
 	return true;
 }
 
-bool	Server::addUser(User* user)
+bool		Server::addUser(User* user)
 {
 	if (!_user_tab.empty() && !isUserUnique(user))
 		return false;
@@ -21,7 +21,7 @@ bool	Server::addUser(User* user)
 	return true;
 }
 
-void	Server::addSocket(int fd, short events)
+void		Server::addSocket(int fd, short events)
 {
 	t_pollfd fd_new;
 
@@ -31,18 +31,16 @@ void	Server::addSocket(int fd, short events)
 	_socket_tab.push_back(fd_new);
 }
 
-// Server::handlingExistingConnection()
-
 void		Server::deleteUserSocket(nfds_t i)
 {
 	_socket_tab.erase(_socket_tab.begin() + i);
 	_user_tab.erase(_user_tab.begin() + i);
 }
 
-std::string	Server::findMatchingUser(int socket)
+User*		Server::findMatchingUser(int socket)
 {
-	pollfdVector::const_iterator res;
-	t_pollfd temp;
+	pollfdVector::const_iterator	res;
+	t_pollfd 						temp;
 
 	temp.fd = socket;
 
@@ -50,28 +48,12 @@ std::string	Server::findMatchingUser(int socket)
 	if (res == _socket_tab.end())
 	{
 		CERR "not found" ENDL;
-		return (std::string ());
+		return (NULL);
 	}
-	DEB res - _socket_tab.begin() ENDL;
-	return _user_tab[res - _socket_tab.begin()]->getUser();
+	return _user_tab[res - _socket_tab.begin()];
 }
 
-std::string Server::findMatchingUser(std::string user)
-{
-	userVector::const_iterator	it = _user_tab.begin();
-
-	for (; it != _user_tab.end(); it++)
-	{
-		COUT "get nick == " << (*it)->getNick() << "!" ENDL;
-		COUT "get user == " << user.c_str() << "!" ENDL;
-		if ((*it)->getNick() == user)
-			return (*it)->getNick();
-	}
-	COUT "return" ENDL;
-	return std::string ();
-}
-
-int	Server::findMatchingSocket(std::string user)
+t_pollfd	Server::findMatchingSocket(std::string user)
 {
 	userVector::const_iterator	it = _user_tab.begin();
 	int							i = 0;
@@ -81,10 +63,22 @@ int	Server::findMatchingSocket(std::string user)
 		if ((*it)->getNick() == user)
 				break;
 	}
-	return _socket_tab[i].fd;
+	return _socket_tab[i];
 }
 
-std::string	getPaquet(int fd)
+int			Server::findPosSocket(int fd)
+{
+	size_t pos = 0;
+
+	for (; pos < _socket_tab.size(); pos++)
+	{
+		if (_socket_tab[pos].fd == fd)
+			break ;
+	}
+	return pos;
+}
+
+std::string	Server::getPackage(int fd, bool registered)
 {
 	char		recvline[MAXLINE + 1];
 	int			n = 0;
@@ -95,6 +89,14 @@ std::string	getPaquet(int fd)
 	{
 		perror("recv");
 		exit(1);
+	}
+	else if (n == 0)
+	{
+		CERR "Socket close by client" ENDL;
+		if (registered)
+			deleteUserSocket(findPosSocket(fd));
+		close(fd);
+		return (std::string ());
 	}
 	return (std::string (recvline));
 }

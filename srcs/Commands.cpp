@@ -1,46 +1,21 @@
 #include "../headers/Commands.hpp"
 
-int		pass(const std::string &line, int fd, Server& server)
+std::vector<std::string> ft_split(std::string tosplit, char delimiter)
 {
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur pass fonction" ENDL;
-	return 2;
-}
-int		nick(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur fonction" ENDL;
-	return 2;
-}
-int		oper(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur fonction" ENDL;
-	return 2;
-}
-int		user(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur fonction" ENDL;
-	return 2;
-}
+    std::vector<std::string>res;
 
-int    mode(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur mode" ENDL;
+    while(!tosplit.empty())
+    {
+        size_t pos = tosplit.find(delimiter);
 
-    return 2;
+        if (pos == std::string::npos)
+            pos = tosplit.size();
+        res.push_back(std::string(tosplit.begin(), tosplit.begin() + pos));
+        tosplit.erase(0, pos);
+        while (tosplit[0] == delimiter && !tosplit.empty())
+            tosplit.erase(0, 1);
+    }
+    return res;
 }
 
 // int    whois(const std::string &line, int fd, Server& server)
@@ -52,14 +27,4 @@ int    mode(const std::string &line, int fd, Server& server)
 
 //     return 2;
 // }
-
-int    ping(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur ping" ENDL;
-
-    return 2;
-}
 

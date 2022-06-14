@@ -11,7 +11,7 @@ public:
 	bool		_operator;
 	int			_socket;
 	std::string	_nick;
-	std::string	_user;
+	std::string	_user_name;
 	std::string	_pass;
 	std::string	_mode;
 	
@@ -26,12 +26,12 @@ public:
 	bool	isOperator(void) const;
 
 	const std::string	getNick(void) const;
-	const std::string	getUser(void) const;
+	const std::string	getUserName(void) const;
 	const std::string	getPass(void) const;
 	const std::string	getMode(void) const;
 
 	void	setNick(std::string nick);
-	void	setUser(std::string user);
+	void	setUserName(std::string user);
 	void	setPass(std::string pass);
 	void	setMode(std::string mode);
 
