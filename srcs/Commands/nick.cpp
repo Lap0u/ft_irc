@@ -60,16 +60,23 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 		server.send_reply(fd, 484, ES, ES, ES, ES);
 		return 1;
 	}
-	//add user to server if not in yet
+	if (newly == NULL)
+	{
+		newly = new User(fd, nick, ES, ES, ES);
+		server.addUser(newly);
+		server.addSocket(fd, POLLIN);
+		DEB "new user added, nick : " << nick ENDL;
+	}
+	else
+		newly->setNick(nick);
 	return 0;
 }
 
 int		nick(const std::string &line, int fd, Server& server)
 {
+	DEB "Pointeur nick fonction, line : " << line ENDL;
 	std::vector<std::string>splited = ft_split(line, ' ');
 	if (checkNickErrors(splited[1], fd, server, splited.size()) == 1)
 		return 1;
-	COUT "Pointeur nick fonction" ENDL;
-	server.send_reply(fd, 431, ES, ES, ES, ES);
 	return 2;
 }
