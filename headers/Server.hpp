@@ -30,6 +30,7 @@ private:
 	int				_main_socket;
 	std::string		_server_password;
 	std::string		_server_name;
+	std::string		_oper_password;
 
 	pollfdVector	_socket_tab;
 	userVector		_user_tab;
@@ -49,9 +50,11 @@ public:
 	bool			addUser(User* user);
 
 	t_pollfd*		getSocket(nfds_t i);
+	User*			getUser(std::string nick) const;
 	nfds_t			getSocketSize(void) const;
 	int				getMainSocket(void) const;
 	std::string		getServerName(void) const;
+	std::string		getOperPassword(void) const;
 	std::string		getServerPassword(void) const;
 
 	void			addSocket(int fd, short events);

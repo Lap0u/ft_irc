@@ -7,6 +7,20 @@ t_pollfd*	Server::getSocket(nfds_t i)
 	return (&_socket_tab[i]);
 }
 
+User*	Server::getUser(std::string nick) const
+{
+	if (_user_tab.empty())
+		return (NULL);
+	for (userVector::const_iterator it = _user_tab.begin(); it != _user_tab.end(); it++)
+	{
+		if ((*it)->getNick() == nick)
+		{
+			return _user_tab[it - _user_tab.begin()];
+		}
+	}
+	return (NULL);
+}
+
 nfds_t		Server::getSocketSize(void) const
 {
 	return _socket_tab.size();
@@ -25,4 +39,9 @@ std::string Server::getServerName(void) const
 std::string Server::getServerPassword(void) const
 {
 	return _server_password;
+}
+
+std::string	Server::getOperPassword(void) const
+{
+	return _oper_password;
 }

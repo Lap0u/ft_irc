@@ -1,6 +1,8 @@
 #include "../../headers/Server.hpp"
 
-Server::Server(int port, std::string pass) : _server_password(pass), _server_name("Our_IRC")
+Server::Server(int port, std::string pass)
+	: _server_password(pass), _server_name("Our_IRC"),
+		_oper_password(OP_PASS)
 {
 	COUT "Server waiting on port " << port ENDL;
 

@@ -33,7 +33,10 @@ public:
 	void	setNick(std::string nick);
 	void	setUserName(std::string user);
 	void	setPass(std::string pass);
-	void	setMode(std::string mode);
+	void	updateMode(std::string mode, char op);
+	void	addMode(std::string mode);
+	void	delMode(std::string mode);
+
 
 	bool	operator==(User* user) const;
 	
