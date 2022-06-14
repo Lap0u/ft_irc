@@ -78,5 +78,5 @@ int		nick(const std::string &line, int fd, Server& server)
 	std::vector<std::string>splited = ft_split(line, ' ');
 	if (checkNickErrors(splited[1], fd, server, splited.size()) == 1)
 		return 1;
-	return 2;
+	return 0;
 }
