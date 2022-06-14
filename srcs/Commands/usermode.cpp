@@ -20,18 +20,18 @@ int		checkError(int fd, Server& server, std::vector<std::string> word,
 
 	if (word.size() < 2 || word.size() > 3)
 	{
-		server.send_reply(fd, 461, "MODE", "", "", ""); //ERR_NEEDMOREPARAMS
+		server.send_reply(fd, 461, "MODE", ES, ES, ES); //ERR_NEEDMOREPARAMS
 		return 1;
 	}
 	if ((*word[pos].begin() != '+' && *word[pos].begin() != '-')
 		|| word[pos].size() < 2)
 	{
-		server.send_reply(fd, 501, "", "", "", ""); //ERR_UMODEUNKNOWNFLAG
+		server.send_reply(fd, 501, ES, ES, ES, ES); //ERR_UMODEUNKNOWNFLAG
 		return 1;
 	}
 	if (!is_in_set(mode_read, user_mode))
 	{
-		server.send_reply(fd, 501, "", "", "", ""); //ERR_UMODEUNKNOWNFLAG
+		server.send_reply(fd, 501, ES, ES, ES, ES); //ERR_UMODEUNKNOWNFLAG
 		return 1;
 	}
 	if (word.size() == 3 && server.getUser(word[1]) == NULL)
@@ -39,7 +39,7 @@ int		checkError(int fd, Server& server, std::vector<std::string> word,
 	if (!cur->isOperator() && word.size() == 3
 			&& word[1].compare(cur->getNick()) != 0)
 	{
-		server.send_reply(fd, 502, "", "", "", ""); //ERR_USERSDONTMATCH
+		server.send_reply(fd, 502, ES, ES, ES, ES); //ERR_USERSDONTMATCH
 		return (1);
 	}
 	return 0;
@@ -62,6 +62,6 @@ int    mode(const std::string &line, int fd, Server& server)
 	if (word.size() == 3)
 		cur = server.getUser(word[1]);
 	cur->updateMode(mode, *word[pos].begin());
-	server.send_reply(fd, 221, cur->getMode(), "", "", ""); // RPL_UMODEIS
+	server.send_reply(fd, 221, cur->getMode(), ES, ES, ES); // RPL_UMODEIS
     return 0;
 }

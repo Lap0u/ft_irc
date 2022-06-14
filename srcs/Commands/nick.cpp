@@ -4,7 +4,7 @@ int	checkNickInSet(const std::string &nick)
 {
 	if (nick.size() > 9)
 		return 1;
-	if (is_in_set(nick, NICK_CHAR, 8) == false || is_in_set(&nick[8], NICK_LAST_CHAR, 1) == false)
+	if (is_in_set(nick, NICK_CHAR, 8) == false || is_in_set(nick, NICK_LAST_CHAR, 9) == false)
 		return 1;
 	return 0;
 }
