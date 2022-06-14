@@ -66,7 +66,7 @@ std::vector<std::string> ft_split(std::string tosplit, std::string delimiter)
 int    whois(const std::string &line, int fd, Server& server)
 {
 	// (void)line;
-	(void)fd;
+	// (void)fd;
 	// (void)server;
 
     std::vector<std::string> tab = ft_split(line, " \r\n,");
@@ -79,16 +79,25 @@ int    whois(const std::string &line, int fd, Server& server)
     // }
     if (tab.size() == 1)
     {
-        return ERR_NONICKNAMEGIVEN;
+        server.send_reply(fd, ERR_NONICKNAMEGIVEN, std::string(), std::string(), std::string(), std::string());
+        return 1;
     }
     for (unsigned int i = 1; i < tab.size(); i++)
     {
         COUT "tab i == " << tab[i] ENDL;
         if (server.findMatchingUser(tab[i]) == std::string())
         {
-            COUT "no such nick" ENDL;
-            return ERR_NOSUCHNICK; 
+            server.send_reply(fd, ERR_NOSUCHNICK, tab[i], std::string(), std::string(), std::string());
+        }
+        else
+        {
+			server.send_reply(fd, RPL_WHOISUSER, std::string(), std::string(), std::string(), std::string());
+    		server.send_reply(fd, RPL_WHOISOPERATOR, std::string(), std::string(), std::string(), std::string());
+    		server.send_reply(fd, RPL_WHOISIDLE, std::string(), std::string(), std::string(), std::string());
+    		server.send_reply(fd, RPL_WHOISCHANNELS, std::string(), std::string(), std::string(), std::string());
+
         }
     }
-    return RPL_ENDOFWHOIS;
+    server.send_reply(fd, RPL_ENDOFWHOIS, std::string(), std::string(), std::string(), std::string());
+    return 0;
 }
