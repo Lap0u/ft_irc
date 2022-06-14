@@ -66,12 +66,6 @@ std::vector<std::string> ft_split(std::string tosplit, std::string delimiter)
 int    whois(const std::string &line, int fd, Server& server)
 {
     std::vector<std::string> tab = ft_split(line, " ,");
-
-	// COUT "line == " << line << "!" ENDL;
-    // for (unsigned int i = 0; i < tab.size(); i++)
-    // {
-    //     COUT "tab == " << tab[i] << " size == " << tab.size() ENDL;
-    // }
     if (tab.size() == 1)
     {
         server.send_reply(fd, WI_ERR_NONICKNAMEGIVEN, std::string(), std::string(), std::string(), std::string());
@@ -79,8 +73,7 @@ int    whois(const std::string &line, int fd, Server& server)
     }
     for (unsigned int i = 1; i < tab.size(); i++)
     {
-        // COUT "tab i == " << tab[i] ENDL;
-        User *user = server.findMatchingUser(tab[i]);
+        User *user = server.getUser(tab[i]);
         if (user == NULL)
         {
             server.send_reply(fd, WI_ERR_NOSUCHNICK, tab[i], std::string(), std::string(), std::string());

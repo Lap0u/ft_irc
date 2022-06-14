@@ -63,7 +63,6 @@ public:
 	void			deleteUserSocket(nfds_t i);
 
 	User*			findMatchingUser(int fd);
-	User*			findMatchingUser(std::string user);
 
 	t_pollfd		findMatchingSocket(std::string user);
 
