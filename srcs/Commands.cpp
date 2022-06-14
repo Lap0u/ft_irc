@@ -37,4 +37,3 @@ int    whois(const std::string &line, int fd, Server& server)
 
     return 2;
 }
-

@@ -59,14 +59,43 @@ void	User::setPass(std::string pass)
 {
 	_pass = pass;
 }
-void	User::updateMode(std::string mode)
+
+void	User::addMode(std::string mode)
+{
+	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
+	{
+		if (*it == 'o' && *it == 'O' && *it == 'a')
+			continue ;
+		if (_mode.empty())
+			_mode = *it;
+		else if (_mode.find(*it) == std::string::npos)
+			_mode += *it;	
+	}
+}
+void	User::delMode(std::string mode)
 {
 	
+	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
+	{
+		if (!_mode.empty())
+			return ;
+		if (*it == 'a' && *it != 'r')
+			continue ;
+		if (mode.find(*it) != std::string::npos)
+			_mode.erase(it);
+	}
+}
+
+void	User::updateMode(std::string mode, char op)
+{
+	if (op == '+')
+		addMode(mode);
+	else
+		delMode(mode);
 }
 
 bool	User::operator==(User* user) const
 {
-	COUT "find" ENDL;
 	if (this->_nick == user->_nick)
 		return true;
 	return false;
