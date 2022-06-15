@@ -54,8 +54,10 @@ std::string Server::getVersion(void) const
 std::string Server::getDate(void) const
 {
 	char mbstr[100];
-    if (std::strftime(mbstr, sizeof(mbstr), "%A %c", std::localtime(&_date))) {
-        std::cout << mbstr << '\n';
-    }
+    std::strftime(mbstr, sizeof(mbstr), "%A %c", std::localtime(&_date));
 	return mbstr;
+}
+std::string Server::getServerInfos(void) const
+{
+	return "Server : " + getServerName() + " :" + getVersion() + ", created on " + getDate();
 }

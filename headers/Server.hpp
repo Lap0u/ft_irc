@@ -60,6 +60,7 @@ public:
 	std::string		getServerPassword(void) const;
 	std::string		getVersion(void) const;
 	std::string		getDate(void) const;
+	std::string		getServerInfos(void) const;
 
 	void			addSocket(int fd, short events);
 	void			connectionRequest(void);

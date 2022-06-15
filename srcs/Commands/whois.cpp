@@ -20,48 +20,7 @@
 
 #define WI_ERR_NONICKNAMEGIVEN 431                        
 
-int find_a_delimiter(std::string tosplit, std::string delimiter)
-{
-    for (unsigned int i = 0; i < tosplit.length(); i++)
-    {
-        for (unsigned int j = 0; j < delimiter.length(); j++)
-        {
-            if (delimiter[j] == tosplit[i])
-                return i;
-        }
-    }
-    return -1;
-}
 
-int find_a_delimiter_at_beginning(std::string tosplit, std::string delimiter)
-{
-    for (unsigned int j = 0; j < delimiter.length(); j++)
-    {
-		if (delimiter[j] == tosplit[0])
-        	return j;
-    }
-    return -1;
-}
-
-std::vector<std::string> ft_split(std::string tosplit, std::string delimiter)
-{
-    std::vector<std::string>res;
-
-    while(!tosplit.empty())
-    {
-        int pos = find_a_delimiter(tosplit, delimiter);
-
-        if (pos == -1)
-            pos = tosplit.size();
-        res.push_back(std::string(tosplit.begin(), tosplit.begin() + pos));
-        tosplit.erase(0, pos);
-        while (find_a_delimiter_at_beginning(tosplit, delimiter) != -1 && !tosplit.empty())
-        {
-            tosplit.erase(0, 1);
-        }
-    }
-    return res;
-}
 
 int    whois(const std::string &line, int fd, Server& server)
 {
@@ -77,20 +36,21 @@ int    whois(const std::string &line, int fd, Server& server)
         if (user == NULL)
         {
             server.send_reply(fd, WI_ERR_NOSUCHNICK, tab[i], std::string(), std::string(), std::string());
+            DEB "Nosuchnick(whois)" ENDL;
         }
         else
         {
-			server.send_reply(fd, WI_RPL_WHOISUSER, user->getNick(), user->getUserName(), server.getServerName(), user->getUserName()); // PUT REAL NAME INSTEAD
-			server.send_reply(fd, WI_RPL_WHOISSERVER, user->getNick(), server.getServerName(), "server info", std::string());
+			server.send_reply(fd, WI_RPL_WHOISUSER, user->getNick(), user->getUserName(), server.getServerName(), user->getRealName());
+			server.send_reply(fd, WI_RPL_WHOISSERVER, user->getNick(), server.getServerName(), server.getServerInfos(), std::string());
     		if (user->isOperator())
             {
                 server.send_reply(fd, WI_RPL_WHOISOPERATOR, user->getNick(), std::string(), std::string(), std::string());
             }
-    		server.send_reply(fd, WI_RPL_WHOISIDLE, user->getNick(), std::string(), std::string(), std::string()); // time since it's not there
-    		server.send_reply(fd, WI_RPL_WHOISCHANNELS, user->getNick(), std::string(), std::string(), std::string());
+    		server.send_reply(fd, WI_RPL_WHOISIDLE, user->getNick(), "0", std::string(), std::string());
+    		server.send_reply(fd, WI_RPL_WHOISCHANNELS, user->getNick(), "make function to get user channel", std::string(), std::string());
             if (user->getMode().find("a") != std::string::npos)
             {
-    		    server.send_reply(fd, WI_RPL_AWAY, user->getNick(), "is away", std::string(), std::string());
+    		    server.send_reply(fd, WI_RPL_AWAY, user->getNick(), " is away", std::string(), std::string());
             }
         }
     }
