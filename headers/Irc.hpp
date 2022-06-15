@@ -20,7 +20,9 @@
 # include <algorithm>
 # include <errno.h>
 
+# define SERVER_NAME "Our_IRC"
 # define SERVER_PORT 6667
+
 # define MAXLINE 4096
 # define SA struct sockaddr
 # define OP_PASS "oppass"
