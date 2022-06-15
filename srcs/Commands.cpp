@@ -40,12 +40,13 @@ bool    is_in_set(const std::string& str, const std::string& str2, size_t size)
     return true;
 }
 
-int    whois(const std::string &line, int fd, Server& server)
-{
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur whois" ENDL;
+// int    whois(const std::string &line, int fd, Server& server)
+// {
+// 	(void)line;
+// 	(void)fd;
+// 	(void)server;
+// 	COUT "Pointeur whois" ENDL;
 
-    return 2;
-}
+//     return 2;
+// }
+
