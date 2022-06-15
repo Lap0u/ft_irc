@@ -15,7 +15,7 @@ class Channel
     public:
 
     Channel();
-    Channel();
+    Channel(std::string name);
     virtual ~Channel();
 
 };
