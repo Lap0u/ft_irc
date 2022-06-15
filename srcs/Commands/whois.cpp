@@ -80,15 +80,15 @@ int    whois(const std::string &line, int fd, Server& server)
         }
         else
         {
-			server.send_reply(fd, WI_RPL_WHOISUSER, user->getNick(), user->getUserName(), "localhost", user->getUserName());
-			server.send_reply(fd, WI_RPL_WHOISSERVER, user->getNick(), server.getServerName(), std::string(), std::string());
+			server.send_reply(fd, WI_RPL_WHOISUSER, user->getNick(), user->getUserName(), server.getServerName(), user->getUserName()); // PUT REAL NAME INSTEAD
+			server.send_reply(fd, WI_RPL_WHOISSERVER, user->getNick(), server.getServerName(), "server info", std::string());
     		if (user->isOperator())
             {
                 server.send_reply(fd, WI_RPL_WHOISOPERATOR, user->getNick(), std::string(), std::string(), std::string());
             }
-    		server.send_reply(fd, WI_RPL_WHOISIDLE, user->getNick(), std::string(), std::string(), std::string());
+    		server.send_reply(fd, WI_RPL_WHOISIDLE, user->getNick(), std::string(), std::string(), std::string()); // time since it's not there
     		server.send_reply(fd, WI_RPL_WHOISCHANNELS, user->getNick(), std::string(), std::string(), std::string());
-            if (user->getMode() == "a")
+            if (user->getMode().find("a") != std::string::npos)
             {
     		    server.send_reply(fd, WI_RPL_AWAY, user->getNick(), "is away", std::string(), std::string());
             }
