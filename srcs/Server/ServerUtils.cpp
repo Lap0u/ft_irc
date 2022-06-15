@@ -60,7 +60,7 @@ User*		Server::findMatchingUser(int socket)
 	res = find(_socket_tab.begin(), _socket_tab.end(), temp);
 	if (res == _socket_tab.end())
 	{
-		CERR "not found" ENDL;
+		DEB "not found" ENDL;
 		return (NULL);
 	}
 	return _user_tab[res - _socket_tab.begin()];

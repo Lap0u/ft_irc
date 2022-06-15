@@ -35,7 +35,7 @@ Server::Server(int port, std::string pass)
 
 Server::~Server( void )
 {
-	COUT "Destruct Server." ENDL;
+	DEB "Destruct Server." ENDL;
 }
 
 void	Server::initReplies(void)

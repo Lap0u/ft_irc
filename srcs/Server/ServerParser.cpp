@@ -8,5 +8,5 @@ void	Server::parseCmd(std::string line, int fd)
 	if (it != _commands.end())
 		it->second(line, fd, *this);
 	else
-		CERR "Command not found" ENDL;
+		DEB "Command not found" ENDL;
 }
