@@ -45,3 +45,17 @@ std::string	Server::getOperPassword(void) const
 {
 	return _oper_password;
 }
+
+std::string Server::getVersion(void) const
+{
+	return _version;
+}
+
+std::string Server::getDate(void) const
+{
+	char mbstr[100];
+    if (std::strftime(mbstr, sizeof(mbstr), "%A %c", std::localtime(&_date))) {
+        std::cout << mbstr << '\n';
+    }
+	return mbstr;
+}

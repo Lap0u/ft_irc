@@ -4,7 +4,7 @@
 # include "Irc.hpp"
 
 
-# define RPL_WELCOME(nick) ("Welcome to the Internet Relay Network " + nick)
+# define RPL_WELCOME(nick, user, localhost) ("Welcome to the Internet Relay Network " + nick + "!" + user + "@" + localhost)
 # define RPL_YOURHOST(servername, ver) ("Your host is " + servername + " running version " + ver)
 # define RPL_CREATED(date) ("This server was created " + date)
 # define RPL_MYINFO(servername, version, usr_mod, chan_mod) (servername + " " + version + " " + usr_mod + " " + chan_mod)

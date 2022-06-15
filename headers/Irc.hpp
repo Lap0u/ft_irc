@@ -5,7 +5,8 @@
 #  define DEBUG 0
 # endif
 
-
+# include <ctime>
+# include <locale>
 # include <sys/socket.h>
 # include <sys/types.h>
 # include <signal.h>
@@ -24,8 +25,10 @@
 # define SA struct sockaddr
 # define OP_PASS "oppass"
 # define USER_MODE "aiwroOs"
+# define CHANNEL_MODE "OovaimnqpsrtklbeI"
 # define NICK_CHAR "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[]\\`_^{|}"
 # define NICK_LAST_CHAR "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[]\\`_^{|}1234567890-"
+# define VERSION "1.1"
 
 # define ES std::string()
 # define COUT std::cout <<

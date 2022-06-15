@@ -7,7 +7,7 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
     switch (code)
     {
         case 1:
-            return RPL_WELCOME(arg1);
+            return RPL_WELCOME(arg1, arg2, arg3);
         case 2:
             return RPL_YOURHOST(arg1, arg2);
         case 3:

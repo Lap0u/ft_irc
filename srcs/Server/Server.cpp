@@ -2,7 +2,7 @@
 
 Server::Server(int port, std::string pass)
 	: _server_password(pass), _server_name("Our_IRC"),
-		_oper_password(OP_PASS)
+		_oper_password(OP_PASS), _version(VERSION), _date(std::time(NULL))
 {
 	COUT "Server waiting on port " << port ENDL;
 

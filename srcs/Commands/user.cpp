@@ -34,9 +34,9 @@ int		user(const std::string &line, int fd, Server& server)
 	for (std::vector<std::string>::iterator it = split.begin() + 5; it != split.end(); it++)
 		real_name += " " + *it;
 	cur->setRealName(real_name);
-	server.send_reply(fd, 001, "nick", ES, ES, ES);
-	server.send_reply(fd, 002, "servername", "ver", ES, ES);
-	server.send_reply(fd, 003, "Date", ES, ES, ES);
-	server.send_reply(fd, 004, "servername", "version", "usr_mod", "chan_mod");
+	server.send_reply(fd, 001, cur->getNick(), cur->getUserName(), server.getServerName(), ES);
+	server.send_reply(fd, 002, server.getServerName(), server.getVersion(), ES, ES);
+	server.send_reply(fd, 003, server.getDate(), ES, ES, ES);
+	server.send_reply(fd, 004, server.getServerName(), server.getVersion(), USER_MODE, CHANNEL_MODE);
 	return 2;
 }
