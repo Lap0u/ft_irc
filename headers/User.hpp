@@ -12,6 +12,7 @@ public:
 	int			_socket;
 	std::string	_nick;
 	std::string	_user_name;
+	std::string	_real_name;
 	std::string	_pass;
 	std::string	_mode;
 	
@@ -29,9 +30,11 @@ public:
 	const std::string	getUserName(void) const;
 	const std::string	getPass(void) const;
 	const std::string	getMode(void) const;
+	const std::string	getRealName(void) const;
 
 	void	setNick(std::string nick);
 	void	setUserName(std::string user);
+	void	setRealName(std::string user);
 	void	setPass(std::string pass);
 	void	updateMode(std::string mode, char op);
 	void	addMode(std::string mode);

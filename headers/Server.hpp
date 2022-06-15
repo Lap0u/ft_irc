@@ -31,6 +31,8 @@ private:
 	std::string		_server_password;
 	std::string		_server_name;
 	std::string		_oper_password;
+	std::string		_version;
+	std::time_t		_date;
 
 	pollfdVector	_socket_tab;
 	userVector		_user_tab;
@@ -56,6 +58,8 @@ public:
 	std::string		getServerName(void) const;
 	std::string		getOperPassword(void) const;
 	std::string		getServerPassword(void) const;
+	std::string		getVersion(void) const;
+	std::string		getDate(void) const;
 
 	void			addSocket(int fd, short events);
 	void			connectionRequest(void);

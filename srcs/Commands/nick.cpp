@@ -75,8 +75,8 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 int		nick(const std::string &line, int fd, Server& server)
 {
 	DEB "Pointeur nick fonction, line : " << line ENDL;
-	std::vector<std::string>splited = ft_split(line, ' ');
-	if (checkNickErrors(splited[1], fd, server, splited.size()) == 1)
+	std::vector<std::string>split = ft_split(line, ' ');
+	if (checkNickErrors(split[1], fd, server, split.size()) == 1)
 		return 1;
 	return 0;
 }
