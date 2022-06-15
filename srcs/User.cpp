@@ -9,7 +9,7 @@ User::User( void )
 User::User( int socket, std::string nick, std::string user_name,
 		std::string pass, std::string mode)
 		: _socket(socket), _nick(nick), _user_name(user_name),
-			_pass(pass), _mode(mode) 
+			_real_name("Server"), _pass(pass), _mode(mode) 
 			{
 				if (DEBUG == 2)
 					COUT "Construct User " << this->_nick ENDL;

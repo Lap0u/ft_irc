@@ -2,7 +2,7 @@
 
 int		pass(const std::string &line, int fd, Server& server)
 {
-	COUT "Point pass fonction" ENDL;
+	DEB "Point pass fonction" ENDL;
 	std::vector<std::string>parsedLine = ft_split(line, ' ');
 	if (parsedLine.size() < 2)
 	{

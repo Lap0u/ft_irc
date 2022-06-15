@@ -18,7 +18,7 @@ int		checkUserErrors(const std::vector<std::string> & split, int fd, Server& ser
 
 int		user(const std::string &line, int fd, Server& server)
 {
-	COUT "Pointeur user fonction" ENDL;
+	DEB "Pointeur user fonction" ENDL;
 
 	std::vector<std::string> split = ft_split(line, ' ');
 	std::string real_name = split[4];

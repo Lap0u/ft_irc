@@ -16,18 +16,46 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_MYINFO(arg1, arg2, arg3, arg4);
         case 221:
             return RPL_UMODEIS(arg1);
+        case 301:
+            return RPL_AWAY(arg1, arg2);
+        case 311:
+            return RPL_WHOISUSER(arg1, arg2, arg3, arg4);
+        case 312:
+            return RPL_WHOISSERVER(arg1, arg2, arg3);
+        case 313:
+            return RPL_WHOISOPERATOR(arg1);
+        case 317:
+            return RPL_WHOISIDLE(arg1, arg2);
+        case 318:
+            return RPL_ENDOFWHOIS(arg1);
+        case 319:
+            return RPL_WHOISCHANNELS(arg1, arg2);
+        case 401:
+            return ERR_NOSUCHNICK(arg1);
         case 409:
             return ERR_NOORIGIN;
         case 431:
             return ERR_NONICKNAMEGIVEN;
+        case 432:
+            return ERR_ERRONEUSNICKNAME(arg1);
+        case 433:
+            return ERR_NICKNAMEINUSE(arg1);
+        case 437:
+            return ERR_UNAVAILRESOURCE(arg1);
         case 461:
             return ERR_NEEDMOREPARAMS(arg1);
         case 462:
             return ERR_ALREADYREGISTRED;
+        case 484:
+            return ERR_RESTRICTED;
+        case 501:
+            return ERR_UMODEUNKNOWNFLAG;
+        case 502:
+            return ERR_USERSDONTMATCH;
         case 1000:
             return SPE_PONG(arg1, arg2);
         default:
-            COUT "This response is not into the switch yet(find_reply function)" ENDL;
+            COUT "The response " << code << " is not into the switch yet(find_reply function)" ENDL;
     }
     return (ES);
 }
