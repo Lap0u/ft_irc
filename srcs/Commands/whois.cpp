@@ -24,6 +24,8 @@
 
 int    whois(const std::string &line, int fd, Server& server)
 {
+    DEB "pointer whois" ENDL;
+    DEB line ENDL;
     std::vector<std::string> tab = ft_split(line, " ,");
     if (tab.size() == 1)
     {
@@ -47,7 +49,7 @@ int    whois(const std::string &line, int fd, Server& server)
                 server.send_reply(fd, WI_RPL_WHOISOPERATOR, user->getNick(), std::string(), std::string(), std::string());
             }
     		server.send_reply(fd, WI_RPL_WHOISIDLE, user->getNick(), "0", std::string(), std::string());
-    		server.send_reply(fd, WI_RPL_WHOISCHANNELS, user->getNick(), "make function to get user channel", std::string(), std::string());
+    		server.send_reply(fd, WI_RPL_WHOISCHANNELS, user->getNick(), "make_function_to_get_user_channel", std::string(), std::string());
             if (user->getMode().find("a") != std::string::npos)
             {
     		    server.send_reply(fd, WI_RPL_AWAY, user->getNick(), " is away", std::string(), std::string());
