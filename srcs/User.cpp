@@ -38,6 +38,10 @@ const std::string	User::getUserName(void) const
 {
 	return this->_user_name;
 }
+const std::string	User::getRealName(void) const
+{
+	return this->_real_name;
+}
 const std::string	User::getPass(void) const
 {
 	return this->_pass;
@@ -54,6 +58,10 @@ void	User::setNick(std::string nick)
 void	User::setUserName(std::string user_name)
 {
 	_user_name = user_name;
+}
+void	User::setRealName(std::string real_name)
+{
+	_real_name = real_name;
 }
 void	User::setPass(std::string pass)
 {
