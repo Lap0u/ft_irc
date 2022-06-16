@@ -95,23 +95,28 @@ std::string	Server::getPackage(int fd, bool registered)
 {
 	char		recvline[MAXLINE + 1];
 	int			n = 0;
-
+	std::string buffer;
 	memset(recvline, 0, MAXLINE);
-	n = recv(fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
-	if (n == -1)
-	{
-		perror("recv");
-		exit(1);
-	}
-	else if (n == 0)
-	{
-		CERR "Socket close by client" ENDL;
-		if (registered)
-			deleteUserSocket(findPosSocket(fd));
-		close(fd);
-		return (std::string ());
-	}
-	return (std::string (recvline));
+	n = recv(fd, recvline, MAXLINE - 1, 0);
+	buffer += recvline;
+	(void)registered;
+	(void)n;
+	// memset(recvline, 0, MAXLINE);
+	// n = recv(fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
+	// if (n == -1)
+	// {
+	// 	perror("recv");
+	// 	exit(1);
+	// }
+	// else if (n == 0)
+	// {
+	// 	CERR "Socket close by client" ENDL;
+	// 	if (registered)
+	// 		deleteUserSocket(findPosSocket(fd));
+	// 	close(fd);
+	// 	return (std::string ());
+	// }
+	return (buffer);
 }
 
 bool	operator==(const t_pollfd &pollfd1, const t_pollfd &pollfd2)

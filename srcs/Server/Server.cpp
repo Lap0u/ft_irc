@@ -8,7 +8,7 @@ Server::Server(int port, std::string pass)
 
 	struct sockaddr_in  servaddr;
 
-	_main_socket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+	_main_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_main_socket < 0)
 		exit(1);
 	bzero(&servaddr, sizeof(servaddr));

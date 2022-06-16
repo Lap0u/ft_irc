@@ -14,6 +14,7 @@ void    launch_serv(std::string port, std::string password)
 	while(1)
 	{
 		ret_poll = poll(server.getSocket(0), server.getSocketSize(), 15000);
+		COUT "Size" << server.getSocketSize() ENDL;
 		if (ret_poll == -1)
 		{
 			perror("poll");
@@ -36,21 +37,22 @@ void    launch_serv(std::string port, std::string password)
 				}
 				else
 					fd = server.getSocket(i)->fd;
-				while (1)
-				{
+				// while (1)
+				// {
 					DEB "Tour" ENDL;
-
+					COUT "Will try to read" ENDL;
 					recvline = server.getPackage(fd, true);
 					if (recvline.empty())
 						break ;
+					COUT recvline << " and size " << recvline.size() ENDL;
 					while (recvline.find("\r\n") != std::string::npos)
 					{
 						separatedline = recvline.substr(0, recvline.find("\r\n"));
-						server.parseCmd(separatedline, fd);
+						// server.parseCmd(separatedline, fd);
 						recvline.erase(0, recvline.find("\r\n") + 2);
 					}
 					recvline.clear();
-				}
+				// }
 			}
 		}
 	}
