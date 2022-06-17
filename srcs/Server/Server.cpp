@@ -8,9 +8,12 @@ Server::Server(int port, std::string pass)
 
 	struct sockaddr_in  servaddr;
 
-	_main_socket = socket(AF_INET, SOCK_STREAM, 0);
+	_main_socket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	if (_main_socket < 0)
 		exit(1);
+	const int enable = 1;
+	if (setsockopt(_main_socket, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(enable)) < 0)
+    	perror("setsockopt(SO_REUSEADDR) failed");
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family         = AF_INET;
 	servaddr.sin_addr.s_addr    = htonl(INADDR_ANY);
@@ -22,7 +25,7 @@ Server::Server(int port, std::string pass)
 		exit(1);
 	}
 
-	if ((listen(_main_socket, 10)) < 0)
+	if ((listen(_main_socket, 0)) < 0)
 	{
 		fprintf(stdout, "listen\n");
 		exit(1);

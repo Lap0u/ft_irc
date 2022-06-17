@@ -15,6 +15,7 @@ public:
 	std::string	_real_name;
 	std::string	_pass;
 	std::string	_mode;
+	bool		_registered;
 	
 public:
 	User( void );
@@ -33,6 +34,7 @@ public:
 	const std::string	getRealName(void) const;
 
 	void	setNick(std::string nick);
+	void	setSocket(int socket);
 	void	setUserName(std::string user);
 	void	setRealName(std::string user);
 	void	setPass(std::string pass);

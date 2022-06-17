@@ -46,6 +46,7 @@ void		Server::addSocket(int fd, short events)
 
 void		Server::deleteUserSocket(nfds_t i)
 {
+	close(_socket_tab[i].fd);
 	_socket_tab.erase(_socket_tab.begin() + i);
 	_user_tab.erase(_user_tab.begin() + i);
 }
@@ -63,6 +64,7 @@ User*		Server::findMatchingUser(int socket)
 		DEB "not found" ENDL;
 		return (NULL);
 	}
+	DEB "user_tab[" << res - _socket_tab.begin() << "]" ENDL;
 	return _user_tab[res - _socket_tab.begin()];
 }
 
@@ -96,26 +98,25 @@ std::string	Server::getPackage(int fd, bool registered)
 	char		recvline[MAXLINE + 1];
 	int			n = 0;
 	std::string buffer;
+
 	memset(recvline, 0, MAXLINE);
-	n = recv(fd, recvline, MAXLINE - 1, 0);
+	n = recv(fd, recvline, MAXLINE - 1, MSG_DONTWAIT);
 	buffer += recvline;
 	(void)registered;
 	(void)n;
-	// memset(recvline, 0, MAXLINE);
-	// n = recv(fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
-	// if (n == -1)
-	// {
-	// 	perror("recv");
-	// 	exit(1);
-	// }
-	// else if (n == 0)
-	// {
-	// 	CERR "Socket close by client" ENDL;
-	// 	if (registered)
-	// 		deleteUserSocket(findPosSocket(fd));
-	// 	close(fd);
-	// 	return (std::string ());
-	// }
+	if (n == -1 && errno != EAGAIN)
+	{
+		perror("recv");
+		exit(1);
+	}
+	else if (n == 0)
+	{
+		CERR "Socket close by client" ENDL;
+		if (registered)
+			deleteUserSocket(findPosSocket(fd));
+		close(fd);
+		return (ES);
+	}
 	return (buffer);
 }
 
