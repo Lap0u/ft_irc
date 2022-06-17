@@ -6,9 +6,11 @@ int		checkUserErrors(const std::vector<std::string> & split, int fd, Server& ser
 	if (split.size() < 5) //not enough arguments
 	{
 		server.send_reply(fd, 461, "USER", ES, ES, ES);
+		if (cur->_registered == 0)
+			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
-	if (cur && cur->getUserName().empty() != 1) //user is already registered
+	if (cur->_registered == 1) //user is already registered
 	{
 		server.send_reply(fd, 462, ES, ES, ES, ES);
 		return 1;
@@ -34,9 +36,10 @@ int		user(const std::string &line, int fd, Server& server)
 	for (std::vector<std::string>::iterator it = split.begin() + 5; it != split.end(); it++)
 		real_name += " " + *it;
 	cur->setRealName(real_name);
+	cur->_registered = 1;
 	server.send_reply(fd, 001, cur->getNick(), cur->getUserName(), server.getServerName(), ES);
 	server.send_reply(fd, 002, server.getServerName(), server.getVersion(), ES, ES);
 	server.send_reply(fd, 003, server.getDate(), ES, ES, ES);
 	server.send_reply(fd, 004, server.getServerName(), server.getVersion(), USER_MODE, CHANNEL_MODE);
-	return 2;
+	return 0;
 }
