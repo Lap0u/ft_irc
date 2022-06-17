@@ -7,11 +7,11 @@ Server::Server(int port, std::string pass)
 	COUT "Server waiting on port " << port ENDL;
 
 	struct sockaddr_in  servaddr;
+	const int			enable = 1;
 
 	_main_socket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	if (_main_socket < 0)
 		exit(1);
-	const int enable = 1;
 	if (setsockopt(_main_socket, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(enable)) < 0)
     	perror("setsockopt(SO_REUSEADDR) failed");
 	bzero(&servaddr, sizeof(servaddr));

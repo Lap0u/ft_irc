@@ -22,7 +22,6 @@ void    launch_serv(std::string port, std::string password)
 		}
 		else if (ret_poll == 0)
 			continue ;
-		// usleep(200);
 		for (nfds_t i = 0; i < server.getSocketSize(); i++)
 		{
 			if ((server.getSocket(i)->revents & POLLIN) == POLLIN)
@@ -40,21 +39,12 @@ void    launch_serv(std::string port, std::string password)
 					User *user = new User();
 					user->setSocket(fd);
 					server.addUser(user);
-					// DEB "Sleep" ENDL;
-					// usleep(2000);
 				}
 				else
-				
 					fd = server.getSocket(i)->fd;
-				// while (1)
-				// {
-				DEB "Tour" ENDL;
-				COUT "Will try to read" ENDL;
-				recvline = server.getPackage(fd, true);
+				recvline = server.getPackage(fd);
 				if (recvline.empty())
-				{	COUT "Continue" ENDL;
-					continue ;}
-				COUT recvline << " and size " << recvline.size() ENDL;
+					continue ;
 				while (recvline.find("\r\n") != std::string::npos)
 				{
 					separatedline = recvline.substr(0, recvline.find("\r\n"));
@@ -62,7 +52,6 @@ void    launch_serv(std::string port, std::string password)
 					recvline.erase(0, recvline.find("\r\n") + 2);
 				}
 				recvline.clear();
-				// }
 			}
 		}
 	}
