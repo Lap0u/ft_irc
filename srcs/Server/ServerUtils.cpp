@@ -93,7 +93,7 @@ int			Server::findPosSocket(int fd)
 	return pos;
 }
 
-std::string	Server::getPackage(int fd, bool registered)
+std::string	Server::getPackage(int fd)
 {
 	char		recvline[MAXLINE + 1];
 	int			n = 0;
@@ -101,9 +101,12 @@ std::string	Server::getPackage(int fd, bool registered)
 
 	memset(recvline, 0, MAXLINE);
 	n = recv(fd, recvline, MAXLINE - 1, MSG_DONTWAIT);
-	buffer += recvline;
-	(void)registered;
-	(void)n;
+	buffer = recvline;
+	while (n > 0 && buffer.find("\r\n") == std::string::npos)
+	{
+		n = recv(fd, recvline, MAXLINE - 1, MSG_DONTWAIT);
+		buffer += recvline;
+	}
 	if (n == -1 && errno != EAGAIN)
 	{
 		perror("recv");
@@ -112,9 +115,8 @@ std::string	Server::getPackage(int fd, bool registered)
 	else if (n == 0)
 	{
 		CERR "Socket close by client" ENDL;
-		if (registered)
+		if (findMatchingUser(fd)->_registered == 0)
 			deleteUserSocket(findPosSocket(fd));
-		close(fd);
 		return (ES);
 	}
 	return (buffer);

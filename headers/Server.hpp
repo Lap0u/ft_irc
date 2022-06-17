@@ -63,8 +63,6 @@ public:
 	std::string		getServerInfos(void) const;
 
 	void			addSocket(int fd, short events);
-	void			connectionRequest(void);
-	int				setConnection(int fd);
 	void			deleteUserSocket(nfds_t i);
 
 	User*			findMatchingUser(int fd);
@@ -74,7 +72,7 @@ public:
 	int				findPosSocket(int fd);
 
 	void			parseCmd(std::string line, int fd);
-	std::string     getPackage(int fd, bool registered);
+	std::string     getPackage(int fd);
 
 	void			send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
 	void			send_reply_no_header(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;

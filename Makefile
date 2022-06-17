@@ -15,7 +15,6 @@ SRC			=	main.cpp \
 				srcs/socket.cpp \
 				srcs/User.cpp \
 				srcs/Server/Server.cpp \
-				srcs/Server/ServerConnection.cpp \
 				srcs/Server/ServerGetters.cpp \
 				srcs/Server/ServerParser.cpp \
 				srcs/Server/ServerUtils.cpp \
@@ -29,7 +28,7 @@ SRC			=	main.cpp \
 				srcs/Commands/ping.cpp \
 				srcs/Commands/user.cpp \
 				srcs/Commands/usermode.cpp \
-				srcs/Commands/whois.cpp \
+				srcs/Commands/whois.cpp
 
 OBJ			=	$(SRC:%.cpp=%.o)
 
