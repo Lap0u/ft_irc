@@ -53,5 +53,6 @@ void	Server::initCommands(void)
 	_commands["MODE"] = mode;
 	_commands["WHOIS"] = whois;
 	_commands["PING"] = ping;
+	_commands["JOIN"] = join;
 }
 
