@@ -42,6 +42,7 @@ class Channel
     const std::string&			getTopic(void) const;
     const std::string&			getKey(void) const;
     const std::string&			getMode(void) const;
+    const int&      			getSocket(void) const;
 
     void						setName(std::string const & name);
 	void						setTopic(std::string const & topic);

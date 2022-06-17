@@ -34,6 +34,11 @@ const std::string&			Channel::getMode(void) const
 	return _mode;
 }
 
+const int&					Channel::getSocket(void) const
+{
+	return _socket;
+}
+
 void						Channel::setName(std::string const & name)
 {
 	_name = name;
