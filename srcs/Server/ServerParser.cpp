@@ -7,7 +7,7 @@ void	Server::parseCmd(std::string line, int fd)
 	{
 		DEB "Command not found (find)" ENDL;
 		User *cur = findMatchingUser(fd);
-		if (cur->_registered == 0)
+		if (cur->isRegistered() == false)
 			deleteUserSocket(findPosSocket(fd));
 		return;
 	}
@@ -18,7 +18,7 @@ void	Server::parseCmd(std::string line, int fd)
 		it->second(line, fd, *this);
 	else
 	{
-		if (findMatchingUser(fd)->_registered == 0)
+		if (findMatchingUser(fd)->isRegistered() == false)
 			deleteUserSocket(findPosSocket(fd));
 		DEB "Command not found" ENDL;
 	}

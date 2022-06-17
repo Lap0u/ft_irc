@@ -14,7 +14,6 @@ void    launch_serv(std::string port, std::string password)
 	while(1)
 	{
 		ret_poll = poll(server.getSocket(0), server.getSocketSize(), 15000);
-		COUT "Size" << server.getSocketSize() ENDL;
 		if (ret_poll == -1)
 		{
 			perror("poll");

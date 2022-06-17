@@ -6,7 +6,7 @@ int		cap(const std::string &line, int fd, Server& server)
 	if ( parsedLine.size () != 2 || parsedLine[1] != "LS")
 	{
 		User *cur = server.findMatchingUser(fd);
-		if (cur->_registered == 0)
+		if (cur->isRegistered() == false)
 			server.deleteUserSocket(server.findPosSocket(fd));
 	}
 	DEB "Pointeur cap fonction" ENDL;

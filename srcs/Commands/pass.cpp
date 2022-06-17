@@ -8,11 +8,11 @@ int		pass(const std::string &line, int fd, Server& server)
 	if (parsedLine.size() < 2)
 	{
 		server.send_reply(fd, 461, "PASS", ES, ES, ES);
-		if (cur->_registered == 0)
+		if (cur->isRegistered() == false)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;		
 	}
-	if (cur->_registered == 1)
+	if (cur && cur->isRegistered())
 	{
 		server.send_reply(fd, 462, ES, ES, ES, ES);
 		return 1;
@@ -20,7 +20,7 @@ int		pass(const std::string &line, int fd, Server& server)
 	if (parsedLine[1] != server.getServerPassword())
 	{
 		DEB "Password " << parsedLine[1] << " was wrong" ENDL;
-		if (cur->_registered == 0)
+		if (cur->isRegistered() == false)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}

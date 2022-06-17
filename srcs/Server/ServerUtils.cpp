@@ -64,7 +64,6 @@ User*		Server::findMatchingUser(int socket)
 		DEB "not found" ENDL;
 		return (NULL);
 	}
-	DEB "user_tab[" << res - _socket_tab.begin() << "]" ENDL;
 	return _user_tab[res - _socket_tab.begin()];
 }
 
@@ -115,8 +114,9 @@ std::string	Server::getPackage(int fd)
 	else if (n == 0)
 	{
 		CERR "Socket close by client" ENDL;
-		if (findMatchingUser(fd)->_registered == 0)
+		if (findMatchingUser(fd)->isRegistered() == false)
 			deleteUserSocket(findPosSocket(fd));
+		close(fd);
 		return (ES);
 	}
 	return (buffer);

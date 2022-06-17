@@ -7,7 +7,7 @@
 
 class User
 {
-public:
+private:
 	bool		_operator;
 	int			_socket;
 	std::string	_nick;
@@ -32,6 +32,7 @@ public:
 	const std::string	getPass(void) const;
 	const std::string	getMode(void) const;
 	const std::string	getRealName(void) const;
+	bool				isRegistered(void) const;
 
 	void	setNick(std::string nick);
 	void	setSocket(int socket);
@@ -41,6 +42,7 @@ public:
 	void	updateMode(std::string mode, char op);
 	void	addMode(std::string mode);
 	void	delMode(std::string mode);
+	void	setRegister(void);
 
 
 	bool	operator==(User* user) const;
