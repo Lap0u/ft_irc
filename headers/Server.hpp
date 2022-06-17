@@ -10,6 +10,7 @@
 #include "Irc.hpp"
 #include "User.hpp"
 #include "Commands.hpp"
+#include "Channel.hpp"
 #include <poll.h>
 
 class Server;
@@ -25,6 +26,7 @@ public:
 	typedef std::map<int, std::string>					repliesMap;
 	typedef	std::vector<t_pollfd>						pollfdVector;
 	typedef	std::vector<User*>							userVector;
+	typedef	std::vector<Channel*>						channelVector;
 
 private:
 	int				_main_socket;
@@ -36,6 +38,7 @@ private:
 
 	pollfdVector	_socket_tab;
 	userVector		_user_tab;
+	channelVector	_channel_tab;
 
 	commandMap		_commands;
 	repliesMap		_replies;

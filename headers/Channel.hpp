@@ -20,6 +20,7 @@ class Channel
 	public:
 
 	typedef Server::userVector	Clients;
+	typedef Server::userVector	Operators;
 
     private:
     
@@ -30,6 +31,7 @@ class Channel
     std::string	            	_mode;
     std::string                 _flags;
     Clients      				_clients;
+    Operators                   _operators;
 
     public:
 
