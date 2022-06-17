@@ -49,6 +49,10 @@ const std::string	User::getMode(void) const
 {
 	return this->_mode;
 }
+bool				User::isRegistered(void) const
+{
+	return this->_registered;
+}
 
 void	User::setSocket(int socket)
 {
@@ -70,6 +74,10 @@ void	User::setRealName(std::string real_name)
 void	User::setPass(std::string pass)
 {
 	_pass = pass;
+}
+void	User::setRegister(void)
+{
+	_registered = true;
 }
 
 void	User::addMode(std::string mode)
