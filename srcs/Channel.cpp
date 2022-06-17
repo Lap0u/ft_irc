@@ -1,6 +1,6 @@
 #include "../headers/Channel.hpp"
 
-Channel::Channel(std::string name, std::string key = std::string()) :
+Channel::Channel(std::string name, std::string key) :
 	_name(name), _topic(std::string()), _key(key), _mode(std::string()), _flags("aimnqpsrtlk")
 {
 	if (_key != std::string())

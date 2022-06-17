@@ -10,8 +10,9 @@
 #include "Irc.hpp"
 #include "User.hpp"
 #include "Commands.hpp"
-#include "Channel.hpp"
 #include <poll.h>
+
+class Channel;
 
 class Server;
 
