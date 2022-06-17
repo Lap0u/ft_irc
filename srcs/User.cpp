@@ -1,9 +1,10 @@
 #include "../headers/User.hpp"
 
-User::User( void )
+User::User( void ) : _socket(0), _nick(""),
+	_user_name(""), _real_name("Server"),
+	_pass(), _mode() , _registered(0)
 {
 	DEB  "Construct User " ENDL;
-	_operator = false;
 }
 User::User( int socket, std::string nick, std::string user_name,
 		std::string pass, std::string mode)
