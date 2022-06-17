@@ -7,7 +7,7 @@
 
 class User
 {
-private:
+protected:
 	bool		_operator;
 	int			_socket;
 	std::string	_nick;

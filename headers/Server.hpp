@@ -9,6 +9,7 @@
 
 #include "Irc.hpp"
 #include "User.hpp"
+#include "Oper.hpp"
 #include "Commands.hpp"
 #include <poll.h>
 
@@ -21,10 +22,11 @@ class Server
 {
 public:
 	
-	typedef std::map<std::string, commandFunction>		commandMap;
-	typedef std::map<int, std::string>					repliesMap;
-	typedef	std::vector<t_pollfd>						pollfdVector;
-	typedef	std::vector<User*>							userVector;
+	typedef std::map<std::string, commandFunction>	commandMap;
+	typedef std::map<int, std::string>				repliesMap;
+	typedef	std::vector<t_pollfd>					pollfdVector;
+	typedef	std::vector<User*>						userVector;
+	typedef	std::vector<Oper*>						operVector;
 
 private:
 	int				_main_socket;
@@ -33,9 +35,11 @@ private:
 	std::string		_oper_password;
 	std::string		_version;
 	std::time_t		_date;
+	
 
 	pollfdVector	_socket_tab;
 	userVector		_user_tab;
+	operVector		_oper_tab;
 
 	commandMap		_commands;
 	repliesMap		_replies;
@@ -50,6 +54,7 @@ public:
 	bool			isUserUnique(User* user) const;
 	bool			isUserUnique(const std::string &nick) const;
 	bool			addUser(User* user);
+	bool			addOper(Oper* oper);
 
 	t_pollfd*		getSocket(nfds_t i);
 	User*			getUser(std::string nick) const;

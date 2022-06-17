@@ -26,6 +26,14 @@ bool    	Server::isUserUnique(const std::string &nick) const
 	return true;
 }
 
+bool		Server::addOper(Oper* oper)
+{
+	if (!_oper_tab.empty() && !isUserUnique(oper))
+		return false;
+	_oper_tab.push_back(oper);
+	return true;
+}
+
 bool		Server::addUser(User* user)
 {
 	if (!_user_tab.empty() && !isUserUnique(user))
