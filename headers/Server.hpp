@@ -21,24 +21,26 @@ class Server
 {
 public:
 	
-	typedef std::map<std::string, commandFunction>		commandMap;
-	typedef std::map<int, std::string>					repliesMap;
-	typedef	std::vector<t_pollfd>						pollfdVector;
-	typedef	std::vector<User*>							userVector;
+	typedef std::map<std::string, commandFunction>	commandMap;
+	typedef std::map<int, std::string>				repliesMap;
+	typedef	std::vector<t_pollfd>					pollfdVector;
+	typedef	std::vector<User*>						userVector;
+	typedef std::map <std::string, std::string>		operMap;
 
 private:
 	int				_main_socket;
 	std::string		_server_password;
 	std::string		_server_name;
-	std::string		_oper_password;
 	std::string		_version;
 	std::time_t		_date;
+	
 
 	pollfdVector	_socket_tab;
 	userVector		_user_tab;
 
 	commandMap		_commands;
 	repliesMap		_replies;
+	operMap			_operators;
 	
 	void			initReplies(void);
 	void			initCommands(void);
@@ -56,19 +58,17 @@ public:
 	nfds_t			getSocketSize(void) const;
 	int				getMainSocket(void) const;
 	std::string		getServerName(void) const;
-	std::string		getOperPassword(void) const;
 	std::string		getServerPassword(void) const;
 	std::string		getVersion(void) const;
 	std::string		getDate(void) const;
 	std::string		getServerInfos(void) const;
+	Server::operMap	getOperators(void) const;
 
 	void			addSocket(int fd, short events);
 	void			deleteUserSocket(nfds_t i);
 
 	User*			findMatchingUser(int fd);
-
 	t_pollfd		findMatchingSocket(std::string user);
-
 	int				findPosSocket(int fd);
 
 	void			parseCmd(std::string line, int fd);

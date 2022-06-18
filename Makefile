@@ -29,6 +29,7 @@ SRC			=	main.cpp \
 				srcs/Commands/user.cpp \
 				srcs/Commands/usermode.cpp \
 				srcs/Commands/whois.cpp
+				
 
 OBJ			=	$(SRC:%.cpp=%.o)
 
