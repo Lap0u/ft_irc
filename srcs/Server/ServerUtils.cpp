@@ -26,14 +26,6 @@ bool    	Server::isUserUnique(const std::string &nick) const
 	return true;
 }
 
-bool		Server::addOper(Oper* oper)
-{
-	if (!_oper_tab.empty())
-		return false;
-	_oper_tab.push_back(oper);
-	return true;
-}
-
 bool		Server::addUser(User* user)
 {
 	if (!_user_tab.empty() && !isUserUnique(user))
@@ -98,19 +90,6 @@ int			Server::findPosSocket(int fd)
 			break ;
 	}
 	return pos;
-}
-
-bool		Server::operExist(const std::string& name)
-{
-	operVector::const_iterator	it = _oper_tab.begin();
-	int							i = 0;
-
-	for (; it != _oper_tab.end(); it++, i++)
-	{
-		if ((*it)->getName() == name)
-			return true;
-	}
-	return (false);
 }
 
 std::string	Server::getPackage(int fd)

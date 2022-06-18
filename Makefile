@@ -14,7 +14,6 @@ endif
 SRC			=	main.cpp \
 				srcs/socket.cpp \
 				srcs/User.cpp \
-				srcs/Oper.cpp \
 				srcs/Server/Server.cpp \
 				srcs/Server/ServerGetters.cpp \
 				srcs/Server/ServerParser.cpp \
@@ -29,8 +28,7 @@ SRC			=	main.cpp \
 				srcs/Commands/ping.cpp \
 				srcs/Commands/user.cpp \
 				srcs/Commands/usermode.cpp \
-				srcs/Commands/whois.cpp \
-				srcs/Commands/oper.cpp
+				srcs/Commands/whois.cpp
 				
 
 OBJ			=	$(SRC:%.cpp=%.o)

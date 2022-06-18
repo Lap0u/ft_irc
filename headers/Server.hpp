@@ -9,7 +9,6 @@
 
 #include "Irc.hpp"
 #include "User.hpp"
-#include "Oper.hpp"
 #include "Commands.hpp"
 #include <poll.h>
 
@@ -26,23 +25,22 @@ public:
 	typedef std::map<int, std::string>				repliesMap;
 	typedef	std::vector<t_pollfd>					pollfdVector;
 	typedef	std::vector<User*>						userVector;
-	typedef	std::vector<Oper*>						operVector;
+	typedef std::map <std::string, std::string>		operMap;
 
 private:
 	int				_main_socket;
 	std::string		_server_password;
 	std::string		_server_name;
-	std::string		_oper_password;
 	std::string		_version;
 	std::time_t		_date;
 	
 
 	pollfdVector	_socket_tab;
 	userVector		_user_tab;
-	operVector		_oper_tab;
 
 	commandMap		_commands;
 	repliesMap		_replies;
+	operMap			_operators;
 	
 	void			initReplies(void);
 	void			initCommands(void);
@@ -54,18 +52,17 @@ public:
 	bool			isUserUnique(User* user) const;
 	bool			isUserUnique(const std::string &nick) const;
 	bool			addUser(User* user);
-	bool			addOper(Oper* oper);
 
 	t_pollfd*		getSocket(nfds_t i);
 	User*			getUser(std::string nick) const;
 	nfds_t			getSocketSize(void) const;
 	int				getMainSocket(void) const;
 	std::string		getServerName(void) const;
-	std::string		getOperPassword(void) const;
 	std::string		getServerPassword(void) const;
 	std::string		getVersion(void) const;
 	std::string		getDate(void) const;
 	std::string		getServerInfos(void) const;
+	Server::operMap	getOperators(void) const;
 
 	void			addSocket(int fd, short events);
 	void			deleteUserSocket(nfds_t i);
@@ -73,7 +70,6 @@ public:
 	User*			findMatchingUser(int fd);
 	t_pollfd		findMatchingSocket(std::string user);
 	int				findPosSocket(int fd);
-	bool			operExist(const std::string& name);
 
 	void			parseCmd(std::string line, int fd);
 	std::string     getPackage(int fd);

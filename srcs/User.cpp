@@ -1,8 +1,8 @@
 #include "../headers/User.hpp"
 
-User::User( void ) : _socket(0), _nick(""),
-	_user_name(""), _real_name("Server"),
-	_pass(), _mode() , _registered(0)
+User::User( void ) : _socket(0), _nick(ES),
+	_user_name(ES), _real_name("Server"),
+	_pass(ES), _mode(ES) , _registered(0)
 {
 	DEB  "Construct User " ENDL;
 }
@@ -22,7 +22,12 @@ User::~User( void )
 
 bool    User::isOperator(void) const
 {
-	return _operator;
+	return _serv_op;
+}
+
+bool    User::isChanOp(void) const
+{
+	return _chan_op;
 }
 
 int		User::getSocket(void) const
@@ -80,9 +85,14 @@ void	User::setRegister(void)
 {
 	_registered = true;
 }
-void	User::setOperator(bool operator_status)
+void	User::setServOp(bool status)
 {
-	_operator = operator_status;
+	_serv_op = status;
+}
+
+void	User::setChanOp(bool status)
+{
+	_chan_op = status;
 }
 
 void	User::addMode(std::string mode)
@@ -97,6 +107,7 @@ void	User::addMode(std::string mode)
 			_mode += *it;	
 	}
 }
+
 void	User::delMode(std::string mode)
 {
 	
@@ -125,4 +136,3 @@ bool	User::operator==(User* user) const
 		return true;
 	return false;
 }
-

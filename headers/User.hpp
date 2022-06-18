@@ -8,7 +8,8 @@
 class User
 {
 protected:
-	bool		_operator;
+	bool		_serv_op;
+	bool		_chan_op;
 	int			_socket;
 	std::string	_nick;
 	std::string	_user_name;
@@ -25,7 +26,8 @@ public:
 		std::string pass, std::string mode);
 
 	int		getSocket(void) const;
-	bool	isOperator(void) const;
+	bool    isOperator(void) const; // isServOp()
+	bool    isChanOp(void) const;
 
 	const std::string	getNick(void) const;
 	const std::string	getUserName(void) const;
@@ -43,7 +45,8 @@ public:
 	void	addMode(std::string mode);
 	void	delMode(std::string mode);
 	void	setRegister(void);
-	void	setOperator(bool operator_status);
+	void	setServOp(bool status);
+	void	setChanOp(bool status);
 
 
 	bool	operator==(User* user) const;

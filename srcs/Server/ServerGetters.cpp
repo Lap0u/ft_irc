@@ -36,14 +36,14 @@ std::string Server::getServerName(void) const
 	return _server_name;
 }
 
+Server::operMap	Server::getOperators(void) const
+{
+	return (_operators);
+}
+
 std::string Server::getServerPassword(void) const
 {
 	return _server_password;
-}
-
-std::string	Server::getOperPassword(void) const
-{
-	return _oper_password;
 }
 
 std::string Server::getVersion(void) const
