@@ -102,17 +102,15 @@ int			Server::findPosSocket(int fd)
 
 bool		Server::operExist(const std::string& name)
 {
-	operVector::const_iterator	res;
-	Oper	 					temp(name, NULL);
+	operVector::const_iterator	it = _oper_tab.begin();
+	int							i = 0;
 
-	res = find(_oper_tab.begin(), _oper_tab.end(), &temp);
-	if (res == _oper_tab.end())
+	for (; it != _oper_tab.end(); it++, i++)
 	{
-		DEB "oper not found" ENDL;
-		return (false);
+		if ((*it)->getName() == name)
+			return true;
 	}
-	DEB "oper found" ENDL;
-	return (true);
+	return (false);
 }
 
 std::string	Server::getPackage(int fd)
