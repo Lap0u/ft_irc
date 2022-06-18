@@ -2,7 +2,7 @@
 
 int    ping(const std::string &line, int fd, Server& server)
 {
-	COUT "Tried ping" ENDL;
+	DEB "Tried ping" ENDL;
 	std::vector<std::string>parsedLine = ft_split(line, ' ');
 	if (parsedLine.size() < 2)
 	{

@@ -20,8 +20,11 @@
 
 #define WI_ERR_NONICKNAMEGIVEN 431
 
+
 int    whois(const std::string &line, int fd, Server& server)
 {
+    DEB "pointer whois" ENDL;
+    DEB line ENDL;
     std::vector<std::string> tab = ft_split(line, " ,");
     if (tab.size() == 1)
     {
@@ -33,21 +36,22 @@ int    whois(const std::string &line, int fd, Server& server)
         User *user = server.getUser(tab[i]);
         if (user == NULL)
         {
-            server.send_reply(fd, WI_ERR_NOSUCHNICK, tab[i], ES, ES, ES);
+            server.send_reply(fd, WI_ERR_NOSUCHNICK, tab[i], std::string(), std::string(), std::string());
+            DEB "Nosuchnick(whois)" ENDL;
         }
         else
         {
-			server.send_reply(fd, WI_RPL_WHOISUSER, user->getNick(), user->getUserName(), server.getServerName(), user->getUserName()); // PUT REAL NAME INSTEAD
-			server.send_reply(fd, WI_RPL_WHOISSERVER, user->getNick(), server.getServerName(), "server info", ES);
+			server.send_reply(fd, WI_RPL_WHOISUSER, user->getNick(), user->getUserName(), server.getServerName(), user->getRealName());
+			server.send_reply(fd, WI_RPL_WHOISSERVER, user->getNick(), server.getServerName(), server.getServerInfos(), std::string());
     		if (user->isOperator())
             {
                 server.send_reply(fd, WI_RPL_WHOISOPERATOR, user->getNick(), ES, ES, ES);
             }
-    		server.send_reply(fd, WI_RPL_WHOISIDLE, user->getNick(), ES, ES, ES); // time since it's not there
-    		server.send_reply(fd, WI_RPL_WHOISCHANNELS, user->getNick(), ES, ES, ES);
+    		server.send_reply(fd, WI_RPL_WHOISIDLE, user->getNick(), "0", std::string(), std::string());
+    		server.send_reply(fd, WI_RPL_WHOISCHANNELS, user->getNick(), "make_function_to_get_user_channel", std::string(), std::string());
             if (user->getMode().find("a") != std::string::npos)
             {
-    		    server.send_reply(fd, WI_RPL_AWAY, user->getNick(), "is away", ES, ES);
+    		    server.send_reply(fd, WI_RPL_AWAY, user->getNick(), " is away", std::string(), std::string());
             }
         }
     }

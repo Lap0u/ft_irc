@@ -25,7 +25,8 @@
 
 int		not_enough_parameters(int fd, Server& server)
 {
-	server.send_reply(fd, J_ERR_NEEDMOREPARAMS, "join", ES, ES, ES);
+	COUT "no" ENDL;
+	server.send_reply(fd, J_ERR_NEEDMOREPARAMS, "join:", ES, ES, ES);
     return 1;
 }
 
@@ -60,13 +61,13 @@ int     join(const std::string &line, int fd, Server& server)
 	}
 	if (tab.size() == 3)
 	{
-		COUT "SIZE 3 " ENDL;
-		COUT "tab1 " << tab[1].data() ENDL;
-		COUT "tab2 " << tab[2].data() ENDL;
+		// COUT "SIZE 3 " ENDL;
+		// COUT "tab1 " << tab[1].data() ENDL;
+		// COUT "tab2 " << tab[2].data() ENDL;
 		std::vector<std::string> tab1 = ft_split(tab[1].data(), ',');
 		std::vector<std::string> tab2 = ft_split(tab[2].data(), ',');
-		COUT "tab1 == " << tab1.size() ENDL;
-		COUT "tab2 == " << tab2.size() ENDL;
+		// COUT "tab1 == " << tab1.size() ENDL;
+		// COUT "tab2 == " << tab2.size() ENDL;
 		if (tab2.size() > tab1.size())
 			return not_enough_parameters(fd, server);
 		return ft_handle_two_tabs(tab1, tab2);

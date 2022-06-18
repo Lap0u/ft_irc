@@ -9,6 +9,7 @@ void    launch_serv(std::string port, std::string password)
 	int			ret_poll;
 	std::string	recvline;
 	std::string	separatedline;
+	int			fd;
 	
 	while(1)
 	{
@@ -22,26 +23,34 @@ void    launch_serv(std::string port, std::string password)
 			continue ;
 		for (nfds_t i = 0; i < server.getSocketSize(); i++)
 		{
-			if (server.getSocket(i)->revents == POLLIN)
+			if ((server.getSocket(i)->revents & POLLIN) == POLLIN)
 			{
+				server.getSocket(i)->revents = 0;
 				if (i == 0)
-					server.connectionRequest();
-				else
-				{					
-					while (1)
+				{
+					fd = accept(server.getMainSocket(), (SA*) NULL, NULL);
+					if (fd == -1)
 					{
-						recvline = server.getPackage(server.getSocket(i)->fd, true);
-						if (recvline.empty())
-							break ;
-						while (recvline.find("\r\n") != std::string::npos)
-						{
-							separatedline = recvline.substr(0, recvline.find("\r\n"));
-							server.parseCmd(separatedline, server.getSocket(i)->fd);
-							recvline.erase(0, recvline.find("\r\n") + 2);
-						}
-						recvline.clear();
+						perror("accept");
+						exit(1);
 					}
+					server.addSocket(fd, POLLIN);
+					User *user = new User();
+					user->setSocket(fd);
+					server.addUser(user);
 				}
+				else
+					fd = server.getSocket(i)->fd;
+				recvline = server.getPackage(fd);
+				if (recvline.empty())
+					continue ;
+				while (recvline.find("\r\n") != std::string::npos)
+				{
+					separatedline = recvline.substr(0, recvline.find("\r\n"));
+					server.parseCmd(separatedline, fd);
+					recvline.erase(0, recvline.find("\r\n") + 2);
+				}
+				recvline.clear();
 			}
 		}
 	}

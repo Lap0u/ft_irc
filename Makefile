@@ -15,7 +15,6 @@ SRC			=	main.cpp \
 				srcs/socket.cpp \
 				srcs/User.cpp \
 				srcs/Server/Server.cpp \
-				srcs/Server/ServerConnection.cpp \
 				srcs/Server/ServerGetters.cpp \
 				srcs/Server/ServerParser.cpp \
 				srcs/Server/ServerUtils.cpp \

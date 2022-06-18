@@ -8,6 +8,7 @@ class Server;
 
 std::vector<std::string> ft_split(std::string tosplit, char delimiter);
 std::vector<std::string> ft_split(std::string tosplit, std::string delimiter);
+
 bool    is_in_set(const std::string& str, const std::string& str2);
 bool    is_in_set(const std::string& str, const std::string& str2, size_t size);
 

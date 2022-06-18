@@ -46,6 +46,7 @@ void		Server::addSocket(int fd, short events)
 
 void		Server::deleteUserSocket(nfds_t i)
 {
+	close(_socket_tab[i].fd);
 	_socket_tab.erase(_socket_tab.begin() + i);
 	_user_tab.erase(_user_tab.begin() + i);
 }
@@ -91,14 +92,21 @@ int			Server::findPosSocket(int fd)
 	return pos;
 }
 
-std::string	Server::getPackage(int fd, bool registered)
+std::string	Server::getPackage(int fd)
 {
 	char		recvline[MAXLINE + 1];
 	int			n = 0;
+	std::string buffer;
 
 	memset(recvline, 0, MAXLINE);
-	n = recv(fd, recvline, MAXLINE -1, 0); //flag MSG_DONTWAIT? 
-	if (n == -1)
+	n = recv(fd, recvline, MAXLINE - 1, MSG_DONTWAIT);
+	buffer = recvline;
+	while (n > 0 && buffer.find("\r\n") == std::string::npos)
+	{
+		n = recv(fd, recvline, MAXLINE - 1, MSG_DONTWAIT);
+		buffer += recvline;
+	}
+	if (n == -1 && errno != EAGAIN)
 	{
 		perror("recv");
 		exit(1);
@@ -106,12 +114,12 @@ std::string	Server::getPackage(int fd, bool registered)
 	else if (n == 0)
 	{
 		CERR "Socket close by client" ENDL;
-		if (registered)
+		if (findMatchingUser(fd)->isRegistered() == false)
 			deleteUserSocket(findPosSocket(fd));
 		close(fd);
-		return (std::string ());
+		return (ES);
 	}
-	return (std::string (recvline));
+	return (buffer);
 }
 
 bool	operator==(const t_pollfd &pollfd1, const t_pollfd &pollfd2)

@@ -2,14 +2,13 @@
 
 User::User( void )
 {
-	if (DEBUG == 2)
-		COUT "Construct User " << this->_socket ENDL;
+	DEB  "Construct User " ENDL;
 	_operator = false;
 }
 User::User( int socket, std::string nick, std::string user_name,
 		std::string pass, std::string mode)
 		: _socket(socket), _nick(nick), _user_name(user_name),
-			_pass(pass), _mode(mode) 
+			_real_name("Server"), _pass(pass), _mode(mode) , _registered(0)
 			{
 				if (DEBUG == 2)
 					COUT "Construct User " << this->_nick ENDL;
@@ -50,6 +49,15 @@ const std::string	User::getMode(void) const
 {
 	return this->_mode;
 }
+bool				User::isRegistered(void) const
+{
+	return this->_registered;
+}
+
+void	User::setSocket(int socket)
+{
+	_socket = socket;
+}
 
 void	User::setNick(std::string nick)
 {
@@ -66,6 +74,10 @@ void	User::setRealName(std::string real_name)
 void	User::setPass(std::string pass)
 {
 	_pass = pass;
+}
+void	User::setRegister(void)
+{
+	_registered = true;
 }
 
 void	User::addMode(std::string mode)

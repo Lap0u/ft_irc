@@ -2,9 +2,13 @@
 
 int		cap(const std::string &line, int fd, Server& server)
 {
-	(void)line;
-	(void)fd;
-	(void)server;
-	COUT "Pointeur cap fonction" ENDL;
+	std::vector<std::string>parsedLine = ft_split(line, ' ');
+	if ( parsedLine.size () != 2 || parsedLine[1] != "LS")
+	{
+		User *cur = server.findMatchingUser(fd);
+		if (cur->isRegistered() == false)
+			server.deleteUserSocket(server.findPosSocket(fd));
+	}
+	DEB "Pointeur cap fonction" ENDL;
 	return 2;
 }
