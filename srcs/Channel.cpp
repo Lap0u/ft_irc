@@ -79,8 +79,3 @@ void						Channel::delMode(std::string mode)
 			_mode.erase(it);
 	}
 }
-
-Channel*					Channel::createChannel(std::string name, std::string key)
-{
-	return (new Channel(name, key));
-}

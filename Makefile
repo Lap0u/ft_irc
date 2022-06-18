@@ -18,6 +18,7 @@ SRC			=	main.cpp \
 				srcs/Server/ServerGetters.cpp \
 				srcs/Server/ServerParser.cpp \
 				srcs/Server/ServerUtils.cpp \
+				srcs/Server/ServerChannel.cpp \
 				srcs/Message.cpp \
 				srcs/Commands.cpp \
 				srcs/MessageBuilder.cpp \

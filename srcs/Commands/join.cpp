@@ -30,20 +30,33 @@ int		not_enough_parameters(int fd, Server& server)
     return 1;
 }
 
-int		ft_handle_two_tabs(std::vector<std::string> const & tab1, std::vector<std::string> const & tab2)
+int		ft_handle_two_tabs(std::vector<std::string> const & tab1,
+			std::vector<std::string> const & tab2, int fd, Server& server)
 {
+	(void)fd;
 	for (unsigned int i = 0; i < tab1.size(); i++)
 	{
 		COUT "there " << tab1[i] << " " << tab2[i] ENDL;
+		if (server.findChannel(tab1[i]) == NULL)
+		{
+			COUT tab1[i] << " is not added" ENDL;
+			server.addChannel(new Channel(tab1[i], tab2[i]));
+		}
 	}
 	return 0;
 }
 
-int		ft_handle_one_tab(std::vector<std::string> const & tab)
+int		ft_handle_one_tab(std::vector<std::string> const & tab, int fd, Server& server)
 {
+	(void)fd;
 	for (unsigned int i = 0; i < tab.size(); i++)
 	{
 		COUT "here " << tab[i] ENDL;
+		if (server.findChannel(tab[i]) == NULL)
+		{
+			COUT tab[i] << " is not added" ENDL;
+			server.addChannel(new Channel(tab[i]));
+		}
 	}
 	return 0;
 }
@@ -56,8 +69,9 @@ int     join(const std::string &line, int fd, Server& server)
 		return not_enough_parameters(fd, server);
 	if (tab.size() == 2)
 	{
-		std::vector<std::string> tab1 = ft_split(tab[1].data(), ' ');
-		return ft_handle_one_tab(tab1);
+		std::vector<std::string> tab1 = ft_split(tab[1].data(), ',');
+		COUT "tab1 " << tab[1].data() ENDL;
+		return ft_handle_one_tab(tab1, fd, server);
 	}
 	if (tab.size() == 3)
 	{
@@ -70,7 +84,7 @@ int     join(const std::string &line, int fd, Server& server)
 		// COUT "tab2 == " << tab2.size() ENDL;
 		if (tab2.size() > tab1.size())
 			return not_enough_parameters(fd, server);
-		return ft_handle_two_tabs(tab1, tab2);
+		return ft_handle_two_tabs(tab1, tab2, fd, server);
 	}
     return 1;
 }

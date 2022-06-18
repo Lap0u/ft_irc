@@ -82,6 +82,7 @@ public:
 	void			send_reply_no_header(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
 	
 	bool			addChannel(Channel *channel);
+	Channel*		findChannel(std::string const & channel) const;
 };
 
 bool	operator==(const t_pollfd &pollfd1, const t_pollfd &pollfd2);

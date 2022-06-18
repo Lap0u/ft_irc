@@ -51,6 +51,4 @@ class Channel
     void						setKey(std::string const & key);
     void                        addMode(std::string const mode);
     void                        delMode(std::string const mode);
-
-    Channel*					createChannel(std::string name, std::string key = std::string());
 };
