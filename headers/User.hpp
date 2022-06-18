@@ -43,6 +43,7 @@ public:
 	void	addMode(std::string mode);
 	void	delMode(std::string mode);
 	void	setRegister(void);
+	void	setOperator(bool operator_status);
 
 
 	bool	operator==(User* user) const;

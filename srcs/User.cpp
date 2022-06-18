@@ -80,6 +80,10 @@ void	User::setRegister(void)
 {
 	_registered = true;
 }
+void	User::setOperator(bool operator_status)
+{
+	_operator = operator_status;
+}
 
 void	User::addMode(std::string mode)
 {

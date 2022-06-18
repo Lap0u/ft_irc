@@ -6,20 +6,21 @@
 #include "Irc.hpp"
 #include "User.hpp"
 
-class Oper : public User
+class Oper
 {
 private:
+	std::string	_name;
+	User*		_creator;
 	
 public:
-	Oper( void );
 	virtual ~Oper( void );
+	Oper(std::string name, User *creator);
 
-	Oper( int socket, std::string nick, std::string user_name,
-		std::string pass, std::string mode);
+	const std::string	getName(void) const;
+	User*				getUser(void) const;
+	const std::string	getUserNick(void) const;
 
-	// bool	operator==(Oper* Oper) const;
-	
+	bool	operator==(Oper* Oper) const;
 };
 
 #endif
-

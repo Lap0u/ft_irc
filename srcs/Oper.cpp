@@ -1,14 +1,30 @@
 #include "../headers/Oper.hpp"
 
-Oper::Oper() : User()
-{}
-
 Oper::~Oper()
 {}
 
-Oper::Oper(int socket, std::string nick, std::string user_name,
-		std::string pass, std::string mode)
-        : User(socket, nick, user_name, pass, mode)
+Oper::Oper(std::string name, User *creator)
+: _name(name), _creator(creator)
 {}
 
+bool    Oper::operator==(Oper* oper) const
+{
+	if (this->_name == oper->_name)
+		return true;
+	return false;
+}
 
+const std::string	Oper::getName(void) const
+{
+	return _name;
+}
+
+User*				Oper::getUser(void) const
+{
+	return _creator;
+}
+
+const std::string	Oper::getUserNick(void) const
+{
+	return _creator->getNick();
+}
