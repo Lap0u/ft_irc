@@ -95,7 +95,7 @@ void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::st
 void    Server::send_raw_message(int fd, std::string message) const
 {
     DEB "reply sent (raw) " << message ENDL;
-    message += "/r/n";
+    std::string reply = ":OurServ Nick " + message + "\r\n";
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
         perror("send");
