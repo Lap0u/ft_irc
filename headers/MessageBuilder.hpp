@@ -32,6 +32,6 @@
 
 # define SPE_PONG(sender, receiver) ("PONG " + arg1 + " " + arg2)
 
-void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
+// void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 
 #endif

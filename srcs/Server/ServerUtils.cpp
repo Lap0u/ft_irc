@@ -119,6 +119,7 @@ std::string	Server::getPackage(int fd)
 		close(fd);
 		return (ES);
 	}
+	DEB "Line read is " << buffer ENDL;
 	return (buffer);
 }
 
