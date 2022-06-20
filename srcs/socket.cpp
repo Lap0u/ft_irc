@@ -69,7 +69,7 @@ void    launch_serv(std::string port, std::string password)
 	std::string	separatedline;
 	int			fd;
 	
-	test_reply(0, server);
+	// test_reply(0, server);
 	while(1)
 	{
 		ret_poll = poll(server.getSocket(0), server.getSocketSize(), 15000);

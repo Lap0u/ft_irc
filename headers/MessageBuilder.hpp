@@ -16,7 +16,7 @@
 # define RPL_WHOISCHANNELS(nickname, chanlist) (nickname + " " + chanlist)
 # define RPL_AWAY(nickname, message)( nickname + " :" + message)
 # define RPL_WHOISOPERATOR(nickname) (nickname + " :is an IRC operator")
-
+# define RPL_YOUREOPER ":You are now an IRC operator"
 # define ERR_UMODEUNKNOWNFLAG ":Unknown MODE flag"
 # define ERR_USERSDONTMATCH ":Cannot change mode for other users"
 # define ERR_NOSUCHNICK(nickname) (nickname + " :No such nick/channel")
@@ -28,8 +28,10 @@
 # define ERR_NICKNAMEINUSE(nickname) (nickname + " :Nickname is already in use")
 # define ERR_UNAVAILRESOURCE(nickname) (nickname + " :Nick is temporarily unavailable")
 # define ERR_RESTRICTED ":Your connection is restricted!"
-
-
+# define ERR_PASSWDMISMATCH ":Password incorrect"
+# define ERR_NORECIPIENT(command) (":No recipient given " + command)
+# define ERR_NOTEXTTOSEND ":No text to send"
+# define ERR_TOOMANYTARGETS(target, code, abort_message) (target + " :" + code + " recipients. " + abort_message)
 # define SPE_PONG(sender) ("PONG :" + arg1)
 
 // void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);

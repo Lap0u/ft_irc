@@ -30,10 +30,18 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_ENDOFWHOIS(arg1);
         case 319:
             return RPL_WHOISCHANNELS(arg1, arg2);
+        case 381:
+            return RPL_YOUREOPER;
         case 401:
             return ERR_NOSUCHNICK(arg1);
+        case 407:
+            return ERR_TOOMANYTARGETS(arg1, arg2, arg3);
         case 409:
             return ERR_NOORIGIN;
+        case 411:
+            return ERR_NORECIPIENT(arg1);
+        case 412:
+            return ERR_NOTEXTTOSEND;
         case 431:
             return ERR_NONICKNAMEGIVEN;
         case 432:
@@ -46,6 +54,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return ERR_NEEDMOREPARAMS(arg1);
         case 462:
             return ERR_ALREADYREGISTRED;
+        case 464:
+            return ERR_PASSWDMISMATCH;
         case 484:
             return ERR_RESTRICTED;
         case 501:
@@ -72,15 +82,13 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
 		str_code = std::string(1, '0').append(temp);
     else
         str_code = temp;
-    std::string message = ":" + getServerName() + " " + str_code + " " + "Temp_nick" + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
-    write(fd, message.c_str(), message.size());
-    // std::string message = ":" + getServerName() + " " + str_code + " " + findMatchingUser(fd)->getNick() + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
-    // DEB "reply sent " << message ENDL;
-    // if (send(fd, message.c_str(), message.length(), 0) < 0)
-    // {
-    //     perror("send reply");
-    //     exit(1);
-    // }
+    std::string message = ":" + getServerName() + " " + str_code + " " + findMatchingUser(fd)->getNick() + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
+    DEB "reply sent " << message ENDL;
+    if (send(fd, message.c_str(), message.length(), 0) < 0)
+    {
+        perror("send reply");
+        exit(1);
+    }
 }
 
 void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const
