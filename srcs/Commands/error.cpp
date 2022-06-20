@@ -2,10 +2,7 @@
 
 int    error(const std::string &line, int fd, Server& server)
 {
-	User*						cur = NULL;
-	std::vector<std::string>	word = ft_split(line, ' ');
-
-    // if (word)
-
+    std::string message(line.begin() + line.find(""), line.end());
+    server.send_raw_message(fd, message);
     return 0;
 }

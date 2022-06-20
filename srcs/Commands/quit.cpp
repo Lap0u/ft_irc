@@ -2,8 +2,7 @@
 
 int    quit(const std::string &line, int fd, Server& server)
 {
-	User*						cur = NULL;
-	std::vector<std::string>	word = ft_split(line, ' ');
-
+	error(line, fd, server);
+	server.deleteUserSocket(static_cast<nfds_t>(server.findPosSocket(fd)));
     return 0;
 }

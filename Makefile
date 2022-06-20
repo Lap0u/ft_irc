@@ -29,7 +29,9 @@ SRC			=	main.cpp \
 				srcs/Commands/user.cpp \
 				srcs/Commands/usermode.cpp \
 				srcs/Commands/whois.cpp \
-				srcs/Commands/privateMessage.cpp
+				srcs/Commands/privateMessage.cpp \
+				srcs/Commands/error.cpp \
+				srcs/Commands/quit.cpp
 				
 
 OBJ			=	$(SRC:%.cpp=%.o)
