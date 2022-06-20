@@ -99,12 +99,16 @@ void	User::addMode(std::string mode)
 {
 	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
-		if (*it == 'o' && *it == 'O' && *it == 'a')
+		if (*it == 'o' && !isOperator())
+			continue ;
+		if (*it == 'O' && !isChanOp())
+			continue ;
+		if (*it == 'a')
 			continue ;
 		if (_mode.empty())
 			_mode = *it;
 		else if (_mode.find(*it) == std::string::npos)
-			_mode += *it;	
+			_mode += *it;
 	}
 }
 
@@ -113,12 +117,19 @@ void	User::delMode(std::string mode)
 	
 	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
-		if (!_mode.empty())
+		if (_mode.empty())
 			return ;
 		if (*it == 'a' && *it != 'r')
 			continue ;
-		if (mode.find(*it) != std::string::npos)
-			_mode.erase(it);
+		size_t pos = _mode.find(*it);
+		if (pos != std::string::npos)
+		{
+			if (*it == 'o')
+				setServOp(false);
+			else if (*it == 'O')
+				setChanOp(false);
+			_mode.erase(pos, 1);
+		}
 	}
 }
 
