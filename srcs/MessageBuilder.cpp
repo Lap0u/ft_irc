@@ -94,9 +94,7 @@ void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::st
 
 void    Server::send_raw_message(int fd, std::string message) const
 {
-    message.erase(0, 1);
     std::string reply = message + "\r\n";
-    // std::string reply = ":" + getServerName() + " " + findMatchingUser(fd)->getNick() + " " + message + "\r\n";
     DEB "reply sent (raw) " << reply ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
