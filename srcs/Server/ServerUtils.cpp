@@ -106,15 +106,15 @@ std::string	Server::getPackage(int fd)
 		n = recv(fd, recvline, MAXLINE - 1, MSG_DONTWAIT);
 		buffer += recvline;
 	}
-	if (n == -1 && errno != EAGAIN)
-	{
-		perror("recv");
-		exit(1);
-	}
-	else if (n == 0)
+	// if (n == -1 && errno != EAGAIN)
+	// {
+	// 	perror("recv");
+	// 	exit(1);
+	// }
+	if (n == 0)
 	{
 		CERR "Socket close by client" ENDL;
-		if (findMatchingUser(fd)->isRegistered() == false)
+		if (findMatchingUser(fd))
 			deleteUserSocket(findPosSocket(fd));
 		close(fd);
 		return (ES);
