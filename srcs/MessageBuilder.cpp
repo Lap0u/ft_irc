@@ -72,13 +72,15 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
 		str_code = std::string(1, '0').append(temp);
     else
         str_code = temp;
-    std::string message = ":" + getServerName() + " " + str_code + " " + findMatchingUser(fd)->getNick() + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
-    DEB "reply sent " << message ENDL;
-    if (send(fd, message.c_str(), message.length(), 0) < 0)
-    {
-        perror("send reply");
-        exit(1);
-    }
+    std::string message = ":" + getServerName() + " " + str_code + " " + "Temp_nick" + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
+    write(fd, message.c_str(), message.size());
+    // std::string message = ":" + getServerName() + " " + str_code + " " + findMatchingUser(fd)->getNick() + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
+    // DEB "reply sent " << message ENDL;
+    // if (send(fd, message.c_str(), message.length(), 0) < 0)
+    // {
+    //     perror("send reply");
+    //     exit(1);
+    // }
 }
 
 void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const
