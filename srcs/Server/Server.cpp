@@ -62,5 +62,6 @@ void	Server::initCommands(void)
 	_commands["ERROR"] = error;
 	_commands["QUIT"] = quit;
 	// _commands["KILL"] = kill;
+	_commands["PRIVMSG"] = privateMessage;
 }
 
