@@ -59,5 +59,8 @@ void	Server::initCommands(void)
 	_commands["MODE"] = mode;
 	_commands["WHOIS"] = whois;
 	_commands["PING"] = ping;
+	_commands["ERROR"] = error;
+	_commands["QUIT"] = quit;
+	// _commands["KILL"] = kill;
 }
 

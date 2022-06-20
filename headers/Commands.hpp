@@ -20,6 +20,8 @@ int     user(const std::string &line, int fd, Server& server);
 int     mode(const std::string &line, int fd, Server& server);
 int     whois(const std::string &line, int fd, Server& server);
 int     ping(const std::string &line, int fd, Server& server);
+int     error(const std::string &line, int fd, Server& server);
+int     quit(const std::string &line, int fd, Server& server);
 
 
 #endif
