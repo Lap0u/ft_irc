@@ -1,17 +1,16 @@
 #include "../headers/Channel.hpp"
 
 Channel::Channel(std::string name, std::string key) :
-	_name(name), _topic(std::string()), _key(key), _mode(std::string()), _flags("aimnqpsrtlk")
+	_name(name), _topic(ES), _key(key), _mode(ES), _flags("aimnqpsrtlk")
 {
-	if (_key != std::string())
+	DEB "Construct Channel " << this->_name ENDL;
+	if (_key != ES)
 		this->addMode(KEY);
-	if (DEBUG == 2)
-		COUT "Construct Channel " << this->_name ENDL;
 }
 
 Channel::~Channel()
 {
-	COUT "Destruct Channel." ENDL;
+	DEB "Destruct Channel." ENDL;
 }
 
 const std::string&			Channel::getName(void) const
@@ -80,16 +79,39 @@ void						Channel::delMode(std::string mode)
 	}
 }
 
-int						Channel::joinChannel(User* const user, std::string const & key)
+int						Channel::joinChannel(User* const user)
 {
-	(void)key;
 	if (this->findClient(user->getNick()) != NULL)
 		return 1;
 	_clients.push_back(user);
 	return 0;
 }
 
-User*						Channel::findClient(std::string const client)
+int						Channel::joinChannel(User* const user, std::string const & key)
+{
+	if (this->findClient(user->getNick()) != NULL)
+		return 1;
+	if (this->getMode().find("k") != std::string::npos && this->getKey() != key)
+		return 2;
+	_clients.push_back(user);
+	return 0;
+}
+
+int						Channel::partWithAClient(std::string const user)
+{
+	Clients::iterator it = _clients.begin();
+	for (; it != _clients.end(); it++)
+	{
+		if ((*it)->getNick() == user)
+			break;
+	}
+	if (it == _clients.end())
+		return 1;
+	_clients.erase(it);
+	return 0;
+}
+
+User*					Channel::findClient(std::string const client)
 {
 	Clients::iterator it = _clients.begin();
 	for (; it != _clients.end(); it++)

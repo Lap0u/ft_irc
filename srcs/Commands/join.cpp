@@ -48,6 +48,10 @@ int		ft_handle_two_tabs(std::vector<std::string> const & tab1,
 
 int		ft_handle_one_tab(std::vector<std::string> const & tab, int fd, Server& server)
 {
+	Channel*	chan;
+	User*		user;
+	int 		joined;
+
 	for (unsigned int i = 0; i < tab.size(); i++)
 	{
 		COUT "here " << tab[i] ENDL;
@@ -56,9 +60,9 @@ int		ft_handle_one_tab(std::vector<std::string> const & tab, int fd, Server& ser
 			COUT tab[i] << " is not added" ENDL;
 			server.addChannel(new Channel(tab[i]));
 		}
-		Channel *chan = server.findChannel(tab[i]);
-		User* user = server.findMatchingUser(fd);
-		int joined = chan->joinChannel(user);
+		chan = server.findChannel(tab[i]);
+		user = server.findMatchingUser(fd);
+		joined = chan->joinChannel(user);
 		if (joined == 0)
 		{
 			if (chan->getTopic() != ES)

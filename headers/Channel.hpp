@@ -42,6 +42,7 @@ class Channel
     const std::string&			getTopic(void) const;
     const std::string&			getKey(void) const;
     const std::string&			getMode(void) const;
+    const std::string&			getAMode(void) const;
     const int&      			getSocket(void) const;
 
     // const std::string&			getIdentifier(void) const;
@@ -52,6 +53,8 @@ class Channel
     void                        addMode(std::string const mode);
     void                        delMode(std::string const mode);
 
-    int                         joinChannel(User* const user, std::string const & key = std::string());
+    int                         joinChannel(User* const user);
+    int                         joinChannel(User* const user, std::string const & key);
     User*                       findClient(std::string const client);
+    int                         partWithAClient(std::string const user);
 };
