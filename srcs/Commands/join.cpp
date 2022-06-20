@@ -23,9 +23,19 @@
 
 #define J_RPL_TOPIC 332
 
+#define J_RPL_NAMREPLY 353
+
+#define J_RPL_ENDOFNAMES 366
+
+int		check_first_char_channel(std::string &name)
+{
+	if (name[0] == '#' || name[0] == '+' || name[0] == '!' || name[0] == '&')
+		return 0;
+	return 1;
+}
+
 int		not_enough_parameters(int fd, Server& server)
 {
-	COUT "no" ENDL;
 	server.send_reply(fd, J_ERR_NEEDMOREPARAMS, "join:", ES, ES, ES);
     return 1;
 }
@@ -67,6 +77,8 @@ int		ft_handle_one_tab(std::vector<std::string> const & tab, int fd, Server& ser
 		{
 			if (chan->getTopic() != ES)
 				server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
+			server.send_reply(fd, J_RPL_NAMREPLY , user->getUserName(), chan->getName(), user->getNick(), ES);
+			server.send_reply(fd, J_RPL_ENDOFNAMES, user->getUserName(), chan->getName(), ES, ES);
 		}
 	}
 	return 0;
@@ -77,22 +89,19 @@ int     join(const std::string &line, int fd, Server& server)
     std::vector<std::string> tab = ft_split(line, ' ');
 	COUT line ENDL;
     if (tab.size() == 1)
+	{
 		return not_enough_parameters(fd, server);
+	}
+	std::vector<std::string> tab1 = ft_split(tab[1].data(), ',');
+	if (check_first_char_channel(tab1[0]) != 0)
+		return 1;
 	if (tab.size() == 2)
 	{
-		std::vector<std::string> tab1 = ft_split(tab[1].data(), ',');
-		COUT "tab1 " << tab[1].data() ENDL;
 		return ft_handle_one_tab(tab1, fd, server);
 	}
 	if (tab.size() == 3)
 	{
-		// COUT "SIZE 3 " ENDL;
-		// COUT "tab1 " << tab[1].data() ENDL;
-		// COUT "tab2 " << tab[2].data() ENDL;
-		std::vector<std::string> tab1 = ft_split(tab[1].data(), ',');
 		std::vector<std::string> tab2 = ft_split(tab[2].data(), ',');
-		// COUT "tab1 == " << tab1.size() ENDL;
-		// COUT "tab2 == " << tab2.size() ENDL;
 		if (tab2.size() > tab1.size())
 			return not_enough_parameters(fd, server);
 		return ft_handle_two_tabs(tab1, tab2, fd, server);
