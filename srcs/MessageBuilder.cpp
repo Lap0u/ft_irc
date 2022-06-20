@@ -53,7 +53,7 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
         case 502:
             return ERR_USERSDONTMATCH;
         case 1000:
-            return SPE_PONG(arg1, arg2);
+            return SPE_PONG(arg1);
         default:
             COUT "The response " << code << " is not into the switch yet(find_reply function)" ENDL;
     }
