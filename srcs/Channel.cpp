@@ -79,3 +79,23 @@ void						Channel::delMode(std::string mode)
 			_mode.erase(it);
 	}
 }
+
+int						Channel::joinChannel(User* const user, std::string const & key)
+{
+	(void)key;
+	if (this->findClient(user->getNick()) != NULL)
+		return 1;
+	_clients.push_back(user);
+	return 0;
+}
+
+User*						Channel::findClient(std::string const client)
+{
+	Clients::iterator it = _clients.begin();
+	for (; it != _clients.end(); it++)
+	{
+		if ((*it)->getNick() == client)
+			return *it;
+	}
+	return NULL;
+}

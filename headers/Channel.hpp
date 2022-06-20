@@ -44,11 +44,14 @@ class Channel
     const std::string&			getMode(void) const;
     const int&      			getSocket(void) const;
 
-    const std::string&			getIdentifier(void) const;
+    // const std::string&			getIdentifier(void) const;
 
     void						setName(std::string const & name);
 	void						setTopic(std::string const & topic);
     void						setKey(std::string const & key);
     void                        addMode(std::string const mode);
     void                        delMode(std::string const mode);
+
+    int                         joinChannel(User* const user, std::string const & key = std::string());
+    User*                       findClient(std::string const client);
 };
