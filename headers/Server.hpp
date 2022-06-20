@@ -67,9 +67,9 @@ public:
 	void			addSocket(int fd, short events);
 	void			deleteUserSocket(nfds_t i);
 
-	User*			findMatchingUser(int fd);
-	t_pollfd		findMatchingSocket(std::string user);
-	int				findPosSocket(int fd);
+	User*			findMatchingUser(int fd) const;
+	t_pollfd		findMatchingSocket(std::string user) const ; 
+	int				findPosSocket(int fd) const ;
 
 	void			parseCmd(std::string line, int fd);
 	std::string     getPackage(int fd);

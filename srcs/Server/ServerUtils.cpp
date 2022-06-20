@@ -51,7 +51,7 @@ void		Server::deleteUserSocket(nfds_t i)
 	_user_tab.erase(_user_tab.begin() + i);
 }
 
-User*		Server::findMatchingUser(int socket)
+User*		Server::findMatchingUser(int socket) const
 {
 	pollfdVector::const_iterator	res;
 	t_pollfd 						temp;
@@ -67,7 +67,7 @@ User*		Server::findMatchingUser(int socket)
 	return _user_tab[res - _socket_tab.begin()];
 }
 
-t_pollfd	Server::findMatchingSocket(std::string user)
+t_pollfd	Server::findMatchingSocket(std::string user) const
 {
 	userVector::const_iterator	it = _user_tab.begin();
 	int							i = 0;
@@ -80,7 +80,7 @@ t_pollfd	Server::findMatchingSocket(std::string user)
 	return _socket_tab[0];
 }
 
-int			Server::findPosSocket(int fd)
+int			Server::findPosSocket(int fd) const 
 {
 	size_t pos = 0;
 
