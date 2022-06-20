@@ -40,10 +40,27 @@ int		not_enough_parameters(int fd, Server& server)
     return 1;
 }
 
+void	joinChannel_and_send_replies(int fd, Server& server, const std::string& chaname, const std::string& key)
+{
+	Channel* chan = server.findChannel(chaname);
+	User* user = server.findMatchingUser(fd);
+	int joined = chan->joinChannel(user, key);
+	if (joined == 0)
+	{
+		if (chan->getTopic() != ES)
+			server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
+		server.send_reply(fd, J_RPL_NAMREPLY , user->getUserName(), chan->getName(), user->getNick(), ES);
+		server.send_reply(fd, J_RPL_ENDOFNAMES, user->getUserName(), chan->getName(), ES, ES);
+	}
+	else if (joined == 2)
+	{
+		server.send_reply(fd, J_ERR_BADCHANNELKEY, user->getUserName(), chan->getName(), ES, ES);
+	}
+}
+
 int		ft_handle_two_tabs(std::vector<std::string> const & tab1,
 			std::vector<std::string> const & tab2, int fd, Server& server)
 {
-	(void)fd;
 	for (unsigned int i = 0; i < tab1.size(); i++)
 	{
 		COUT "there " << tab1[i] << " " << tab2[i] ENDL;
@@ -52,16 +69,20 @@ int		ft_handle_two_tabs(std::vector<std::string> const & tab1,
 			COUT tab1[i] << " is not added" ENDL;
 			server.addChannel(new Channel(tab1[i], tab2[i]));
 		}
+		if (i < tab2.size())
+		{
+			joinChannel_and_send_replies(fd, server, tab1[i], tab2[i]);
+		}
+		else
+		{
+			joinChannel_and_send_replies(fd, server, tab1[i], ES);
+		}
 	}
 	return 0;
 }
 
 int		ft_handle_one_tab(std::vector<std::string> const & tab, int fd, Server& server)
 {
-	Channel*	chan;
-	User*		user;
-	int 		joined;
-
 	for (unsigned int i = 0; i < tab.size(); i++)
 	{
 		COUT "here " << tab[i] ENDL;
@@ -70,16 +91,7 @@ int		ft_handle_one_tab(std::vector<std::string> const & tab, int fd, Server& ser
 			COUT tab[i] << " is not added" ENDL;
 			server.addChannel(new Channel(tab[i]));
 		}
-		chan = server.findChannel(tab[i]);
-		user = server.findMatchingUser(fd);
-		joined = chan->joinChannel(user);
-		if (joined == 0)
-		{
-			if (chan->getTopic() != ES)
-				server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
-			server.send_reply(fd, J_RPL_NAMREPLY , user->getUserName(), chan->getName(), user->getNick(), ES);
-			server.send_reply(fd, J_RPL_ENDOFNAMES, user->getUserName(), chan->getName(), ES, ES);
-		}
+		joinChannel_and_send_replies(fd, server, tab[i], ES);
 	}
 	return 0;
 }

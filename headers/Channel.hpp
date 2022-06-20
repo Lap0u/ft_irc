@@ -53,8 +53,7 @@ class Channel
     void                        addMode(std::string const mode);
     void                        delMode(std::string const mode);
 
-    int                         joinChannel(User* const user);
-    int                         joinChannel(User* const user, std::string const & key);
+    int                         joinChannel(User* const user, std::string const & key = ES);
     User*                       findClient(std::string const client);
     int                         partWithAClient(std::string const user);
 };
