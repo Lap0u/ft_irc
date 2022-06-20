@@ -51,7 +51,7 @@ void		Server::deleteUserSocket(nfds_t i)
 	_user_tab.erase(_user_tab.begin() + i);
 }
 
-User*		Server::findMatchingUser(int socket)
+User*		Server::findMatchingUser(int socket) const
 {
 	pollfdVector::const_iterator	res;
 	t_pollfd 						temp;
@@ -67,7 +67,7 @@ User*		Server::findMatchingUser(int socket)
 	return _user_tab[res - _socket_tab.begin()];
 }
 
-t_pollfd	Server::findMatchingSocket(std::string user)
+t_pollfd	Server::findMatchingSocket(std::string user) const
 {
 	userVector::const_iterator	it = _user_tab.begin();
 	int							i = 0;
@@ -80,7 +80,7 @@ t_pollfd	Server::findMatchingSocket(std::string user)
 	return _socket_tab[0];
 }
 
-int			Server::findPosSocket(int fd)
+int			Server::findPosSocket(int fd) const 
 {
 	size_t pos = 0;
 
@@ -106,19 +106,20 @@ std::string	Server::getPackage(int fd)
 		n = recv(fd, recvline, MAXLINE - 1, MSG_DONTWAIT);
 		buffer += recvline;
 	}
-	if (n == -1 && errno != EAGAIN)
-	{
-		perror("recv");
-		exit(1);
-	}
-	else if (n == 0)
+	// if (n == -1 && errno != EAGAIN)
+	// {
+	// 	perror("recv");
+	// 	exit(1);
+	// }
+	if (n == 0)
 	{
 		CERR "Socket close by client" ENDL;
-		if (findMatchingUser(fd)->isRegistered() == false)
+		if (findMatchingUser(fd))
 			deleteUserSocket(findPosSocket(fd));
 		close(fd);
 		return (ES);
 	}
+	DEB "Line read is " << buffer ENDL;
 	return (buffer);
 }
 

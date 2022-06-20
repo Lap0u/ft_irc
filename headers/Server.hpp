@@ -67,15 +67,16 @@ public:
 	void			addSocket(int fd, short events);
 	void			deleteUserSocket(nfds_t i);
 
-	User*			findMatchingUser(int fd);
-	t_pollfd		findMatchingSocket(std::string user);
-	int				findPosSocket(int fd);
+	User*			findMatchingUser(int fd) const;
+	t_pollfd		findMatchingSocket(std::string user) const ; 
+	int				findPosSocket(int fd) const ;
 
 	void			parseCmd(std::string line, int fd);
 	std::string     getPackage(int fd);
 
 	void			send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
 	void			send_reply_no_header(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
+	void			send_raw_message(int fd, std::string message) const;
 	
 };
 

@@ -28,7 +28,8 @@ SRC			=	main.cpp \
 				srcs/Commands/ping.cpp \
 				srcs/Commands/user.cpp \
 				srcs/Commands/usermode.cpp \
-				srcs/Commands/whois.cpp
+				srcs/Commands/whois.cpp \
+				srcs/Commands/privateMessage.cpp
 				
 
 OBJ			=	$(SRC:%.cpp=%.o)
