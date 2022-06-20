@@ -60,5 +60,6 @@ void	Server::initCommands(void)
 	_commands["WHOIS"] = whois;
 	_commands["PING"] = ping;
 	_commands["PRIVMSG"] = privateMessage;
+	_commands["NOTICE"] = privateMessage;
 }
 
