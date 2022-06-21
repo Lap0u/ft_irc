@@ -12,10 +12,13 @@ int		pass(const std::string &line, int fd, Server& server)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;		
 	}
-	if (cur && cur->isRegistered())
+	if (cur)
 	{
-		server.send_reply(fd, 462, ES, ES, ES, ES);
-		return 1;
+		if (cur->isRegistered())
+		{
+			server.send_reply(fd, 462, ES, ES, ES, ES);
+			return 1;
+		}
 	}
 	if (parsedLine[1] != server.getServerPassword())
 	{

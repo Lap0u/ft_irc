@@ -32,7 +32,9 @@ SRC			=	main.cpp \
 				srcs/Commands/whois.cpp \
 				srcs/Commands/join.cpp \
 				srcs/Commands/part.cpp \
+				srcs/Commands/privateMessage.cpp \
 				srcs/Channel.cpp \
+				
 
 OBJ			=	$(SRC:%.cpp=%.o)
 

@@ -2,7 +2,7 @@
 
 Server::Server(int port, std::string pass)
 	: _server_password(pass), _server_name(SERVER_NAME),
-		_oper_password(OP_PASS), _version(VERSION), _date(std::time(NULL))
+	_version(VERSION), _date(std::time(NULL))
 {
 	COUT "Server waiting on port " << port ENDL;
 
@@ -34,6 +34,9 @@ Server::Server(int port, std::string pass)
 	addUser(new User(_main_socket, "Server", "Server", "Server", "Server"));
 	initReplies();
 	initCommands();
+
+	_operators["John"] = "johnmdp"; //kill message
+	_operators["Smith"] = "smithmdp"; //restart message
 }
 
 Server::~Server( void )
@@ -58,5 +61,6 @@ void	Server::initCommands(void)
 	_commands["PING"] = ping;
 	_commands["JOIN"] = join;
 	_commands["PART"] = part;
+	_commands["PRIVMSG"] = privateMessage;
 }
 

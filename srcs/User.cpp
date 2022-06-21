@@ -1,14 +1,15 @@
 #include "../headers/User.hpp"
 
-User::User( void )
+User::User( void ) : _socket(0), _nick(ES),
+	_user_name(ES), _real_name("Server"),
+	_pass(ES), _mode(ES) , _registered(false)
 {
 	DEB  "Construct User " ENDL;
-	_operator = false;
 }
 User::User( int socket, std::string nick, std::string user_name,
 		std::string pass, std::string mode)
 		: _socket(socket), _nick(nick), _user_name(user_name),
-			_real_name("Server"), _pass(pass), _mode(mode) , _registered(0)
+			_real_name("Server"), _pass(pass), _mode(mode) , _registered(false)
 			{
 				if (DEBUG == 2)
 					COUT "Construct User " << this->_nick ENDL;
@@ -21,7 +22,12 @@ User::~User( void )
 
 bool    User::isOperator(void) const
 {
-	return _operator;
+	return _serv_op;
+}
+
+bool    User::isChanOp(void) const
+{
+	return _chan_op;
 }
 
 int		User::getSocket(void) const
@@ -49,7 +55,7 @@ const std::string	User::getMode(void) const
 {
 	return this->_mode;
 }
-bool				User::isRegistered(void) const
+bool	User::isRegistered(void) const
 {
 	return this->_registered;
 }
@@ -79,30 +85,51 @@ void	User::setRegister(void)
 {
 	_registered = true;
 }
+void	User::setServOp(bool status)
+{
+	_serv_op = status;
+}
+
+void	User::setChanOp(bool status)
+{
+	_chan_op = status;
+}
 
 void	User::addMode(std::string mode)
 {
 	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
-		if (*it == 'o' && *it == 'O' && *it == 'a')
+		if (*it == 'o' && !isOperator())
+			continue ;
+		if (*it == 'O' && !isChanOp())
+			continue ;
+		if (*it == 'a')
 			continue ;
 		if (_mode.empty())
 			_mode = *it;
 		else if (_mode.find(*it) == std::string::npos)
-			_mode += *it;	
+			_mode += *it;
 	}
 }
+
 void	User::delMode(std::string mode)
 {
 	
 	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
-		if (!_mode.empty())
+		if (_mode.empty())
 			return ;
 		if (*it == 'a' && *it != 'r')
 			continue ;
-		if (mode.find(*it) != std::string::npos)
-			_mode.erase(it);
+		size_t pos = _mode.find(*it);
+		if (pos != std::string::npos)
+		{
+			if (*it == 'o')
+				setServOp(false);
+			else if (*it == 'O')
+				setChanOp(false);
+			_mode.erase(pos, 1);
+		}
 	}
 }
 
@@ -120,4 +147,3 @@ bool	User::operator==(User* user) const
 		return true;
 	return false;
 }
-

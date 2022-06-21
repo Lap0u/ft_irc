@@ -2,15 +2,21 @@
 
 /**
  * @brief 
- * a - user is flagged as away;
- * i - marks a users as invisible;
- * w - user receives wallops;
+ * 
+ * Mandatory :
  * r - restricted user connection;
- * o - operator flag;
- * O - local operator flag;
+ * o - operator flag; // server_operator
+ * O - local operator flag; // channel_operator
+ * 
+ * Optionals :
+ * i - marks a users as invisible; 
+ * w - user receives wallops;
+ * 
+ * Obsoletes :
  * s - marks a user for receipt of server notices.
+ * a - user is flagged as away;
+ * 
  */
-
 
 int		checkError(int fd, Server& server, std::vector<std::string> word,
 					int pos, std::string mode_read)
