@@ -50,6 +50,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, const std::string& cha
 		server.send_raw_message(fd, user->getNick() + " " + chan->getName());
 		if (chan->getTopic() != ES)
 			server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
+		server.parseCmd("NAMES " + chan->getName(), fd);
 	}
 	else if (joined == 2)
 	{
