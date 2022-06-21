@@ -10,7 +10,6 @@
 int     part(const std::string &line, int fd, Server& server)
 {
     std::vector<std::string> tab = ft_split(line, ' ');
-	COUT line ENDL;
 	if (tab.size() == 1)
 	{
 		server.send_reply(fd, P_ERR_NEEDMOREPARAMS, "part:", ES, ES, ES);
@@ -39,7 +38,7 @@ int     part(const std::string &line, int fd, Server& server)
 				else
 				{
 					message = tab.size() == 3 ? tab[2] : client->getNick();
-					COUT "Message == " << message ENDL;
+					COUT "Message == " << message ENDL; // MESSAGE NEED TO BE DONE AND SEND TO THE USER
 				}
 			}
 		}
