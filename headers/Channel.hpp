@@ -43,6 +43,8 @@ class Channel
     const std::string&			getKey(void) const;
     const std::string&			getMode(void) const;
     const std::string&			getAMode(void) const;
+    User*			            getAClient(size_t i) const;
+    size_t			            getClientsSize(void) const;
     const int&      			getSocket(void) const;
 
     // const std::string&			getIdentifier(void) const;

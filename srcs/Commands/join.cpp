@@ -47,10 +47,9 @@ void	joinChannel_and_send_replies(int fd, Server& server, const std::string& cha
 	int joined = chan->joinChannel(user, key);
 	if (joined == 0)
 	{
+		server.send_raw_message(fd, user->getNick() + " " + chan->getName());
 		if (chan->getTopic() != ES)
 			server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
-		server.send_reply(fd, J_RPL_NAMREPLY , user->getUserName(), chan->getName(), user->getNick(), ES);
-		server.send_reply(fd, J_RPL_ENDOFNAMES, user->getUserName(), chan->getName(), ES, ES);
 	}
 	else if (joined == 2)
 	{
@@ -63,10 +62,10 @@ int		ft_handle_two_tabs(std::vector<std::string> const & tab1,
 {
 	for (unsigned int i = 0; i < tab1.size(); i++)
 	{
-		COUT "there " << tab1[i] << " " << tab2[i] ENDL;
+		DEB "there " << tab1[i] << " " << tab2[i] ENDL;
 		if (server.findChannel(tab1[i]) == NULL)
 		{
-			COUT tab1[i] << " is not added" ENDL;
+			DEB tab1[i] << " is not added" ENDL;
 			server.addChannel(new Channel(tab1[i], tab2[i]));
 		}
 		if (i < tab2.size())
@@ -85,10 +84,10 @@ int		ft_handle_one_tab(std::vector<std::string> const & tab, int fd, Server& ser
 {
 	for (unsigned int i = 0; i < tab.size(); i++)
 	{
-		COUT "here " << tab[i] ENDL;
+		DEB "here " << tab[i] ENDL;
 		if (server.findChannel(tab[i]) == NULL)
 		{
-			COUT tab[i] << " is not added" ENDL;
+			DEB tab[i] << " is not added" ENDL;
 			server.addChannel(new Channel(tab[i]));
 		}
 		joinChannel_and_send_replies(fd, server, tab[i], ES);

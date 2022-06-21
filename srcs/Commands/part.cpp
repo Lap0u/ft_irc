@@ -38,7 +38,7 @@ int     part(const std::string &line, int fd, Server& server)
 				else
 				{
 					message = tab.size() == 3 ? tab[2] : client->getNick();
-					COUT "Message == " << message ENDL; // MESSAGE NEED TO BE DONE AND SEND TO THE USER
+					server.send_raw_message(fd, message);
 				}
 			}
 		}

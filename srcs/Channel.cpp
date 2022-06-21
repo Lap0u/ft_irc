@@ -113,3 +113,15 @@ User*					Channel::findClient(std::string const client)
 	}
 	return NULL;
 }
+
+size_t					Channel::getClientsSize(void) const
+{
+	return _clients.size();
+}
+
+User*					Channel::getAClient(size_t i) const
+{
+	if (i >= _clients.size())
+		return NULL;
+	return (_clients[i]);
+}
