@@ -31,12 +31,14 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_ENDOFWHOIS(arg1);
         case 319:
             return RPL_WHOISCHANNELS(arg1, arg2);
+        case 332:
+            return RPL_TOPIC(arg1, arg2);
         case 353:
             return RPL_NAMREPLY(arg1, arg2);
         case 366:
             return RPL_ENDOFNAMES(arg1);
         case 381:
-          return RPL_YOUREOPER;
+            return RPL_YOUREOPER;
         case 401:
             return ERR_NOSUCHNICK(arg1);
         case 407:
@@ -61,6 +63,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return ERR_ALREADYREGISTRED;
         case 464:
             return ERR_PASSWDMISMATCH;
+        case 475:
+            return ERR_BADCHANNELKEY(arg1);
         case 484:
             return ERR_RESTRICTED;
         case 501:
@@ -78,6 +82,7 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
 void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const
 {
     std::string user = findMatchingUser(fd)->getNick();
+    // std::string user = "randomUser"; //used for debug!!
     std::string str_code;
     char        temp[30];
 
@@ -88,9 +93,11 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
 		str_code = std::string(1, '0').append(temp);
     else
         str_code = temp;
-    std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + findMatchingUser(fd)->getNick() + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
+    std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + user + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
+    // std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + user + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n"; //used for debug!!
     DEB "fd : " << fd << " ->reply sent " << message ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
+    // if (write(fd, message.c_str(), message.length()) < 0) //used for debug!!
     {
         perror("send reply");
         exit(1);

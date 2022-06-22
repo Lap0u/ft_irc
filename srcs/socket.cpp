@@ -19,7 +19,37 @@
 
 #define WI_ERR_NOSUCHSERVER 402
 
-#define WI_ERR_NONICKNAMEGIVEN 431       
+#define WI_ERR_NONICKNAMEGIVEN 431      
+
+#define N_RPL_NAMREPLY 353
+
+#define N_RPL_ENDOFNAMES 366
+
+#define J_ERR_NEEDMOREPARAMS 461
+
+#define J_ERR_INVITEONLYCHAN 473
+
+#define J_ERR_CHANNELISFULL 471
+
+#define J_ERR_NOSUCHCHANNEL 403
+
+#define J_ERR_TOOMANYTARGETS 407
+
+#define J_ERR_BANNEDFROMCHAN 474
+
+#define J_ERR_BADCHANNELKEY 475
+
+#define J_ERR_BADCHANMASK 476
+
+#define J_ERR_TOOMANYCHANNELS 405
+
+#define J_ERR_UNAVAILRESOURCE 437
+
+#define J_RPL_TOPIC 332
+
+#define J_RPL_NAMREPLY 353
+
+#define J_RPL_ENDOFNAMES 366
 
 void	test_reply(int fd, Server & server)
 {
@@ -57,6 +87,12 @@ void	test_reply(int fd, Server & server)
     server.send_reply(fd, WI_RPL_WHOISCHANNELS, "Nick", "make_function_to_get_user_channel", ES, ES);
     server.send_reply(fd, WI_RPL_AWAY, "Nick", " is away", ES, ES);
     server.send_reply(fd, WI_RPL_ENDOFWHOIS, "Nick", ES, ES, ES);
+	server.send_reply(fd, J_ERR_NEEDMOREPARAMS, "join:", ES, ES, ES);
+	server.send_reply(fd, J_RPL_TOPIC, "channame", "chanTopic", ES, ES);
+	server.send_reply(fd, J_ERR_BADCHANNELKEY, "UserName", "channame", ES, ES);
+	server.send_reply(fd, N_RPL_NAMREPLY, "channame", "user_list", ES, ES);
+	server.send_reply(fd, N_RPL_ENDOFNAMES, "channame", ES, ES, ES);
+
 	COUT "End of replies test, Bye.." ENDL;
 	exit(1);
 }
@@ -69,7 +105,7 @@ void    launch_serv(std::string port, std::string password)
 	std::string	separatedline;
 	int			fd;
 	
-	// test_reply(0, server);
+	// test_reply(1, server);
 	while(1)
 	{
 		ret_poll = poll(server.getSocket(0), server.getSocketSize(), 15000);
