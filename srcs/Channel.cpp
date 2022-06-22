@@ -99,7 +99,7 @@ int						Channel::partWithAClient(std::string const user)
 	}
 	if (it == _clients.end())
 		return 1;
-	_clients.erase(it);
+	// _clients.erase(it);
 	return 0;
 }
 

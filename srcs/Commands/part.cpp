@@ -36,8 +36,11 @@ int     part(const std::string &line, int fd, Server& server)
 				}
 				else
 				{
-					message = tab.size() == 3 ? tab[2] : client->getNick();
-					server.send_raw_message(fd, " " + message);
+					if (tab.size() == 3)
+						message = tab[2];
+					else
+						message = client->getNick();
+					server.send_chan_message(client, "PART", tab1[i], message);
 				}
 			}
 		}

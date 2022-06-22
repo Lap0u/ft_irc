@@ -105,16 +105,17 @@ void    Server::send_chan_message(User *&sender, std::string cmd, std::string ch
     Channel * curr_chan = findChannel(chan);
     size_t      users = findChannel(chan)->getClientsSize();
     if (cmd == "JOIN")
-    {
         reply += " :" + chan + "\r\n";
-        // users--;
-    }
     if (cmd == "PRIVMSG")
         reply += " " + chan + " " + message + "\r\n";
     if (cmd == "PART")
         reply += " " + chan + "\r\n";
     for (size_t i = 0; i < users; i++)
+    {
+        if (cmd == "PRIVMSG" && sender->getSocket() == curr_chan->getAClient(i)->getSocket())
+            continue;
         send_raw_message(curr_chan->getAClient(i)->getSocket(), reply);
+    }
 }
 
 void    Server::send_raw_message(int fd, std::string message) const
