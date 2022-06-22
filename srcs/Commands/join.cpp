@@ -50,7 +50,6 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	if (joined == 0)
 	{
 		server.send_chan_message(user, "JOIN", chaname, ES);
-		COUT "On repond JOIN" ENDL;
 		if (chan->getTopic() != ES)
 			server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
 		server.parseCmd("NAMES " + chan->getName(), fd);
