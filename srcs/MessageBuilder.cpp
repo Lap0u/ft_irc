@@ -1,5 +1,6 @@
 #include "../headers/MessageBuilder.hpp"
 #include "../headers/Server.hpp"
+#include "../headers/Channel.hpp"
 #include <stdlib.h>
 
 std::string    find_reply(int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4)
@@ -90,6 +91,25 @@ void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::st
         perror("send");
         exit(1);
     }
+}
+
+void    Server::send_chan_message(User *&sender, std::string cmd, std::string chan, std::string message) const
+{
+    (void)sender;
+    std::string reply = ":" + sender->getNick() + "!" + getServerName() + "@localhost " + cmd;
+    Channel * curr_chan = findChannel(chan);
+    size_t      users = findChannel(chan)->getClientsSize();
+    if (cmd == "JOIN")
+    {
+        reply += " :" + chan;
+        users--;
+    }
+    if (cmd == "PRIVMSG")
+        reply += " " + chan + " " + message;
+    if (cmd == "PART")
+        reply += " " + chan;
+    for (size_t i = 0; i < users; i++)
+        send_raw_message(curr_chan->getAClient(i)->getSocket(), reply);
 }
 
 void    Server::send_raw_message(int fd, std::string message) const

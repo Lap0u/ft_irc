@@ -35,7 +35,7 @@ int		privateMessage(const std::string &line, int fd, Server& server)
 
     if (checkError(split, fd, server, receiver) == 1)
         return 1;
-    std::string message = ":" + sender->getNick() + "!" + receiver->getUserName() + "@localhost" + " " + line + "\r\n";
+    std::string message = ":" + sender->getNick() + "!" + server.getServerName() + "@localhost" + " " + line + "\r\n";
     DEB "Private message function" ENDL;
     server.send_raw_message(receiver->getSocket(), message);
     return 0;
