@@ -8,6 +8,7 @@
 int     names(const std::string &line, int fd, Server& server)
 {
     std::vector<std::string> tab = ft_split(line, ' ');
+    std::string user_list;
     COUT line ENDL;
     if (tab.size() == 1)
         return 1;
@@ -18,12 +19,12 @@ int     names(const std::string &line, int fd, Server& server)
         DEB tab1[i] ENDL;
         if ((chan = server.findChannel(tab1[i])) == NULL)
             continue;
+        
         for (unsigned int i = 0; i < chan->getClientsSize(); i++)
-        {
-            User * user = chan->getAClient(i);
-            server.send_reply(fd, N_RPL_NAMREPLY, user->getUserName(), chan->getName(), user->getNick(), ES);
-        }
+            user_list += chan->getAClient(i)->getNick() + " ";
+        server.send_reply(fd, N_RPL_NAMREPLY, chan->getName(), user_list, ES, ES);
+    	server.send_reply(fd, N_RPL_ENDOFNAMES, chan->getName(), ES, ES, ES);
+        user_list.clear();
     }
-	server.send_reply(fd, N_RPL_ENDOFNAMES, server.findMatchingUser(fd)->getNick(), tab1[0], ES, ES);
     return 0;
 }
