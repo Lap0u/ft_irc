@@ -63,5 +63,6 @@ void	Server::initCommands(void)
 	_commands["PART"] = part;
 	_commands["NAMES"] = names;
 	_commands["PRIVMSG"] = privateMessage;
+	_commands["NOTICE"] = privateMessage;
 }
 

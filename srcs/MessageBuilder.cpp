@@ -35,10 +35,18 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_NAMREPLY(arg1, arg2);
         case 366:
             return RPL_ENDOFNAMES(arg1);
+        case 381:
+          return RPL_YOUREOPER;
         case 401:
             return ERR_NOSUCHNICK(arg1);
+        case 407:
+            return ERR_TOOMANYTARGETS(arg1, arg2, arg3);
         case 409:
             return ERR_NOORIGIN;
+        case 411:
+            return ERR_NORECIPIENT(arg1);
+        case 412:
+            return ERR_NOTEXTTOSEND;
         case 431:
             return ERR_NONICKNAMEGIVEN;
         case 432:
@@ -51,6 +59,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return ERR_NEEDMOREPARAMS(arg1);
         case 462:
             return ERR_ALREADYREGISTRED;
+        case 464:
+            return ERR_PASSWDMISMATCH;
         case 484:
             return ERR_RESTRICTED;
         case 501:

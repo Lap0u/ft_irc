@@ -10,7 +10,6 @@
 
 int main(int argc, char **argv)
 {
-	(void)argv;
 	if (argc != 3)
 	{
 		CERR "./ircserv <port> <password>" ENDL;
