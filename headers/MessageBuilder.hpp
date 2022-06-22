@@ -19,6 +19,8 @@
 # define RPL_YOUREOPER ":You are now an IRC operator"
 # define RPL_NAMREPLY(channel, nicklist) ("= " + channel + " :" + nicklist)
 # define RPL_ENDOFNAMES(channel) (channel + " :End of NAMES list")
+# define RPL_TOPIC(channel, topic) (channel + " :" + topic)
+
 # define ERR_UMODEUNKNOWNFLAG ":Unknown MODE flag"
 # define ERR_USERSDONTMATCH ":Cannot change mode for other users"
 # define ERR_NOSUCHNICK(nickname) (nickname + " :No such nick/channel")
@@ -34,6 +36,8 @@
 # define ERR_NORECIPIENT(command) (":No recipient given " + command)
 # define ERR_NOTEXTTOSEND ":No text to send"
 # define ERR_TOOMANYTARGETS(target, code, abort_message) (target + " :" + code + " recipients. " + abort_message)
+# define ERR_BADCHANNELKEY(channel) (channel + " :Cannot join channel (+k)")
+
 # define SPE_PONG(sender) ("PONG :" + arg1)
 
 // void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
