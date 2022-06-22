@@ -18,8 +18,7 @@
 
 #define WI_ERR_NOSUCHSERVER 402
 
-#define WI_ERR_NONICKNAMEGIVEN 431                        
-
+#define WI_ERR_NONICKNAMEGIVEN 431
 
 
 int    whois(const std::string &line, int fd, Server& server)

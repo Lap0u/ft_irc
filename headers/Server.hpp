@@ -12,6 +12,8 @@
 #include "Commands.hpp"
 #include <poll.h>
 
+class Channel;
+
 class Server;
 
 typedef struct pollfd t_pollfd;
@@ -21,11 +23,12 @@ class Server
 {
 public:
 	
-	typedef std::map<std::string, commandFunction>	commandMap;
-	typedef std::map<int, std::string>				repliesMap;
-	typedef	std::vector<t_pollfd>					pollfdVector;
-	typedef	std::vector<User*>						userVector;
-	typedef std::map <std::string, std::string>		operMap;
+	typedef std::map<std::string, commandFunction>		commandMap;
+	typedef std::map<int, std::string>					repliesMap;
+	typedef	std::vector<t_pollfd>						pollfdVector;
+	typedef	std::vector<User*>							userVector;
+	typedef	std::vector<Channel*>						channelVector;
+	typedef std::map <std::string, std::string>			operMap;
 
 private:
 	int				_main_socket;
@@ -37,6 +40,7 @@ private:
 
 	pollfdVector	_socket_tab;
 	userVector		_user_tab;
+	channelVector	_channel_tab;
 
 	commandMap		_commands;
 	repliesMap		_replies;
@@ -77,7 +81,10 @@ public:
 	void			send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
 	void			send_reply_no_header(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const;
 	void			send_raw_message(int fd, std::string message) const;
+	void			send_chan_message(User *&sender, std::string cmd, std::string chan, std::string message) const;
 	
+	bool			addChannel(Channel *channel);
+	Channel*		findChannel(std::string const & channel) const;
 };
 
 bool	operator==(const t_pollfd &pollfd1, const t_pollfd &pollfd2);

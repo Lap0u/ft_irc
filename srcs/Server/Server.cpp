@@ -59,6 +59,9 @@ void	Server::initCommands(void)
 	_commands["MODE"] = mode;
 	_commands["WHOIS"] = whois;
 	_commands["PING"] = ping;
+	_commands["JOIN"] = join;
+	_commands["PART"] = part;
+	_commands["NAMES"] = names;
 	_commands["PRIVMSG"] = privateMessage;
 	_commands["NOTICE"] = privateMessage;
 }

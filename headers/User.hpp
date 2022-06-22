@@ -25,10 +25,10 @@ public:
 	User( int socket, std::string nick, std::string user,
 		std::string pass, std::string mode);
 
-	int		getSocket(void) const;
 	bool    isOperator(void) const; // isServOp()
 	bool    isChanOp(void) const;
 
+	int					getSocket(void) const;
 	const std::string	getNick(void) const;
 	const std::string	getUserName(void) const;
 	const std::string	getPass(void) const;

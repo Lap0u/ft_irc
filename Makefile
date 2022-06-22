@@ -18,6 +18,7 @@ SRC			=	main.cpp \
 				srcs/Server/ServerGetters.cpp \
 				srcs/Server/ServerParser.cpp \
 				srcs/Server/ServerUtils.cpp \
+				srcs/Server/ServerChannel.cpp \
 				srcs/Message.cpp \
 				srcs/Commands.cpp \
 				srcs/MessageBuilder.cpp \
@@ -29,7 +30,11 @@ SRC			=	main.cpp \
 				srcs/Commands/user.cpp \
 				srcs/Commands/usermode.cpp \
 				srcs/Commands/whois.cpp \
-				srcs/Commands/privateMessage.cpp
+				srcs/Commands/join.cpp \
+				srcs/Commands/part.cpp \
+				srcs/Commands/names.cpp \
+				srcs/Commands/privateMessage.cpp \
+				srcs/Channel.cpp \
 				
 
 OBJ			=	$(SRC:%.cpp=%.o)

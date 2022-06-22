@@ -17,6 +17,8 @@
 # define RPL_AWAY(nickname, message)( nickname + " :" + message)
 # define RPL_WHOISOPERATOR(nickname) (nickname + " :is an IRC operator")
 # define RPL_YOUREOPER ":You are now an IRC operator"
+# define RPL_NAMREPLY(channel, nicklist) ("= " + channel + " :" + nicklist)
+# define RPL_ENDOFNAMES(channel) (channel + " :End of NAMES list")
 # define ERR_UMODEUNKNOWNFLAG ":Unknown MODE flag"
 # define ERR_USERSDONTMATCH ":Cannot change mode for other users"
 # define ERR_NOSUCHNICK(nickname) (nickname + " :No such nick/channel")

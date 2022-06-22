@@ -1,5 +1,6 @@
 #include "../headers/MessageBuilder.hpp"
 #include "../headers/Server.hpp"
+#include "../headers/Channel.hpp"
 #include <stdlib.h>
 
 std::string    find_reply(int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4)
@@ -30,8 +31,12 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_ENDOFWHOIS(arg1);
         case 319:
             return RPL_WHOISCHANNELS(arg1, arg2);
+        case 353:
+            return RPL_NAMREPLY(arg1, arg2);
+        case 366:
+            return RPL_ENDOFNAMES(arg1);
         case 381:
-            return RPL_YOUREOPER;
+          return RPL_YOUREOPER;
         case 401:
             return ERR_NOSUCHNICK(arg1);
         case 407:
@@ -72,6 +77,7 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
 
 void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const
 {
+    std::string user = findMatchingUser(fd)->getNick();
     std::string str_code;
     char        temp[30];
 
@@ -82,8 +88,8 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
 		str_code = std::string(1, '0').append(temp);
     else
         str_code = temp;
-    std::string message = ":" + getServerName() + " " + str_code + " " + findMatchingUser(fd)->getNick() + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
-    DEB "reply sent " << message ENDL;
+    std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + findMatchingUser(fd)->getNick() + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
+    DEB "fd : " << fd << " ->reply sent " << message ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
         perror("send reply");
@@ -102,10 +108,30 @@ void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::st
     }
 }
 
+void    Server::send_chan_message(User *&sender, std::string cmd, std::string chan, std::string message) const
+{
+    (void)sender;
+    std::string reply = ":" + sender->getNick() + "!" + getServerName() + "@localhost " + cmd;
+    Channel * curr_chan = findChannel(chan);
+    size_t      users = findChannel(chan)->getClientsSize();
+    if (cmd == "JOIN")
+        reply += " :" + chan + "\r\n";
+    if (cmd == "PRIVMSG")
+        reply += " " + chan + " " + message + "\r\n";
+    if (cmd == "PART")
+        reply += " " + chan + "\r\n";
+    for (size_t i = 0; i < users; i++)
+    {
+        if (cmd == "PRIVMSG" && sender->getSocket() == curr_chan->getAClient(i)->getSocket())
+            continue;
+        send_raw_message(curr_chan->getAClient(i)->getSocket(), reply);
+    }
+}
+
 void    Server::send_raw_message(int fd, std::string message) const
 {
     std::string reply = message + "\r\n";
-    DEB "reply sent (raw) " << reply ENDL;
+    DEB "fd: " << fd << " ->reply sent (raw) " << reply ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
         perror("send");
