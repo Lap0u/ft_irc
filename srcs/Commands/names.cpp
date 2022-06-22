@@ -9,6 +9,7 @@ int     names(const std::string &line, int fd, Server& server)
 {
     std::vector<std::string> tab = ft_split(line, ' ');
     std::string user_list;
+    
     COUT line ENDL;
     if (tab.size() == 1)
         return 1;

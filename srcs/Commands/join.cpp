@@ -48,6 +48,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, const std::string& cha
 	if (joined == 0)
 	{
 		server.send_chan_message(user, "JOIN", chaname, ES);
+		COUT "On repond JOIN" ENDL;
 		// server.send_raw_message(fd, user->getNick() + " " + chan->getName());
 		if (chan->getTopic() != ES)
 			server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
@@ -57,6 +58,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, const std::string& cha
 	{
 		server.send_reply(fd, J_ERR_BADCHANNELKEY, user->getUserName(), chan->getName(), ES, ES);
 	}
+	COUT "joined = " << joined ENDL;
 }
 
 int		ft_handle_two_tabs(std::vector<std::string> const & tab1,

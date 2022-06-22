@@ -79,7 +79,7 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
     else
         str_code = temp;
     std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + findMatchingUser(fd)->getNick() + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
-    DEB "reply sent " << message ENDL;
+    DEB "fd : " << fd << " ->reply sent " << message ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
         perror("send reply");
@@ -106,13 +106,13 @@ void    Server::send_chan_message(User *&sender, std::string cmd, std::string ch
     size_t      users = findChannel(chan)->getClientsSize();
     if (cmd == "JOIN")
     {
-        reply += " :" + chan;
-        users--;
+        reply += " :" + chan + "\r\n";
+        // users--;
     }
     if (cmd == "PRIVMSG")
-        reply += " " + chan + " " + message;
+        reply += " " + chan + " " + message + "\r\n";
     if (cmd == "PART")
-        reply += " " + chan;
+        reply += " " + chan + "\r\n";
     for (size_t i = 0; i < users; i++)
         send_raw_message(curr_chan->getAClient(i)->getSocket(), reply);
 }
@@ -120,7 +120,7 @@ void    Server::send_chan_message(User *&sender, std::string cmd, std::string ch
 void    Server::send_raw_message(int fd, std::string message) const
 {
     std::string reply = message + "\r\n";
-    DEB "reply sent (raw) " << reply ENDL;
+    DEB "fd: " << fd << " ->reply sent (raw) " << reply ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     {
         perror("send");
