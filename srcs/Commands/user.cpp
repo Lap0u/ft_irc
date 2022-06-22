@@ -23,11 +23,11 @@ int		user(const std::string &line, int fd, Server& server)
 	DEB "Pointeur user fonction" ENDL;
 
 	std::vector<std::string> split = ft_split(line, ' ');
+	if (checkUserErrors(split, fd, server) == 1)
+		return 1;
 	std::string real_name = split[4];
 	real_name.erase(real_name.begin());
 
-	if (checkUserErrors(split, fd, server) == 1)
-		return 1;
 	User *cur = server.findMatchingUser(fd);
 	if (cur == NULL)//user is not made to create a new user, just add infos during connection
 		return 0;
