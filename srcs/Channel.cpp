@@ -89,12 +89,12 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 	return 0;
 }
 
-int						Channel::partWithAClient(std::string const user)
+int						Channel::partWithAClient(std::string const client)
 {
 	Clients::iterator it = _clients.begin();
 	for (; it != _clients.end(); it++)
 	{
-		if ((*it)->getNick() == user)
+		if ((*it)->getNick() == client)
 			break;
 	}
 	if (it == _clients.end())

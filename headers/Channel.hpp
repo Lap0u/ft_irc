@@ -57,5 +57,5 @@ class Channel
 
     int                         joinChannel(User* const user, std::string const & key = ES);
     User*                       findClient(std::string const client);
-    int                         partWithAClient(std::string const user);
+    int                         partWithAClient(std::string const client);
 };

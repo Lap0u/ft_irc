@@ -30,7 +30,7 @@ int     part(const std::string &line, int fd, Server& server)
 			}
 			else
 			{
-				if (chan->partWithAClient(client->getNick()) == 1)
+				if (chan->findClient(client->getNick()) == NULL)
 				{
 					server.send_reply(fd, P_ERR_NOTONCHANNEL, chan->getName(), ES, ES, ES);
 				}
@@ -41,6 +41,7 @@ int     part(const std::string &line, int fd, Server& server)
 					else
 						message = client->getNick();
 					server.send_chan_message(client, "PART", tab1[i], message);
+					chan->partWithAClient(client->getNick());
 				}
 			}
 		}
