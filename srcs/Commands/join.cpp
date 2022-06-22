@@ -40,8 +40,10 @@ int		not_enough_parameters(int fd, Server& server)
     return 1;
 }
 
-void	joinChannel_and_send_replies(int fd, Server& server, const std::string& chaname, const std::string& key)
+void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, const std::string& key)
 {
+	if (check_first_char_channel(chaname) != 0)
+		return ;
 	Channel* chan = server.findChannel(chaname);
 	User* user = server.findMatchingUser(fd);
 	int joined = chan->joinChannel(user, key);
@@ -49,7 +51,6 @@ void	joinChannel_and_send_replies(int fd, Server& server, const std::string& cha
 	{
 		server.send_chan_message(user, "JOIN", chaname, ES);
 		COUT "On repond JOIN" ENDL;
-		// server.send_raw_message(fd, user->getNick() + " " + chan->getName());
 		if (chan->getTopic() != ES)
 			server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
 		server.parseCmd("NAMES " + chan->getName(), fd);
@@ -61,7 +62,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, const std::string& cha
 	COUT "joined = " << joined ENDL;
 }
 
-int		ft_handle_two_tabs(std::vector<std::string> const & tab1,
+int		ft_handle_two_tabs(std::vector<std::string> & tab1,
 			std::vector<std::string> const & tab2, int fd, Server& server)
 {
 	for (unsigned int i = 0; i < tab1.size(); i++)
@@ -84,7 +85,7 @@ int		ft_handle_two_tabs(std::vector<std::string> const & tab1,
 	return 0;
 }
 
-int		ft_handle_one_tab(std::vector<std::string> const & tab, int fd, Server& server)
+int		ft_handle_one_tab(std::vector<std::string> & tab, int fd, Server& server)
 {
 	for (unsigned int i = 0; i < tab.size(); i++)
 	{
@@ -108,8 +109,6 @@ int     join(const std::string &line, int fd, Server& server)
 		return not_enough_parameters(fd, server);
 	}
 	std::vector<std::string> tab1 = ft_split(tab[1].data(), ',');
-	if (check_first_char_channel(tab1[0]) != 0)
-		return 1;
 	if (tab.size() == 2)
 	{
 		return ft_handle_one_tab(tab1, fd, server);
