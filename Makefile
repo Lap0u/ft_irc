@@ -37,6 +37,7 @@ SRC			=	main.cpp \
 				srcs/Commands/error.cpp \
 				srcs/Commands/privateMessage.cpp \
 				srcs/Commands/topic.cpp \
+				srcs/Commands/list.cpp \
 				srcs/Channel.cpp \
 				
 
