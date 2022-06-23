@@ -5,6 +5,13 @@ int		list(const std::string &line, int fd, Server& server)
 {
     std::vector<std::string>split = ft_split(line, ' ');
     Channel* cur;
+    User*   user = server.findMatchingUser(fd);
+
+    if (user)
+    {
+        if (!user->isRegistered())
+            return 1;
+    }
 
     if (split.size() <= 1)
     {
