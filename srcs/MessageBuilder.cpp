@@ -41,6 +41,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_YOUREOPER;
         case 401:
             return ERR_NOSUCHNICK(arg1);
+        case 403:
+            return ERR_NOSUCHCHANNEL(arg1);
         case 407:
             return ERR_TOOMANYTARGETS(arg1, arg2, arg3);
         case 409:
@@ -57,6 +59,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return ERR_NICKNAMEINUSE(arg1);
         case 437:
             return ERR_UNAVAILRESOURCE(arg1);
+        case 442:
+            return ERR_NOTONCHANNEL(arg1);
         case 461:
             return ERR_NEEDMOREPARAMS(arg1);
         case 462:
@@ -81,8 +85,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
 
 void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4) const
 {
-    std::string user = findMatchingUser(fd)->getNick();
-    // std::string user = "randomUser"; //used for debug!!
+    // std::string user = findMatchingUser(fd)->getNick();
+    std::string user = "randomUser"; //used for debug!!
     std::string str_code;
     char        temp[30];
 
@@ -93,11 +97,11 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
 		str_code = std::string(1, '0').append(temp);
     else
         str_code = temp;
-    std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + user + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
-    // std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + user + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n"; //used for debug!!
+    // std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + user + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
+    std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + user + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n"; //used for debug!!
     DEB "fd : " << fd << " ->reply sent " << message ENDL;
-    if (send(fd, message.c_str(), message.length(), 0) < 0)
-    // if (write(fd, message.c_str(), message.length()) < 0) //used for debug!!
+    // if (send(fd, message.c_str(), message.length(), 0) < 0)
+    if (write(fd, message.c_str(), message.length()) < 0) //used for debug!!
     {
         perror("send reply");
         exit(1);

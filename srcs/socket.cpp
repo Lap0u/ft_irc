@@ -51,6 +51,12 @@
 
 #define J_RPL_ENDOFNAMES 366
 
+#define P_ERR_NEEDMOREPARAMS 461
+
+#define	P_ERR_NOSUCHCHANNEL 403
+
+#define P_ERR_NOTONCHANNEL 442
+
 void	test_reply(int fd, Server & server)
 {
 	server.send_reply(fd, 431, ES, ES, ES, ES);
@@ -92,7 +98,9 @@ void	test_reply(int fd, Server & server)
 	server.send_reply(fd, J_ERR_BADCHANNELKEY, "UserName", "channame", ES, ES);
 	server.send_reply(fd, N_RPL_NAMREPLY, "channame", "user_list", ES, ES);
 	server.send_reply(fd, N_RPL_ENDOFNAMES, "channame", ES, ES, ES);
-
+	server.send_reply(fd, P_ERR_NEEDMOREPARAMS, "part:", ES, ES, ES);
+	server.send_reply(fd, P_ERR_NOSUCHCHANNEL, "channel", ES, ES, ES);
+	server.send_reply(fd, P_ERR_NOTONCHANNEL, "channel->name", ES, ES, ES);
 	COUT "End of replies test, Bye.." ENDL;
 	exit(1);
 }
@@ -105,7 +113,7 @@ void    launch_serv(std::string port, std::string password)
 	std::string	separatedline;
 	int			fd;
 	
-	// test_reply(1, server);
+	test_reply(1, server);
 	while(1)
 	{
 		ret_poll = poll(server.getSocket(0), server.getSocketSize(), 15000);

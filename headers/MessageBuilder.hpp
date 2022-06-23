@@ -37,6 +37,8 @@
 # define ERR_NOTEXTTOSEND ":No text to send"
 # define ERR_TOOMANYTARGETS(target, code, abort_message) (target + " :" + code + " recipients. " + abort_message)
 # define ERR_BADCHANNELKEY(channel) (channel + " :Cannot join channel (+k)")
+# define ERR_NOSUCHCHANNEL(channel) (channel + " :No such channel")
+# define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel")
 
 # define SPE_PONG(sender) ("PONG :" + arg1)
 

@@ -85,6 +85,7 @@ public:
 	
 	bool			addChannel(Channel *channel);
 	Channel*		findChannel(std::string const & channel) const;
+	void			deleteUserQuittingChannel(User *user);
 };
 
 bool	operator==(const t_pollfd &pollfd1, const t_pollfd &pollfd2);

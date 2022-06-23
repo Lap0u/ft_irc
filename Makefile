@@ -33,6 +33,8 @@ SRC			=	main.cpp \
 				srcs/Commands/join.cpp \
 				srcs/Commands/part.cpp \
 				srcs/Commands/names.cpp \
+				srcs/Commands/quit.cpp \
+				srcs/Commands/error.cpp \
 				srcs/Commands/privateMessage.cpp \
 				srcs/Channel.cpp \
 				
