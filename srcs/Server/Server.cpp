@@ -66,5 +66,6 @@ void	Server::initCommands(void)
 	_commands["NOTICE"] = privateMessage;
 	_commands["QUIT"] = quit;
 	_commands["kill"] = kill;
+	_commands["INVITE"] = invite;
 }
 
