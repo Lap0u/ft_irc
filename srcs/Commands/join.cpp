@@ -89,6 +89,7 @@ int		ft_handle_one_tab(std::vector<std::string> & tab, int fd, Server& server)
 		}
 		joinChannel_and_send_replies(fd, server, tab[i], ES);
 	}
+	COUT "RETURN 0" ENDL;
 	return 0;
 }
 

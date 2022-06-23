@@ -53,6 +53,7 @@ int    mode(const std::string &line, int fd, Server& server)
 	int							pos = 1;
 	std::vector<std::string>	word = ft_split(line, ' ');
 	User* 						cur = server.findMatchingUser(fd);
+	COUT line ENDL;
     if (cur)
     {
         if (!cur->isRegistered())
