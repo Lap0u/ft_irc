@@ -26,12 +26,17 @@ bool    	Server::isUserUnique(const std::string &nick) const
 	return true;
 }
 
-bool		Server::addUser(User* user)
+void		Server::addUser(int fd)
 {
-	if (!_user_tab.empty() && !isUserUnique(user))
-		return false;
+	User *user = new User();
+	user->setSocket(fd);
+	if (fd == _main_socket)
+	{
+		user->setNick("Server");
+		user->setUserName("Server");
+		user->setPass("Server");
+	}
 	_user_tab.push_back(user);
-	return true;
 }
 
 void		Server::addSocket(int fd, short events)

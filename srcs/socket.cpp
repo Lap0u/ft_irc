@@ -138,9 +138,7 @@ void    launch_serv(std::string port, std::string password)
 						exit(1);
 					}
 					server.addSocket(fd, POLLIN);
-					User *user = new User();
-					user->setSocket(fd);
-					server.addUser(user);
+					server.addUser(fd);
 				}
 				else
 					fd = server.getSocket(i)->fd;

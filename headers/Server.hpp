@@ -55,7 +55,7 @@ public:
 
 	bool			isUserUnique(User* user) const;
 	bool			isUserUnique(const std::string &nick) const;
-	bool			addUser(User* user);
+	void			addUser(int fd);
 
 	t_pollfd*		getSocket(nfds_t i);
 	User*			getUser(std::string nick) const;

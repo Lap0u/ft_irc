@@ -26,6 +26,12 @@ int    whois(const std::string &line, int fd, Server& server)
     DEB "pointer whois" ENDL;
     DEB line ENDL;
     std::vector<std::string> tab = ft_split(line, " ,");
+    User* cur = server.findMatchingUser(fd);
+    if (cur)
+    {
+        if (!cur->isRegistered())
+            return 1;
+    }
     if (tab.size() == 1)
     {
         server.send_reply(fd, WI_ERR_NONICKNAMEGIVEN, ES, ES, ES, ES);

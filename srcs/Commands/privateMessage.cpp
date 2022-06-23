@@ -30,6 +30,12 @@ int     checkError(std::vector<std::string>split, int fd, Server& server, User*&
 int		privateMessage(const std::string &line, int fd, Server& server)
 {
     User *sender = server.findMatchingUser(fd);
+    if (sender)
+    {
+        if (!sender->isRegistered())
+            return 1;
+    }
+
     std::vector<std::string>split = ft_split(line, ' ');
     User *receiver = server.getUser(split[1]);
     std::string chan_first = "#&+!";

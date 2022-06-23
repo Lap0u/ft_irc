@@ -37,10 +37,10 @@ int		checkError(int fd, Server& server, std::vector<std::string> word,
 		server.send_reply(fd, 501, ES, ES, ES, ES); //ERR_UMODEUNKNOWNFLAG
 		return 1;
 	}
-	if (word.size() == 3 && !server.getUser(word[1]) && cur->isRegistered()) // check if user exists in userVector
+	if (word.size() == 3 && !server.getUser(word[1]))
 		return 1;
 	if (!cur->isOperator() && word.size() == 3
-			&& word[1].compare(cur->getNick()) != 0  && cur->isRegistered())
+			&& word[1].compare(cur->getNick()) != 0 )
 	{
 		server.send_reply(fd, 502, ES, ES, ES, ES); //ERR_USERSDONTMATCH
 		return (1);
@@ -51,20 +51,22 @@ int		checkError(int fd, Server& server, std::vector<std::string> word,
 int    mode(const std::string &line, int fd, Server& server)
 {
 	int							pos = 1;
-	User*						cur = NULL;
 	std::vector<std::string>	word = ft_split(line, ' ');
+	User* 						cur = server.findMatchingUser(fd);
+    if (cur)
+    {
+        if (!cur->isRegistered())
+            return 1;
+    }
 
 	if (word.size() == 3)
 		pos = 2;
 	std::string mode (word[pos].begin() + 1, word[pos].end());
-	
 	if (checkError(fd, server, word, pos, mode))
 		return (1);
-	cur = server.findMatchingUser(fd);
-	if (word.size() == 3 && cur->isRegistered())
+	if (word.size() == 3)
 		cur = server.getUser(word[1]);
 	cur->updateMode(mode, *word[pos].begin());
 	server.send_reply(fd, 221, cur->getMode(), ES, ES, ES); // RPL_UMODEIS
-	cur->setRegister();
     return 0;
 }
