@@ -11,7 +11,7 @@ int	checkNickInSet(const std::string &nick)
 
 int	checkNickDoublon(const std::string &nick, Server& server)
 {
-	return (!server.isUserUnique(nick));
+	return (server.isUserUnique(nick));
 }
 
 int	checkNickDelay(User *newUser)
@@ -49,8 +49,9 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
-	if (checkNickDoublon(nick, server) == -1)//nick is not doublon
+	if (checkNickDoublon(nick, server) == false)//nick is not doublon
 	{
+		DEB "DOUBLON" ENDL;
 		server.send_reply(fd, 433, nick, ES, ES, ES);
 		if (cur->isRegistered() == false)
 			server.deleteUserSocket(server.findPosSocket(fd));
@@ -71,6 +72,14 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 		return 1;
 	}
 	cur->setNick(nick);
+	if (!cur->getUserName().empty())
+	{
+		cur->setRegister();
+		server.send_reply(fd, 001, cur->getNick(), cur->getUserName(), server.getServerName(), ES);
+		server.send_reply(fd, 002, server.getServerName(), server.getVersion(), ES, ES);
+		server.send_reply(fd, 003, server.getDate(), ES, ES, ES);
+		server.send_reply(fd, 004, server.getServerName(), server.getVersion(), USER_MODE, CHANNEL_MODE);
+	}
 	return 0;
 }
 
@@ -80,7 +89,6 @@ int		nick(const std::string &line, int fd, Server& server)
 	std::vector<std::string>split = ft_split(line, ' ');
 	if (checkNickErrors(split[1], fd, server, split.size()) == 1)
 	{
-		server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
 	return 0;

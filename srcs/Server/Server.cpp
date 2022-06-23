@@ -31,7 +31,7 @@ Server::Server(int port, std::string pass)
 		exit(1);
 	};
 	addSocket(_main_socket, POLLIN);
-	addUser(new User(_main_socket, "Server", "Server", "Server", "Server"));
+	addUser(_main_socket);
 	initReplies();
 	initCommands();
 
@@ -65,5 +65,6 @@ void	Server::initCommands(void)
 	_commands["PRIVMSG"] = privateMessage;
 	_commands["NOTICE"] = privateMessage;
 	_commands["QUIT"] = quit;
+	_commands["kill"] = kill;
 }
 
