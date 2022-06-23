@@ -26,7 +26,12 @@ int    kill(const std::string &line, int fd, Server& server)
 {
 	std::vector<std::string>	word = ft_split(line, ' ');
 	User*						cur = server.findMatchingUser(fd);
-    std::string					cur_mode = cur->getMode();
+    if (cur)
+    {
+        if (!cur->isRegistered())
+            return 1;
+    }
+	std::string					cur_mode = cur->getMode();
 	std::string					message;
 
 	if (checkError(fd, server, word, cur_mode))

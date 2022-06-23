@@ -51,16 +51,19 @@ int		checkError(int fd, Server& server, std::vector<std::string> word,
 int    mode(const std::string &line, int fd, Server& server)
 {
 	int							pos = 1;
-	User*						cur = NULL;
 	std::vector<std::string>	word = ft_split(line, ' ');
+	User* 						cur = server.findMatchingUser(fd);
+    if (cur)
+    {
+        if (!cur->isRegistered())
+            return 1;
+    }
 
 	if (word.size() == 3)
 		pos = 2;
 	std::string mode (word[pos].begin() + 1, word[pos].end());
-	
 	if (checkError(fd, server, word, pos, mode))
 		return (1);
-	cur = server.findMatchingUser(fd);
 	if (word.size() == 3)
 		cur = server.getUser(word[1]);
 	cur->updateMode(mode, *word[pos].begin());
