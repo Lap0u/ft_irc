@@ -20,7 +20,7 @@
 # define RPL_NAMREPLY(channel, nicklist) ("= " + channel + " :" + nicklist)
 # define RPL_ENDOFNAMES(channel) (channel + " :End of NAMES list")
 # define RPL_TOPIC(channel, topic) (channel + " :" + topic)
-
+# define RPL_NOTOPIC(channel) (channel + " :No topic is set")
 # define ERR_UMODEUNKNOWNFLAG ":Unknown MODE flag"
 # define ERR_USERSDONTMATCH ":Cannot change mode for other users"
 # define ERR_NOSUCHNICK(nickname) (nickname + " :No such nick/channel")
