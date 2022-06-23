@@ -57,7 +57,8 @@ int    mode(const std::string &line, int fd, Server& server)
 	if (word.size() == 3)
 		pos = 2;
 	std::string mode (word[pos].begin() + 1, word[pos].end());
-	
+	if (word.size() > 1 && server.check_first_char_channel(word[1]) == 0)
+		return (channel_mode(line, fd, server));
 	if (checkError(fd, server, word, pos, mode))
 		return (1);
 	cur = server.findMatchingUser(fd);

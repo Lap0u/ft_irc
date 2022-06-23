@@ -27,3 +27,10 @@ void		Server::deleteUserQuittingChannel(User *client)
 			send_chan_message(client, "PART", (*it)->getName(), ES);
 	}
 }
+
+int			Server::check_first_char_channel(std::string &name) const
+{
+	if (name[0] == '#' || name[0] == '+' || name[0] == '!' || name[0] == '&')
+		return 0;
+	return 1;
+}

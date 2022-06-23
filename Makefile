@@ -29,6 +29,7 @@ SRC			=	main.cpp \
 				srcs/Commands/ping.cpp \
 				srcs/Commands/user.cpp \
 				srcs/Commands/usermode.cpp \
+				srcs/Commands/channelmode.cpp \
 				srcs/Commands/whois.cpp \
 				srcs/Commands/join.cpp \
 				srcs/Commands/part.cpp \

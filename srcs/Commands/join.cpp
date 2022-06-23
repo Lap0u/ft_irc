@@ -27,13 +27,6 @@
 
 #define J_RPL_ENDOFNAMES 366
 
-int		check_first_char_channel(std::string &name)
-{
-	if (name[0] == '#' || name[0] == '+' || name[0] == '!' || name[0] == '&')
-		return 0;
-	return 1;
-}
-
 int		not_enough_parameters(int fd, Server& server)
 {
 	server.send_reply(fd, J_ERR_NEEDMOREPARAMS, "join:", ES, ES, ES);
@@ -42,7 +35,7 @@ int		not_enough_parameters(int fd, Server& server)
 
 void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, const std::string& key)
 {
-	if (check_first_char_channel(chaname) != 0)
+	if (server.check_first_char_channel(chaname) != 0)
 		return ;
 	Channel* chan = server.findChannel(chaname);
 	User* user = server.findMatchingUser(fd);
