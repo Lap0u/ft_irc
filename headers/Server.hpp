@@ -24,7 +24,6 @@ class Server
 public:
 	
 	typedef std::map<std::string, commandFunction>		commandMap;
-	typedef std::map<int, std::string>					repliesMap;
 	typedef	std::vector<t_pollfd>						pollfdVector;
 	typedef	std::vector<User*>							userVector;
 	typedef	std::vector<Channel*>						channelVector;
@@ -43,10 +42,8 @@ private:
 	channelVector	_channel_tab;
 
 	commandMap		_commands;
-	repliesMap		_replies;
 	operMap			_operators;
 	
-	void			initReplies(void);
 	void			initCommands(void);
 
 public:
