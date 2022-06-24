@@ -85,6 +85,7 @@ public:
 	void			deleteUserQuittingChannel(User *user);
 	int				check_first_char_channel(std::string &name) const;
 	void			listChannel(int fd) const;
+	const char&		findUnknownChannelMode(const std::string& mode) const;
 };
 
 bool	operator==(const t_pollfd &pollfd1, const t_pollfd &pollfd2);

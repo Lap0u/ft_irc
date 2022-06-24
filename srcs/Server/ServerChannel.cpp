@@ -41,3 +41,15 @@ void		Server::listChannel(int fd) const
 		send_reply(fd, 322, (*it)->getName(), "visible", (*it)->getTopic(), ES);
     send_reply(fd, 323, ES, ES, ES, ES);
 }
+
+const char&	Server::findUnknownChannelMode(const std::string& mode) const
+{
+	std::string channelmodes = CHANNEL_MODE;
+	std::string::const_iterator it = mode.begin();
+	for (; it != mode.end(); ++it)
+    {
+        if (channelmodes.find(*it) == std::string::npos)
+            break;
+    }
+	return *it;
+}
