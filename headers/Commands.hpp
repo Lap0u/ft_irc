@@ -26,7 +26,10 @@ int     names(const std::string &line, int fd, Server& server);
 int     privateMessage(const std::string &line, int fd, Server& server);
 int     quit(const std::string &line, int fd, Server& server);
 int		error(const std::string &line, int fd, Server& server);
+int		topic(const std::string &line, int fd, Server& server);
+int		list(const std::string &line, int fd, Server& server);
 int     kill(const std::string &line, int fd, Server& server);
 int     kick(const std::string &line, int fd, Server& server);
+int     invite(const std::string &line, int fd, Server& server);
 
 #endif

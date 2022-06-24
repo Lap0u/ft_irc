@@ -31,8 +31,16 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_ENDOFWHOIS(arg1);
         case 319:
             return RPL_WHOISCHANNELS(arg1, arg2);
+        case 322:
+            return RPL_LIST(arg1, arg2, arg3);
+        case 323:
+            return RPL_LISTEND;
+        case 331:
+            return RPL_NOTOPIC(arg1);
         case 332:
             return RPL_TOPIC(arg1, arg2);
+        case 341:
+            return RPL_INVITING(arg1, arg2);
         case 353:
             return RPL_NAMREPLY(arg1, arg2);
         case 366:
@@ -69,6 +77,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return ERR_PASSWDMISMATCH;
         case 475:
             return ERR_BADCHANNELKEY(arg1);
+        case 482:
+            return ERR_CHANOPRIVSNEEDED(arg1);
         case 484:
             return ERR_RESTRICTED;
         case 501:

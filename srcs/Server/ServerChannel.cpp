@@ -27,3 +27,10 @@ void		Server::deleteUserQuittingChannel(User *client)
 		(*it)->partWithAClient(client->getNick());
 	}
 }
+
+void	Server::listChannel(int fd) const
+{
+	for(std::vector<Channel*>::const_iterator it = _channel_tab.begin(); it != _channel_tab.end(); it++)
+		send_reply(fd, 322, (*it)->getName(), "visible", (*it)->getTopic(), ES);
+    send_reply(fd, 323, ES, ES, ES, ES);
+}
