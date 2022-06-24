@@ -31,6 +31,12 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_ENDOFWHOIS(arg1);
         case 319:
             return RPL_WHOISCHANNELS(arg1, arg2);
+        case 322:
+            return RPL_LIST(arg1, arg2, arg3);
+        case 323:
+            return RPL_LISTEND;
+        case 331:
+            return RPL_NOTOPIC(arg1);
         case 332:
             return RPL_TOPIC(arg1, arg2);
         case 341:

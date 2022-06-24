@@ -59,6 +59,8 @@ void	Server::initCommands(void)
 	_commands["PRIVMSG"] = privateMessage;
 	_commands["NOTICE"] = privateMessage;
 	_commands["QUIT"] = quit;
+	_commands["TOPIC"] = topic;
+	_commands["LIST"] = list;
 	_commands["kill"] = kill;
 	_commands["INVITE"] = invite;
 }
