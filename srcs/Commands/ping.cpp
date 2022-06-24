@@ -5,11 +5,9 @@ int    ping(const std::string &line, int fd, Server& server)
 	DEB "Tried ping" ENDL;
 	std::vector<std::string>parsedLine = ft_split(line, ' ');
 	User* cur = server.findMatchingUser(fd);
-    if (cur)
-    {
-        if (!cur->isRegistered())
-            return 1;
-    }
+
+    if (!cur || !cur->isRegistered())
+		return 1;
 	if (parsedLine.size() < 2)
 	{
 		server.send_reply(fd, 409, ES, ES, ES, ES);

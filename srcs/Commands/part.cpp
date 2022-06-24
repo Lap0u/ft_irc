@@ -11,12 +11,9 @@ int     part(const std::string &line, int fd, Server& server)
 {
     std::vector<std::string>		tab = ft_split(line, ' ');
 	User* cur = server.findMatchingUser(fd);
-    if (cur)
-    {
-        if (!cur->isRegistered())
-            return 1;
-    }
 
+    if (!cur || !cur->isRegistered())
+		return 1;
 	if (tab.size() == 1)
 	{
 		server.send_reply(fd, P_ERR_NEEDMOREPARAMS, "part:", ES, ES, ES);

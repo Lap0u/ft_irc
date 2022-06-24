@@ -61,11 +61,8 @@ int     kick(const std::string &line, int fd, Server& server)
     User *target = NULL;
     std::string message;
 
-    if (sender)
-    {
-        if (!sender->isRegistered())
-            return 1;
-    }
+    if (!sender || !sender->isRegistered())
+		return 1;
     std::vector<std::string>split = ft_split(line, ' ');
     if (split.size() < 3)
     {

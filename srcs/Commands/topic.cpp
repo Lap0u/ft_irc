@@ -6,11 +6,8 @@ int		topic(const std::string &line, int fd, Server& server)
     std::vector<std::string>split = ft_split(line, ' ');
     User *sender = server.findMatchingUser(fd);
     
-    if (sender)
-    {
-        if (!sender->isRegistered())
-            return 1;
-    }
+    if (!sender || !sender->isRegistered())
+		return 1;
     if (split.size() <= 1)
     {
         server.send_reply(fd, 461, "TOPIC", ES, ES, ES);

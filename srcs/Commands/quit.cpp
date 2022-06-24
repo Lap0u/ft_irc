@@ -4,11 +4,8 @@ int    quit(const std::string &line, int fd, Server& server)
 {
 	User* cur = server.findMatchingUser(fd);
 
-    if (cur)
-    {
-        if (!cur->isRegistered())
-            return 1;
-    }
+	if (!cur || !cur->isRegistered())
+		return 1;
 	if (line.find(' ') != std::string::npos)
 	{
 		std::string linebis(line.begin() + line.find(' '), line.end());

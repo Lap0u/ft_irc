@@ -53,12 +53,9 @@ int    mode(const std::string &line, int fd, Server& server)
 	int							pos = 1;
 	std::vector<std::string>	word = ft_split(line, ' ');
 	User* 						cur = server.findMatchingUser(fd);
-    if (cur)
-    {
-        if (!cur->isRegistered())
-            return 1;
-    }
 
+	if (!cur || !cur->isRegistered())
+		return 1;
 	if (word.size() == 3)
 		pos = 2;
 	std::string mode (word[pos].begin() + 1, word[pos].end());
