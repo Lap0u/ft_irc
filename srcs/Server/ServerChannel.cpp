@@ -23,7 +23,7 @@ void		Server::deleteUserQuittingChannel(User *client)
 {
 	for (channelVector::iterator it = _channel_tab.begin(); it != _channel_tab.end(); it++)
 	{
-		if ((*it)->partWithAClient(client->getNick()) == 0)
-			send_chan_message(client, "PART", (*it)->getName(), ES);
+		send_chan_message(client, "PART", (*it)->getName(), ES);
+		(*it)->partWithAClient(client->getNick());
 	}
 }
