@@ -67,6 +67,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return ERR_NICKNAMEINUSE(arg1);
         case 437:
             return ERR_UNAVAILRESOURCE(arg1);
+        case 441:
+            return ERR_USERNOTINCHANNEL(arg1, arg2);
         case 442:
             return ERR_NOTONCHANNEL(arg1);
         case 461:
@@ -77,6 +79,10 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return ERR_PASSWDMISMATCH;
         case 475:
             return ERR_BADCHANNELKEY(arg1);
+        case 476:
+            return ERR_BADCHANMASK(arg1);
+        case 481:
+            return ERR_NOPRIVILEGES;
         case 482:
             return ERR_CHANOPRIVSNEEDED(arg1);
         case 484:

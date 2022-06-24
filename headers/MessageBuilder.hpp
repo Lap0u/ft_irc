@@ -44,9 +44,10 @@
 # define ERR_NOSUCHCHANNEL(channel) (channel + " :No such channel")
 # define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel")
 # define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")
-
 # define SPE_PONG(sender) ("PONG :" + arg1)
-
+# define ERR_USERNOTINCHANNEL(nick, channel) (nick + " " + channel + " :They aren't on that channel")
+# define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask")
+# define ERR_NOPRIVILEGES ":Permission Denied- You're not an IRC operator"
 // void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 
 #endif
