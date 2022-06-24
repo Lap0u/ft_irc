@@ -31,8 +31,7 @@ Server::Server(int port, std::string pass)
 		exit(1);
 	};
 	addSocket(_main_socket, POLLIN);
-	addUser(new User(_main_socket, "Server", "Server", "Server", "Server"));
-	initReplies();
+	addUser(_main_socket);
 	initCommands();
 
 	_operators["John"] = "johnmdp"; //kill message
@@ -42,11 +41,6 @@ Server::Server(int port, std::string pass)
 Server::~Server( void )
 {
 	DEB "Destruct Server." ENDL;
-}
-
-void	Server::initReplies(void)
-{
-	_replies[0] = "RPL_WELCOME";
 }
 
 void	Server::initCommands(void)
@@ -67,5 +61,7 @@ void	Server::initCommands(void)
 	_commands["QUIT"] = quit;
 	_commands["TOPIC"] = topic;
 	_commands["LIST"] = list;
+	_commands["kill"] = kill;
+	_commands["INVITE"] = invite;
 }
 

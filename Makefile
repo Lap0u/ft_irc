@@ -35,6 +35,8 @@ SRC			=	main.cpp \
 				srcs/Commands/names.cpp \
 				srcs/Commands/quit.cpp \
 				srcs/Commands/error.cpp \
+				srcs/Commands/kill.cpp \
+				srcs/Commands/invite.cpp \
 				srcs/Commands/privateMessage.cpp \
 				srcs/Commands/topic.cpp \
 				srcs/Commands/list.cpp \
