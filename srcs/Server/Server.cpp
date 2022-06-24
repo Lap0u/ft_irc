@@ -62,6 +62,7 @@ void	Server::initCommands(void)
 	_commands["TOPIC"] = topic;
 	_commands["LIST"] = list;
 	_commands["kill"] = kill;
+	_commands["KICK"] = kick;
 	_commands["INVITE"] = invite;
 }
 
