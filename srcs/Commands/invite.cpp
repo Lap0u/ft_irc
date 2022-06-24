@@ -53,6 +53,6 @@ int     invite(const std::string &line, int fd, Server& server)
 	invited->getNick() + " " + word[2] + "\r\n";
 
 	server.send_reply(fd, 341, word[2], word[1], ES, ES); //RPL_INVITING
-	server.send_raw_message(invited->getSocket(), message); //RPL_INVITING
+	server.send_raw_message(invited->getSocket(), message); //MESSAGE POUR PREVENIR USER
 	return 0;
 }
