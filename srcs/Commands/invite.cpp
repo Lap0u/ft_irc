@@ -13,7 +13,7 @@ int		checkError(int fd, Server& server,
 	}
 	if (server.getUser(word[1]) == NULL)
 	{
-		server.send_reply(fd, 401, ES, ES, ES, ES); //ERR_NOSUCHNICK
+		server.send_reply(fd, 401, word[1], ES, ES, ES); //ERR_NOSUCHNICK
 		return 1;
 	}
 	if (!channel)
@@ -47,6 +47,12 @@ int     invite(const std::string &line, int fd, Server& server)
 	}
 	if (checkError(fd, server, word, cur))
 		return 1;
+
+	User*			invited = server.getUser(word[1]);
+	std::string		message = ":" + cur->getNick() + "!" + server.getServerName() + "@localhost INVITE " +
+	invited->getNick() + " " + word[2] + "\r\n";
+
 	server.send_reply(fd, 341, word[2], word[1], ES, ES); //RPL_INVITING
+	server.send_raw_message(invited->getSocket(), message); //RPL_INVITING
 	return 0;
 }
