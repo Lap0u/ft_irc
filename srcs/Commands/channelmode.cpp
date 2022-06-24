@@ -54,6 +54,11 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 		server.send_reply(fd, C_ERR_NOSUCHCHANNEL, tab[1], ES, ES, ES);
 		return 1;
 	}
+	if (tab.size() < 3)
+	{
+		server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+		return 1;
+	}
 	server.send_reply(fd, C_RPL_UMODEIS, chan->getMode(), ES, ES, ES);
 	return 0;
 }
