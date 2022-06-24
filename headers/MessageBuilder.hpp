@@ -20,6 +20,10 @@
 # define RPL_NAMREPLY(channel, nicklist) ("= " + channel + " :" + nicklist)
 # define RPL_ENDOFNAMES(channel) (channel + " :End of NAMES list")
 # define RPL_TOPIC(channel, topic) (channel + " :" + topic)
+# define RPL_NOTOPIC(channel) (channel + " :No topic is set")
+# define RPL_LIST(channel, visible, topic) (channel + " " + visible + " :" + topic)
+# define RPL_LISTEND ":End of LIST"
+# define RPL_INVITING(channel, nickname) (channel + " " + nickname)
 
 # define ERR_UMODEUNKNOWNFLAG ":Unknown MODE flag"
 # define ERR_USERSDONTMATCH ":Cannot change mode for other users"
@@ -39,9 +43,11 @@
 # define ERR_BADCHANNELKEY(channel) (channel + " :Cannot join channel (+k)")
 # define ERR_NOSUCHCHANNEL(channel) (channel + " :No such channel")
 # define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel")
-
+# define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")
 # define SPE_PONG(sender) ("PONG :" + arg1)
-
+# define ERR_USERNOTINCHANNEL(nick, channel) (nick + " " + channel + " :They aren't on that channel")
+# define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask")
+# define ERR_NOPRIVILEGES ":Permission Denied- You're not an IRC operator"
 // void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 
 #endif

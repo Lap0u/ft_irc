@@ -59,28 +59,24 @@
 
 void	test_reply(int fd, Server & server)
 {
-	server.send_reply(fd, 431, ES, ES, ES, ES);
-	server.send_reply(fd, 432, "nick", ES, ES, ES);
-	server.send_reply(fd, 433, "nick", ES, ES, ES);
-	server.send_reply(fd, 437, "nick", ES, ES, ES);
-	server.send_reply(fd, 484, ES, ES, ES, ES);
-	server.send_reply(fd, 461, "OPER", ES, ES, ES); // ERR_NEEDMOREPARAMS
-	server.send_reply(fd, 464, ES, ES, ES, ES); // ERR_PASSWDMISMATCH
-	server.send_reply(fd, 381, ES, ES, ES, ES); // RPL_YOUREOPER
-	server.send_reply(fd, 461, "PASS", ES, ES, ES);
-	server.send_reply(fd, 462, ES, ES, ES, ES);
-	server.send_reply(fd, 409, ES, ES, ES, ES);
-    server.send_reply(fd, 411, "PRIVMSG", ES, ES, ES);
-    server.send_reply(fd, 412, ES, ES, ES, ES);
-    server.send_reply(fd, 407, "target", "407", "Message couldn't be delivered", ES);
-    server.send_reply(fd, 401, "target", ES, ES, ES);
-	server.send_reply(fd, 461, "USER", ES, ES, ES);
-	server.send_reply(fd, 462, ES, ES, ES, ES);
 	server.send_reply(fd, 001, "Nick", "Username", server.getServerName(), ES);
 	server.send_reply(fd, 002, server.getServerName(), server.getVersion(), ES, ES);
 	server.send_reply(fd, 003, server.getDate(), ES, ES, ES);
 	server.send_reply(fd, 004, server.getServerName(), server.getVersion(), USER_MODE, CHANNEL_MODE);
-	server.send_reply(fd, 461, "MODE", ES, ES, ES); //ERR_NEEDMOREPARAMS
+	server.send_reply(fd, 381, ES, ES, ES, ES); // RPL_YOUREOPER
+    server.send_reply(fd, 401, "target", ES, ES, ES);
+    server.send_reply(fd, 407, "target", "407", "Message couldn't be delivered", ES);
+	server.send_reply(fd, 409, ES, ES, ES, ES);
+    server.send_reply(fd, 411, "PRIVMSG", ES, ES, ES);
+    server.send_reply(fd, 412, ES, ES, ES, ES);
+	server.send_reply(fd, 431, ES, ES, ES, ES);
+	server.send_reply(fd, 432, "nick", ES, ES, ES);
+	server.send_reply(fd, 433, "nick", ES, ES, ES);
+	server.send_reply(fd, 437, "nick", ES, ES, ES);
+	server.send_reply(fd, 461, "PASS", ES, ES, ES);
+	server.send_reply(fd, 462, ES, ES, ES, ES);
+	server.send_reply(fd, 464, ES, ES, ES, ES); // ERR_PASSWDMISMATCH
+	server.send_reply(fd, 484, ES, ES, ES, ES);
 	server.send_reply(fd, 501, ES, ES, ES, ES); //ERR_UMODEUNKNOWNFLAG
 	server.send_reply(fd, 502, ES, ES, ES, ES); //ERR_USERSDONTMATCH
 	server.send_reply(fd, 221, "AoO", ES, ES, ES); // RPL_UMODEIS
@@ -101,6 +97,19 @@ void	test_reply(int fd, Server & server)
 	server.send_reply(fd, P_ERR_NEEDMOREPARAMS, "part:", ES, ES, ES);
 	server.send_reply(fd, P_ERR_NOSUCHCHANNEL, "channel", ES, ES, ES);
 	server.send_reply(fd, P_ERR_NOTONCHANNEL, "channel->name", ES, ES, ES);
+	server.send_reply(fd, 403, "chan", ES, ES, ES);// ERR_NOSUCHCHANNEL
+	server.send_reply(fd, 442, "chan", ES, ES, ES);// ERR_NOTONCHANNEL
+	server.send_reply(fd, 441, "user", "chan", ES, ES);// ERR_USERNOTINCHANNEL
+	server.send_reply(fd, 461, "KICK", ES, ES, ES);//ERR_NEEDMOREPARAMS
+	server.send_reply(fd, 482, "Channel", ES, ES, ES); //ERR_CHANOPRIVSNEEDED
+    server.send_reply(fd, 476, "Channel", ES, ES, ES);
+	server.send_reply(fd, 481, ES, ES, ES, ES); //ERR_NOPRIVILEGES
+    server.send_reply(fd, 322, "Channel", "visible", "Topic", ES); //RPL_LIST
+    server.send_reply(fd, 323, ES, ES, ES, ES); //RPL_LISTEND
+	server.send_reply(fd, 331, "Channel", ES, ES, ES); //RPL_NOTOPIC
+
+
+
 	COUT "End of replies test, Bye.." ENDL;
 	exit(1);
 }
