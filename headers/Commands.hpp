@@ -27,5 +27,6 @@ int     privateMessage(const std::string &line, int fd, Server& server);
 int     quit(const std::string &line, int fd, Server& server);
 int		error(const std::string &line, int fd, Server& server);
 int     kill(const std::string &line, int fd, Server& server);
+int     kick(const std::string &line, int fd, Server& server);
 
 #endif
