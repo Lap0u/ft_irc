@@ -48,6 +48,46 @@ void						Channel::setKey(std::string const & key)
 	_key = key;
 }
 
+bool						Channel::isAnonymous(void)
+{
+	return _anonymous;
+}
+
+bool						Channel::isInviteOnly(void)
+{
+	return _invite_only;
+}
+
+bool						Channel::isModerated(void)
+{
+	return _moderated;
+}
+
+bool						Channel::noMessageFromChannel(void)
+{
+	return _no_msg_outside;
+}
+
+bool						Channel::isQuiet(void)
+{
+	return _quiet;
+}
+
+bool						Channel::isPrivate(void)
+{
+	return _private;
+}
+
+bool						Channel::isSecret(void)
+{
+	return _secret;
+}
+
+bool                        Channel::topicSettableForChanOpOnly(void)
+{
+	return _topic_chanop_only;
+}
+
 void						Channel::addMode(std::string mode)
 {
 	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
