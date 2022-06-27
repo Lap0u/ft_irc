@@ -7,7 +7,7 @@ Channel::Channel(std::string name, std::string key) :
 	if (_key != ES)
 		this->addMode(KEY);
 	//Simulate mode
-	_mode = "i"; // A VIRER PLUS TARD
+	_mode = "m"; // A VIRER PLUS TARD
 }
 
 Channel::~Channel()
