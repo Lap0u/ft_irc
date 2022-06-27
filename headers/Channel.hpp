@@ -30,6 +30,9 @@ class Channel
     std::string             	_key;
     std::string	            	_mode;
     std::string                 _flags;
+
+    size_t                      _user_limit;
+
     Clients      				_clients;
     std::set<std::string>       _whitelist;
     // Operators                   _operators;

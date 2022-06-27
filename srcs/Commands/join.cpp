@@ -11,6 +11,8 @@
 
 #define J_ERR_TOOMANYTARGETS 407
 
+#define J_ERR_CHANNELISFULL 471
+
 #define J_ERR_INVITEONLYCHAN 473
 
 #define J_ERR_BANNEDFROMCHAN 474
@@ -65,6 +67,11 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	else if (joined == 3)
 	{
 		server.send_reply(fd, J_ERR_INVITEONLYCHAN, chan->getName(), ES, ES, ES);
+		return ;		
+	}
+	else if (joined == 4)
+	{
+		server.send_reply(fd, J_ERR_CHANNELISFULL, chan->getName(), ES, ES, ES);
 		return ;		
 	}
 	COUT "joined = " << joined ENDL;

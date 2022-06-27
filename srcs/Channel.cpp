@@ -7,7 +7,8 @@ Channel::Channel(std::string name, std::string key) :
 	if (_key != ES)
 		this->addMode(KEY);
 	//Simulate mode
-	_mode = "t"; // A VIRER PLUS TARD
+	_mode = "l";
+	_user_limit = 2; // A VIRER PLUS TARD
 }
 
 Channel::~Channel()
@@ -92,6 +93,9 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 		return 2;
 	if (this->getMode().find("i") != std::string::npos && !isInWhiteList(user->getNick()) && _clients.size() != 0)
 		return 3;
+	if (this->getMode().find("l") != std::string::npos && _clients.size() >= _user_limit)
+		return 4;
+	
 	_clients.push_back(user);
 	return 0;
 }
