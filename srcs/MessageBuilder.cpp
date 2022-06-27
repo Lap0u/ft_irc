@@ -138,9 +138,14 @@ void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::st
 void    Server::send_chan_message(User *&sender, std::string cmd, std::string chan, std::string message) const
 {
     (void)sender;
-    std::string reply = ":" + sender->getNick() + "!" + getServerName() + "@localhost " + cmd;
-    Channel * curr_chan = findChannel(chan);
-    size_t      users = findChannel(chan)->getClientsSize();
+    std::string     reply;
+    Channel*        curr_chan = findChannel(chan);
+    size_t          users = findChannel(chan)->getClientsSize();
+
+	if (curr_chan->getMode().find('a') != std::string::npos && cmd == "PRIVMSG") //channel is anonymous
+		reply = ":anonymous!anonymous@anonymous " + cmd;
+	else
+		reply = ":" + sender->getNick() + "!" + getServerName() + "@localhost " + cmd;
     if (cmd == "JOIN")
         reply += " :" + chan + "\r\n";
     if (cmd == "PRIVMSG")

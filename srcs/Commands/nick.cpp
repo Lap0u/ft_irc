@@ -73,6 +73,11 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
+	if (nick == "anonymous")
+	{
+		DEB "anonymous is a protected nick" ENDL;
+		return 1;
+	}
 	cur->setNick(nick);
 	DEB "Nick should be changed" ENDL;
 	if (!cur->getUserName().empty())

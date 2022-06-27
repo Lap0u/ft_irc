@@ -6,6 +6,8 @@ Channel::Channel(std::string name, std::string key) :
 	DEB "Construct Channel " << this->_name ENDL;
 	if (_key != ES)
 		this->addMode(KEY);
+	//Simulate mode
+	_mode = "a"; // A VIRER PLUS TARD
 }
 
 Channel::~Channel()
