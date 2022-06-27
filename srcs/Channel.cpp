@@ -154,3 +154,57 @@ bool					Channel::isInWhiteList(const std::string &nick) const
 		return false;
 	return true;
 }
+
+void					Channel::addBanList(const std::string &nick)
+{
+	_banlist.insert(nick);
+}
+
+void					Channel::removeBanList(const std::string &nick)
+{
+	_banlist.erase(nick);
+}
+
+bool					Channel::isInBanList(const std::string &nick) const
+{
+	std::set<std::string>::iterator it = _banlist.find(nick);
+	if (it == _banlist.end())
+		return false;
+	return true;
+}
+
+void					Channel::addExceptList(const std::string &nick)
+{
+	_exceptlist.insert(nick);
+}
+
+void					Channel::removeExceptList(const std::string &nick)
+{
+	_exceptlist.erase(nick);
+}
+
+bool					Channel::isInExceptList(const std::string &nick) const
+{
+	std::set<std::string>::iterator it = _exceptlist.find(nick);
+	if (it == _exceptlist.end())
+		return false;
+	return true;
+}
+
+void					Channel::addInviteList(const std::string &nick)
+{
+	_invitelist.insert(nick);
+}
+
+void					Channel::removeInviteList(const std::string &nick)
+{
+	_invitelist.erase(nick);
+}
+
+bool					Channel::isInInviteList(const std::string &nick) const
+{
+	std::set<std::string>::iterator it = _invitelist.find(nick);
+	if (it == _invitelist.end())
+		return false;
+	return true;
+}
