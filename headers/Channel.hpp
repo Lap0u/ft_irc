@@ -34,7 +34,11 @@ class Channel
     size_t                      _user_limit;
 
     Clients      				_clients;
+
     std::set<std::string>       _whitelist;
+    std::set<std::string>       _banlist;
+    std::set<std::string>       _exceptlist;
+    std::set<std::string>       _invitelist;
     // Operators                   _operators;
 
     public:
