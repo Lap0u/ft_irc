@@ -49,7 +49,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	Channel* chan = server.findChannel(chaname);
 	User* user = server.findMatchingUser(fd);
 	int joined = chan->joinChannel(user, key);
-	
+
 	if (joined == 0)
 	{
 		server.send_chan_message(user, "JOIN", chaname, ES);

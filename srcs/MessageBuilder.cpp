@@ -154,7 +154,9 @@ void    Server::send_chan_message(User *&sender, std::string cmd, std::string ch
         reply += " " + chan + "\r\n";
     for (size_t i = 0; i < users; i++)
     {
-        if (cmd == "PRIVMSG" && sender->getSocket() == curr_chan->getAClient(i)->getSocket())
+        if ((cmd == "PRIVMSG" && sender->getSocket() == curr_chan->getAClient(i)->getSocket()) ||
+            (cmd == "JOIN" && curr_chan->getMode().find("q") != std::string::npos && sender->getSocket() != curr_chan->getAClient(i)->getSocket()) || //mode quiet
+            (cmd == "PART" && curr_chan->getMode().find("q") != std::string::npos && sender->getSocket() != curr_chan->getAClient(i)->getSocket())) //mode quiet
             continue;
         send_raw_message(curr_chan->getAClient(i)->getSocket(), reply);
     }
