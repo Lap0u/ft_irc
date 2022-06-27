@@ -7,7 +7,7 @@ Channel::Channel(std::string name, std::string key) :
 	if (_key != ES)
 		this->addMode(KEY);
 	//Simulate mode
-	_mode = "a"; // A VIRER PLUS TARD
+	_mode = "i"; // A VIRER PLUS TARD
 }
 
 Channel::~Channel()
@@ -83,10 +83,15 @@ void						Channel::delMode(std::string mode)
 
 int						Channel::joinChannel(User* const user, std::string const & key)
 {
+	for(std::set<std::string>::iterator it = _whitelist.begin(); it != _whitelist.end(); it++)
+		COUT *it ENDL;
+	COUT "ENDLIST" ENDL;
 	if (this->findClient(user->getNick()) != NULL)
 		return 1;
 	if (this->getMode().find("k") != std::string::npos && this->getKey() != key)
 		return 2;
+	if (this->getMode().find("i") != std::string::npos && !isInWhiteList(user->getNick()) && _clients.size() != 0)
+		return 3;
 	_clients.push_back(user);
 	return 0;
 }
@@ -126,4 +131,22 @@ User*					Channel::getAClient(size_t i) const
 	if (i >= _clients.size())
 		return NULL;
 	return (_clients[i]);
+}
+
+void					Channel::addWhiteList(const std::string &nick)
+{
+	_whitelist.insert(nick);
+}
+
+void					Channel::removeWhiteList(const std::string &nick)
+{
+	_whitelist.erase(nick);
+}
+
+bool					Channel::isInWhiteList(const std::string &nick) const
+{
+	std::set<std::string>::iterator it = _whitelist.find(nick);
+	if (it == _whitelist.end())
+		return false;
+	return true;
 }

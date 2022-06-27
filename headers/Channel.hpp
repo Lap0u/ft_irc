@@ -31,6 +31,7 @@ class Channel
     std::string	            	_mode;
     std::string                 _flags;
     Clients      				_clients;
+    std::set<std::string>       _whitelist;
     // Operators                   _operators;
 
     public:
@@ -54,6 +55,10 @@ class Channel
     void						setKey(std::string const & key);
     void                        addMode(std::string const mode);
     void                        delMode(std::string const mode);
+
+    void                        addWhiteList(std::string const &nick);
+    void                        removeWhiteList(std::string const &nick);
+    bool                        isInWhiteList(const std::string &nick) const;
 
     int                         joinChannel(User* const user, std::string const & key = ES);
     User*                       findClient(std::string const client);

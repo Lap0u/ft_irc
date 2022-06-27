@@ -11,6 +11,8 @@
 
 #define J_ERR_TOOMANYTARGETS 407
 
+#define J_ERR_INVITEONLYCHAN 473
+
 #define J_ERR_BANNEDFROMCHAN 474
 
 #define J_ERR_BADCHANNELKEY 475
@@ -47,6 +49,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	Channel* chan = server.findChannel(chaname);
 	User* user = server.findMatchingUser(fd);
 	int joined = chan->joinChannel(user, key);
+	
 	if (joined == 0)
 	{
 		server.send_chan_message(user, "JOIN", chaname, ES);
@@ -56,7 +59,13 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	}
 	else if (joined == 2)
 	{
-		server.send_reply(fd, J_ERR_BADCHANNELKEY, user->getUserName(), chan->getName(), ES, ES);
+		server.send_reply(fd, J_ERR_BADCHANNELKEY, chan->getName(), ES, ES, ES);
+		return ;
+	}
+	else if (joined == 3)
+	{
+		server.send_reply(fd, J_ERR_INVITEONLYCHAN, chan->getName(), ES, ES, ES);
+		return ;		
 	}
 	COUT "joined = " << joined ENDL;
 }
