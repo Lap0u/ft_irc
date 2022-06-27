@@ -11,7 +11,7 @@ int	checkNickInSet(const std::string &nick)
 
 int	checkNickDoublon(const std::string &nick, Server& server)
 {
-	return (server.isUserUnique(nick));
+	return (!server.isUserUnique(nick));
 }
 
 int	checkNickDelay(User *newUser)
@@ -27,7 +27,7 @@ int	checkNickRestricted(User *newUser)
 	if (newUser == NULL)
 		return 0;
 	std::string mode = newUser->getMode();
-	if (!(mode.find('r') == std::string::npos))
+	if (mode.find('r') != std::string::npos)
 		return 1;
 	return 0;
 }
@@ -44,14 +44,14 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
-	if (checkNickInSet(nick) == -1) //nick respect nickname allowed characters
+	if (checkNickInSet(nick) == true) //nick respect nickname allowed characters
 	{
 		server.send_reply(fd, 432, nick, ES, ES, ES);
 		if (cur->isRegistered() == false)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
-	if (checkNickDoublon(nick, server) == false)//nick is not doublon
+	if (checkNickDoublon(nick, server) == true)//nick is not doublon
 	{
 		DEB "DOUBLON" ENDL;
 		server.send_reply(fd, 433, nick, ES, ES, ES);
@@ -59,14 +59,14 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
-	if (checkNickDelay(cur) == -1)//user has no delay to change nick again
+	if (checkNickDelay(cur) == true)//user has no delay to change nick again
 	{
 		server.send_reply(fd, 437, nick, ES, ES, ES);
 		if (cur->isRegistered() == false)
 			server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
-	if (checkNickRestricted(cur) == -1)//user is allowed to change (mode)
+	if (checkNickRestricted(cur) == true)//user is allowed to change (mode)
 	{
 		server.send_reply(fd, 484, ES, ES, ES, ES);
 		if (cur->isRegistered() == false)
@@ -74,13 +74,17 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 		return 1;
 	}
 	cur->setNick(nick);
+	DEB "Nick should be changed" ENDL;
 	if (!cur->getUserName().empty())
 	{
-		cur->setRegister();
 		server.send_reply(fd, 001, cur->getNick(), cur->getUserName(), server.getServerName(), ES);
-		server.send_reply(fd, 002, server.getServerName(), server.getVersion(), ES, ES);
-		server.send_reply(fd, 003, server.getDate(), ES, ES, ES);
-		server.send_reply(fd, 004, server.getServerName(), server.getVersion(), USER_MODE, CHANNEL_MODE);
+		if(!cur->isRegistered())
+		{		
+			server.send_reply(fd, 002, server.getServerName(), server.getVersion(), ES, ES);
+			server.send_reply(fd, 003, server.getDate(), ES, ES, ES);
+			server.send_reply(fd, 004, server.getServerName(), server.getVersion(), USER_MODE, CHANNEL_MODE);
+			cur->setRegister();
+		}
 	}
 	return 0;
 }
@@ -90,8 +94,6 @@ int		nick(const std::string &line, int fd, Server& server)
 	DEB "Pointeur nick fonction, line : " << line ENDL;
 	std::vector<std::string>split = ft_split(line, ' ');
 	if (checkNickErrors(split[1], fd, server, split.size()) == 1)
-	{
 		return 1;
-	}
 	return 0;
 }
