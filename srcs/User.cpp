@@ -1,4 +1,5 @@
 #include "../headers/User.hpp"
+#include "../headers/Channel.hpp"
 
 User::User( void ) : _socket(0), _nick(ES),
 	_user_name(ES), _real_name("Server"),

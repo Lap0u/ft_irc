@@ -5,7 +5,8 @@
 #include <string>
 #include <map>
 #include "Irc.hpp"
-#include "Channel.hpp"
+
+class Channel;
 
 class User
 {

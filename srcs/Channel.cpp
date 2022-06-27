@@ -1,14 +1,17 @@
 #include "../headers/Channel.hpp"
 
 Channel::Channel(std::string name, std::string key) :
-		_name(name), _topic(ES), _mode(ES), _flags("aimnqpsrtlk"),
+	_name(name), _topic(ES), _mode(ES), _flags("aimnqpsrtlk"),
 	_anonymous(false), _invite_only(false), _moderated(false),
 	_no_msg_outside(false), _quiet(false), _private(false),
-	_secret(false), _topic_chanop_only(false), _key(key), _user_limit(0)
+	_secret(false), _topic_chanop_only(false), _keyed(false),
+	_userLimited(false), _key(key), _user_limit(0)
 {
 	DEB "Construct Channel " << this->_name ENDL;
 	if (_key != ES)
-		this->addMode(KEY);
+	{
+		this->isKeyed() = true;
+	}
 }
 
 Channel::~Channel()
@@ -51,44 +54,54 @@ void						Channel::setKey(std::string const & key)
 	_key = key;
 }
 
-bool						Channel::isAnonymous(void)
+bool&						Channel::isAnonymous(void)
 {
 	return _anonymous;
 }
 
-bool						Channel::isInviteOnly(void)
+bool&						Channel::isInviteOnly(void)
 {
 	return _invite_only;
 }
 
-bool						Channel::isModerated(void)
+bool&						Channel::isModerated(void)
 {
 	return _moderated;
 }
 
-bool						Channel::noMessageFromChannel(void)
+bool&						Channel::noMessageFromChannel(void)
 {
 	return _no_msg_outside;
 }
 
-bool						Channel::isQuiet(void)
+bool&						Channel::isQuiet(void)
 {
 	return _quiet;
 }
 
-bool						Channel::isPrivate(void)
+bool&						Channel::isPrivate(void)
 {
 	return _private;
 }
 
-bool						Channel::isSecret(void)
+bool&						Channel::isSecret(void)
 {
 	return _secret;
 }
 
-bool                        Channel::topicSettableForChanOpOnly(void)
+bool&                        Channel::topicSettableForChanOpOnly(void)
 {
 	return _topic_chanop_only;
+}
+
+bool&						Channel::isKeyed(void)
+{
+	return _keyed;
+}
+
+bool&						Channel::isUserLimited(void)
+{
+	return _userLimited;
 }
 
 void						Channel::addMode(std::string mode)
@@ -121,7 +134,7 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 {
 	if (this->findClient(user->getNick()) != NULL)
 		return 1;
-	if (this->getMode().find("k") != std::string::npos && this->getKey() != key)
+	if (this->isKeyed() && this->getKey() != key)
 		return 2;
 	_clients.push_back(user);
 	return 0;

@@ -15,6 +15,10 @@
 #define USER_LIMIT "l"
 #define KEY "k"
 
+#define BAN "b"
+#define EXCEPTION "e"
+#define INVITE_ONLY_OVERRIDE "I"
+
 class Channel
 {
 	public:
@@ -39,6 +43,8 @@ class Channel
     bool                        _private;
     bool                        _secret;
     bool                        _topic_chanop_only;
+    bool                        _keyed;
+    bool                        _userLimited;
 
 
     std::string             	_key;
@@ -66,14 +72,16 @@ class Channel
     void                        addMode(std::string const mode);
     void                        delMode(std::string const mode);
 
-    bool                        isAnonymous(void);
-    bool                        isInviteOnly(void);
-    bool                        isModerated(void);
-    bool                        noMessageFromChannel(void);
-    bool                        isQuiet(void);
-    bool                        isPrivate(void);
-    bool                        isSecret(void);
-    bool                        topicSettableForChanOpOnly(void);
+    bool&                       isAnonymous(void);
+    bool&                       isInviteOnly(void);
+    bool&                       isModerated(void);
+    bool&                       noMessageFromChannel(void);
+    bool&                       isQuiet(void);
+    bool&                       isPrivate(void);
+    bool&                       isSecret(void);
+    bool&                       topicSettableForChanOpOnly(void);
+    bool&                       isKeyed(void);
+    bool&                       isUserLimited(void);
 
     int                         joinChannel(User* const user, std::string const & key = ES);
     User*                       findClient(std::string const client);
