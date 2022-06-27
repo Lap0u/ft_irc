@@ -1,7 +1,10 @@
 #include "../headers/Channel.hpp"
 
 Channel::Channel(std::string name, std::string key) :
-	_name(name), _topic(ES), _key(key), _mode(ES), _flags("aimnqpsrtlk")
+		_name(name), _topic(ES), _mode(ES), _flags("aimnqpsrtlk"),
+	_anonymous(false), _invite_only(false), _moderated(false),
+	_no_msg_outside(false), _quiet(false), _private(false),
+	_secret(false), _topic_chanop_only(false), _key(key), _user_limit(0)
 {
 	DEB "Construct Channel " << this->_name ENDL;
 	if (_key != ES)
