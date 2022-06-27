@@ -17,13 +17,18 @@ int		topic(const std::string &line, int fd, Server& server)
         return 1;
     }
     Channel* chan = server.findChannel(split[1]);
+    if (chan == NULL)
+        return 0;
     if (chan->findClient(sender->getNick()) == NULL)
     {
         server.send_reply(fd, 442, split[1], ES, ES, ES);
         return 1;
     }
-    if (chan == NULL)
-        return 0;
+    if (chan->getMode().find("t") != std::string::npos && sender->getMode().find("o") == std::string::npos)
+    {
+        server.send_reply(fd, 482, chan->getName(), ES, ES, ES);
+        return 1;
+    }
     split[2].erase(0, 1);
     if (split.size() >= 2)
         chan->setTopic(split[2]);
