@@ -51,6 +51,10 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	{
 		server.send_reply(fd, J_ERR_BADCHANNELKEY, user->getUserName(), chan->getName(), ES, ES);
 	}
+	else if (joined == 3)
+	{
+		server.send_reply(fd, J_ERR_CHANNELISFULL, chan->getName(), ES, ES, ES);
+	}
 	COUT "joined = " << joined ENDL;
 }
 

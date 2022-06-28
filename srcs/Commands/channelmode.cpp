@@ -101,7 +101,7 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 {
 	COUT "CHANNEL MODE" ENDL;
 	std::vector<std::string>	tab = ft_split(line, ' ');
-	User*						cur = server.findMatchingUser(fd);
+	// User*						cur = server.findMatchingUser(fd);
 	Channel*					chan;
 	if ((chan = server.findChannel(tab[1])) == NULL)
 	{
@@ -113,16 +113,19 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 		server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
 		return 1;
 	}
-	if (cur->isChanOp() == false)
-	{
-		server.send_reply(fd, C_ERR_CHANOPRIVSNEEDED, chan->getName(), ES, ES, ES);
-		return 1;
-	}
-	if ((*tab[2].begin() != '-' || *tab[2].begin() != '+') || (tab[2].size() < 2 || tab[2].size()))
+	// if (cur->isChanOp() == false) // WRONG CONDITION : isChanOP() not good
+	// {
+	// 	server.send_reply(fd, C_ERR_CHANOPRIVSNEEDED, chan->getName(), ES, ES, ES);
+	// 	return 1;
+	// }
+	COUT *tab[2].begin() ENDL;
+	COUT tab[2].size() ENDL;
+	if ((*tab[2].begin() != '-' && *tab[2].begin() != '+') || (tab[2].size() < 2 || tab[2].size() > 4))
 	{
 		return 1;
 	}
 	std::string mode (tab[2].begin() + 1, tab[2].end());
+	COUT mode ENDL;
 	if (!is_in_set(mode, CHANNEL_MODE))
 	{
 		std::string character(1, server.findUnknownChannelMode(mode));
@@ -136,13 +139,47 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 		{
 			if (*tab[2].begin() == '+')
 				add_flag(chan, mode[i]);
-			else
+			else if (*tab[2].begin() == '-')
 				delete_flag(chan, mode[i]);
 		}
-		// else if (type == 2)
-		// {
-
-		// }
+		else if (type == 2)
+		{
+			if (tab.size() < 4 && *tab[2].begin() == '+')
+			{
+				server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+			}
+			else if (mode[i] == 'k')
+			{
+				if (*tab[2].begin() == '+')
+				{
+					chan->isKeyed() = true;
+					chan->setKey(tab[3]);
+					chan->addMode(KEY);
+				}
+				else if (*tab[2].begin() == '-')
+				{
+					chan->isKeyed() = false;
+					chan->setKey(ES);
+					chan->delMode(KEY);
+				}
+			}
+			else if (mode[i] == 'l')
+			{
+				if (*tab[2].begin() == '+')
+				{
+					chan->isUserLimited() = true;
+					chan->setUserLimit(strtol(tab[3].c_str(), NULL, 10));
+					chan->addMode(USER_LIMIT);
+					COUT chan->getUserLimit() ENDL;
+				}
+				else if (*tab[2].begin() == '-')
+				{
+					chan->isUserLimited() = false;
+					chan->setUserLimit(0);
+					chan->delMode(USER_LIMIT);
+				}
+			}
+		}
 		// else if (type == 3)
 		// {
 
@@ -153,6 +190,7 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 	// {
 		
 	// }
+	COUT "" ENDL;
 	server.send_reply(fd, C_RPL_UMODEIS, chan->getMode(), ES, ES, ES);
 	return 0;
 }

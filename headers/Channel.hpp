@@ -49,7 +49,7 @@ class Channel
 
 
     std::string             	_key;
-    int                         _user_limit;
+    size_t						_user_limit;
     // Operators                   _operators;
 
     public:
@@ -65,12 +65,15 @@ class Channel
     const std::string&			getFlags(void) const;
     User*			            getAClient(size_t i) const;
     size_t			            getClientsSize(void) const;
+	const size_t&				getUserLimit(void) const;
+
 
     // const std::string&			getIdentifier(void) const;
 
     void						setName(std::string const & name);
 	void						setTopic(std::string const & topic);
     void						setKey(std::string const & key);
+    void                        setUserLimit(unsigned int limit);
     void                        addMode(std::string const mode);
     void                        delMode(std::string const mode);
 

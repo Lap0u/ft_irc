@@ -40,6 +40,11 @@ const std::string&			Channel::getMode(void) const
 	return _mode;
 }
 
+const size_t&				Channel::getUserLimit(void) const
+{
+	return _user_limit;
+}
+
 void						Channel::setName(std::string const & name)
 {
 	_name = name;
@@ -54,6 +59,12 @@ void						Channel::setKey(std::string const & key)
 {
 	_key = key;
 }
+
+void						Channel::setUserLimit(unsigned int limit)
+{
+	_user_limit = limit;
+}
+
 
 bool&						Channel::isAnonymous(void)
 {
@@ -142,6 +153,8 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 		return 1;
 	if (this->isKeyed() && this->getKey() != key)
 		return 2;
+	if (this->isUserLimited() && this->getClientsSize() + 1 > this->getUserLimit())
+		return 3;
 	_clients.push_back(user);
 	return 0;
 }
