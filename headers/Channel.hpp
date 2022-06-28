@@ -42,6 +42,7 @@ class Channel
     bool                        _quiet;
     bool                        _private;
     bool                        _secret;
+    bool                        _reop;
     bool                        _topic_chanop_only;
     bool                        _keyed;
     bool                        _userLimited;
@@ -61,6 +62,7 @@ class Channel
     const std::string&			getKey(void) const;
     const std::string&			getMode(void) const;
     const std::string&			getAMode(void) const;
+    const std::string&			getFlags(void) const;
     User*			            getAClient(size_t i) const;
     size_t			            getClientsSize(void) const;
 
@@ -79,6 +81,7 @@ class Channel
     bool&                       isQuiet(void);
     bool&                       isPrivate(void);
     bool&                       isSecret(void);
+    bool&                       reOp(void);
     bool&                       topicSettableForChanOpOnly(void);
     bool&                       isKeyed(void);
     bool&                       isUserLimited(void);

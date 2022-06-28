@@ -11,6 +11,7 @@ Channel::Channel(std::string name, std::string key) :
 	if (_key != ES)
 	{
 		this->isKeyed() = true;
+		this->addMode(KEY);
 	}
 }
 
@@ -87,6 +88,11 @@ bool&						Channel::isPrivate(void)
 bool&						Channel::isSecret(void)
 {
 	return _secret;
+}
+
+bool&						Channel::reOp(void)
+{
+	return _reop;
 }
 
 bool&                        Channel::topicSettableForChanOpOnly(void)
