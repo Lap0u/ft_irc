@@ -82,3 +82,10 @@ bool    is_in_set(const std::string& str, const std::string& str2, size_t size)
     }
     return true;
 }
+
+bool    is_in_set(const char& character, const std::string& str2)
+{
+    if (str2.find(character) == std::string::npos)
+        return false;
+    return true;
+}

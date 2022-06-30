@@ -15,7 +15,7 @@
 
 #define TYPE_NO_PARAM "aimnqpsrt"
 #define TYPE_ONE_PARAM "kl"
-#define TYPE_PARAMS "ovbeI"
+#define TYPE_PARAMS "OovbeI"
 
 //	o - give/take channel operator privilege;								// PARAMS
 //  v - give/take the voice privilege;										// PARAMS
@@ -118,77 +118,82 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 	// 	server.send_reply(fd, C_ERR_CHANOPRIVSNEEDED, chan->getName(), ES, ES, ES);
 	// 	return 1;
 	// }
-	COUT *tab[2].begin() ENDL;
-	COUT tab[2].size() ENDL;
 	if ((*tab[2].begin() != '-' && *tab[2].begin() != '+') || (tab[2].size() < 2 || tab[2].size() > 4))
 	{
 		return 1;
 	}
 	std::string mode (tab[2].begin() + 1, tab[2].end());
 	COUT mode ENDL;
-	if (!is_in_set(mode, CHANNEL_MODE))
+	COUT line ENDL;
+	bool plus;
+	for (unsigned int i = 0, j = 0; i < tab[2].size(); i++)
 	{
-		std::string character(1, server.findUnknownChannelMode(mode));
-		server.send_reply(fd, C_ERR_UNKNOWNMODE, character, ES, ES, ES);
-		return 1;
-	}
-	for (unsigned int i = 0; i < mode.size(); i++)
-	{
-		int type = check_type_of_mode(mode[i]);
+		if (tab[2][i] == '+' || tab[2][i] == '-')
+		{
+			plus = tab[2][i] == '+' ? true : false;
+			continue;
+		}
+
+		int type = check_type_of_mode(tab[2][i]);
 		if (type == 1)
 		{
-			if (*tab[2].begin() == '+')
-				add_flag(chan, mode[i]);
-			else if (*tab[2].begin() == '-')
-				delete_flag(chan, mode[i]);
+			if (plus == true)
+				add_flag(chan, tab[2][i]);
+			else
+				delete_flag(chan, tab[2][i]);
 		}
 		else if (type == 2)
 		{
-			if (tab.size() < 4 && *tab[2].begin() == '+')
+			if (tab.size() < 3 + j && plus == true)
 			{
 				server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
 			}
-			else if (mode[i] == 'k')
+			else if (tab[2][i] == 'k')
 			{
-				if (*tab[2].begin() == '+')
+				if (plus == true)
 				{
 					chan->isKeyed() = true;
-					chan->setKey(tab[3]);
+					chan->setKey(tab[2 + j]);
 					chan->addMode(KEY);
 				}
-				else if (*tab[2].begin() == '-')
+				else
 				{
 					chan->isKeyed() = false;
 					chan->setKey(ES);
 					chan->delMode(KEY);
 				}
 			}
-			else if (mode[i] == 'l')
+			else if (tab[2][i] == 'l')
 			{
-				if (*tab[2].begin() == '+')
+				if (plus == true)
 				{
 					chan->isUserLimited() = true;
-					chan->setUserLimit(strtol(tab[3].c_str(), NULL, 10));
+					chan->setUserLimit(strtol(tab[2 + j].c_str(), NULL, 10));
 					chan->addMode(USER_LIMIT);
-					COUT chan->getUserLimit() ENDL;
 				}
-				else if (*tab[2].begin() == '-')
+				else
 				{
 					chan->isUserLimited() = false;
 					chan->setUserLimit(0);
 					chan->delMode(USER_LIMIT);
 				}
 			}
+			j++;
 		}
+		else if (type == 3)
+		{
+			COUT "type 3" ENDL;
+		}
+		else
+		{
+			std::string character(1, tab[2][i]);
+			server.send_reply(fd, C_ERR_UNKNOWNMODE, character, ES, ES, ES);
+		}
+	}
 		// else if (type == 3)
 		// {
 
 		// }
-	}
-	// unsigned int i = 0;
-	// while (i < tab.size())
-	// {
-		
 	// }
 	COUT "" ENDL;
 	server.send_reply(fd, C_RPL_UMODEIS, chan->getMode(), ES, ES, ES);

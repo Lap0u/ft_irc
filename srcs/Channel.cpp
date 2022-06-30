@@ -20,108 +20,108 @@ Channel::~Channel()
 	DEB "Destruct Channel." ENDL;
 }
 
-const std::string&			Channel::getName(void) const
+const std::string&		Channel::getName(void) const
 {
 	return _name;
 }
 
-const std::string&			Channel::getTopic(void) const
+const std::string&		Channel::getTopic(void) const
 {
 	return _topic;
 }
 
-const std::string&			Channel::getKey(void) const
+const std::string&		Channel::getKey(void) const
 {
 	return _key;
 }
 
-const std::string&			Channel::getMode(void) const
+const std::string&		Channel::getMode(void) const
 {
 	return _mode;
 }
 
-const size_t&				Channel::getUserLimit(void) const
+const size_t&			Channel::getUserLimit(void) const
 {
 	return _user_limit;
 }
 
-void						Channel::setName(std::string const & name)
+void					Channel::setName(std::string const & name)
 {
 	_name = name;
 }
 
-void						Channel::setTopic(std::string const & topic)
+void					Channel::setTopic(std::string const & topic)
 {
 	_topic = topic;
 }
 
-void						Channel::setKey(std::string const & key)
+void					Channel::setKey(std::string const & key)
 {
 	_key = key;
 }
 
-void						Channel::setUserLimit(unsigned int limit)
+void					Channel::setUserLimit(unsigned int limit)
 {
 	_user_limit = limit;
 }
 
 
-bool&						Channel::isAnonymous(void)
+bool&					Channel::isAnonymous(void)
 {
 	return _anonymous;
 }
 
-bool&						Channel::isInviteOnly(void)
+bool&					Channel::isInviteOnly(void)
 {
 	return _invite_only;
 }
 
-bool&						Channel::isModerated(void)
+bool&					Channel::isModerated(void)
 {
 	return _moderated;
 }
 
-bool&						Channel::noMessageFromChannel(void)
+bool&					Channel::noMessageFromChannel(void)
 {
 	return _no_msg_outside;
 }
 
-bool&						Channel::isQuiet(void)
+bool&					Channel::isQuiet(void)
 {
 	return _quiet;
 }
 
-bool&						Channel::isPrivate(void)
+bool&					Channel::isPrivate(void)
 {
 	return _private;
 }
 
-bool&						Channel::isSecret(void)
+bool&					Channel::isSecret(void)
 {
 	return _secret;
 }
 
-bool&						Channel::reOp(void)
+bool&					Channel::reOp(void)
 {
 	return _reop;
 }
 
-bool&                        Channel::topicSettableForChanOpOnly(void)
+bool&					Channel::topicSettableForChanOpOnly(void)
 {
 	return _topic_chanop_only;
 }
 
-bool&						Channel::isKeyed(void)
+bool&					Channel::isKeyed(void)
 {
 	return _keyed;
 }
 
-bool&						Channel::isUserLimited(void)
+bool&					Channel::isUserLimited(void)
 {
 	return _userLimited;
 }
 
-void						Channel::addMode(std::string mode)
+void					Channel::addMode(std::string mode)
 {
 	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
@@ -134,16 +134,15 @@ void						Channel::addMode(std::string mode)
 	}
 }
 
-void						Channel::delMode(std::string mode)
+void					Channel::delMode(std::string mode)
 {
-	if (_mode.empty())
-		return;
 	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
-		// if (*it == 'a' && *it != 'r')
-			// continue ; 
-		if (mode.find(*it) != std::string::npos)
-			_mode.erase(it);
+		if (_mode.empty())
+			return ;
+		size_t pos = _mode.find(*it);
+		if (pos != std::string::npos)
+			_mode.erase(pos);
 	}
 }
 
