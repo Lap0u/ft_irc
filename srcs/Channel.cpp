@@ -94,16 +94,16 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 		_clients.push_back(user);
 		return 0;
 	}
-	if (isInExceptList(user->getNick()))
-	{
-		_clients.push_back(user);
-		return 0;
-	}
-	if (isInInviteList(user->getNick()))
-	{
-		_clients.push_back(user);
-		return 0;
-	}
+	// if (isInExceptList(user->getNick()))
+	// {
+	// 	_clients.push_back(user);
+	// 	return 0;
+	// }
+	// if (isInInviteList(user->getNick()))
+	// {
+	// 	_clients.push_back(user);
+	// 	return 0;
+	// }
 	if (user->getMode().find("o") != std::string::npos)
 	{
 		_clients.push_back(user);
@@ -113,9 +113,9 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 		return 2;
 	if (this->getMode().find("i") != std::string::npos)
 		return 3;
-	if (this->getMode().find("l") != std::string::npos && _clients.size() >= _user_limit)
+	if (this->getMode().find("l") != std::string::npos && _clients.size() >= _user_limit && isInInviteList(user->getNick()))
 		return 4;
-	if (isInBanList(user->getNick()))
+	if (isInBanList(user->getNick()) && !isInExceptList(user->getNick()))
 		return 5;
 	_clients.push_back(user);
 	return 0;
