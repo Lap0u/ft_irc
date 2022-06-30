@@ -7,7 +7,7 @@ Channel::Channel(std::string name, std::string key) :
 	if (_key != ES)
 		this->addMode(KEY);
 	//Simulate mode
-	_mode = "l";
+	_mode = "i";
 	_user_limit = 2; // A VIRER PLUS TARD
 }
 
@@ -89,13 +89,34 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 	COUT "ENDLIST" ENDL;
 	if (this->findClient(user->getNick()) != NULL)
 		return 1;
+	if (isInWhiteList(user->getNick()))
+	{
+		_clients.push_back(user);
+		return 0;
+	}
+	if (isInExceptList(user->getNick()))
+	{
+		_clients.push_back(user);
+		return 0;
+	}
+	if (isInInviteList(user->getNick()))
+	{
+		_clients.push_back(user);
+		return 0;
+	}
+	if (user->getMode().find("o") != std::string::npos)
+	{
+		_clients.push_back(user);
+		return 0;
+	}
 	if (this->getMode().find("k") != std::string::npos && this->getKey() != key)
 		return 2;
-	if (this->getMode().find("i") != std::string::npos && !isInWhiteList(user->getNick()) && _clients.size() != 0)
+	if (this->getMode().find("i") != std::string::npos)
 		return 3;
 	if (this->getMode().find("l") != std::string::npos && _clients.size() >= _user_limit)
 		return 4;
-	
+	if (isInBanList(user->getNick()))
+		return 5;
 	_clients.push_back(user);
 	return 0;
 }
