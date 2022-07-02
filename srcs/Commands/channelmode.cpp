@@ -183,6 +183,10 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 		else if (type == 3)
 		{
 			COUT "type 3" ENDL;
+			for (size_t i = 3; i < tab.size(); i++)
+			{
+
+			}
 		}
 		else
 		{
@@ -190,11 +194,6 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 			server.send_reply(fd, C_ERR_UNKNOWNMODE, character, ES, ES, ES);
 		}
 	}
-		// else if (type == 3)
-		// {
-
-		// }
-	// }
 	COUT "" ENDL;
 	server.send_reply(fd, C_RPL_UMODEIS, chan->getMode(), ES, ES, ES);
 	return 0;
