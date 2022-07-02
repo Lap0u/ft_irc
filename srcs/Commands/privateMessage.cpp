@@ -1,4 +1,5 @@
 #include "../../headers/Commands.hpp"
+#include "../../headers/Channel.hpp"
 
 int     checkError(std::vector<std::string>split, int fd, Server& server, User*& receiver)
 {
@@ -27,6 +28,38 @@ int     checkError(std::vector<std::string>split, int fd, Server& server, User*&
     return 0;
 }
 
+int checkChannelError(std::vector<std::string> split, int fd, Server& server, Channel *& channel, User *& sender)
+{
+    size_t size = split.size();
+
+    if (channel == NULL)
+    {
+        server.send_reply(fd, 401, split[1], ES, ES, ES);
+        return 1;
+    }
+    if (channel->getMode().find('m') != std::string::npos && sender->getMode().find("o") == std::string::npos)
+    {
+        server.send_reply(fd, 404, channel->getName(), ES, ES, ES);
+        return 1;
+    }
+    if (size <= 1 || split[1][0] == ':' ) //no recipient
+    {
+        server.send_reply(fd, 411, split[0], ES, ES, ES);
+        return 1;
+    }
+    if (size <= 2)
+    {
+        server.send_reply(fd, 412, ES, ES, ES, ES);
+        return 1;
+    }
+    if (size >= 2 && split[2][0] != ':')// too many targets
+    {
+        server.send_reply(fd, 407, split[1], "407", "Message couldn't be delivered", ES);
+        return 1;
+    }
+    return 0;
+}
+
 int		privateMessage(const std::string &line, int fd, Server& server)
 {
     User *sender = server.findMatchingUser(fd);
@@ -45,6 +78,10 @@ int		privateMessage(const std::string &line, int fd, Server& server)
         message += split[i] + " ";
     if (split.size() > 1 && chan_first.find(split[1][0]) != std::string::npos)
     {
+        Channel*    channel = server.findChannel(split[1]);
+
+        if (checkChannelError(split, fd, server, channel, sender) == 1)
+            return 1;
         server.send_chan_message(sender, "PRIVMSG", split[1], message);
         return 0;
     }

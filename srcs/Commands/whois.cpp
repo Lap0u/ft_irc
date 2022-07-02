@@ -40,7 +40,7 @@ int    whois(const std::string &line, int fd, Server& server)
     for (unsigned int i = 1; i < tab.size(); i++)
     {
         User *user = server.getUser(tab[i]);
-        if (user == NULL)
+        if (user == NULL || user->getMode().find('i') != std::string::npos)
         {
             server.send_reply(fd, WI_ERR_NOSUCHNICK, tab[i], ES, ES, ES);
             DEB "Nosuchnick(whois)" ENDL;

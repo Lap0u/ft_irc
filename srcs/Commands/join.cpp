@@ -11,6 +11,10 @@
 
 #define J_ERR_TOOMANYTARGETS 407
 
+#define J_ERR_CHANNELISFULL 471
+
+#define J_ERR_INVITEONLYCHAN 473
+
 #define J_ERR_BANNEDFROMCHAN 474
 
 #define J_ERR_BADCHANNELKEY 475
@@ -40,6 +44,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	Channel* chan = server.findChannel(chaname);
 	User* user = server.findMatchingUser(fd);
 	int joined = chan->joinChannel(user, key);
+
 	if (joined == 0)
 	{
 		server.send_chan_message(user, "JOIN", chaname, ES);
@@ -49,7 +54,23 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	}
 	else if (joined == 2)
 	{
-		server.send_reply(fd, J_ERR_BADCHANNELKEY, user->getUserName(), chan->getName(), ES, ES);
+		server.send_reply(fd, J_ERR_BADCHANNELKEY, chan->getName(), ES, ES, ES);
+		return ;
+	}
+	else if (joined == 3)
+	{
+		server.send_reply(fd, J_ERR_INVITEONLYCHAN, chan->getName(), ES, ES, ES);
+		return ;		
+	}
+	else if (joined == 4)
+	{
+		server.send_reply(fd, J_ERR_CHANNELISFULL, chan->getName(), ES, ES, ES);
+		return ;		
+	}
+	else if (joined == 5)
+	{
+		server.send_reply(fd, J_ERR_BANNEDFROMCHAN, chan->getName(), ES, ES, ES);
+		return ;
 	}
 	else if (joined == 3)
 	{
@@ -81,7 +102,7 @@ int		ft_handle_two_tabs(std::vector<std::string> & tab1,
 	return 0;
 }
 
-int		ft_handle_one_tab(std::vector<std::string> & tab, int fd, Server& server)
+int		ft_handle_one_tab(std::vector<std::string> & tab, int fd, Server& server, User *& cur)
 {
 	for (unsigned int i = 0; i < tab.size(); i++)
 	{
@@ -89,6 +110,11 @@ int		ft_handle_one_tab(std::vector<std::string> & tab, int fd, Server& server)
 		if (server.findChannel(tab[i]) == NULL)
 		{
 			DEB tab[i] << " is not added" ENDL;
+			if (cur->getMode().find('r') != std::string::npos)
+			{
+				DEB "User is restricted and can't create server";
+				return 1;
+			}
 			server.addChannel(new Channel(tab[i]));
 		}
 		joinChannel_and_send_replies(fd, server, tab[i], ES);
@@ -115,7 +141,7 @@ int     join(const std::string &line, int fd, Server& server)
 	std::vector<std::string> tab1 = ft_split(tab[1].data(), ',');
 	if (tab.size() == 2)
 	{
-		return ft_handle_one_tab(tab1, fd, server);
+		return ft_handle_one_tab(tab1, fd, server, cur);
 	}
 	if (tab.size() == 3)
 	{
