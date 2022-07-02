@@ -160,7 +160,7 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 		return 2;
 	if (this->isUserLimited() && this->getClientsSize() + 1 > this->getUserLimit())
 		return 3;
-	if (this->isUserLimited() && _clients.size() >= _user_limit && isInInviteList(user->getNick()))
+	if (this->isInviteOnly() && !isInInviteList(user->getNick()))
 		return 4;
 	if (isInBanList(user->getNick()) && !isInExceptList(user->getNick()))
 		return 5;

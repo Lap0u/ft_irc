@@ -51,32 +51,24 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 		if (chan->getTopic() != ES)
 			server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
 		server.parseCmd("NAMES " + chan->getName(), fd);
+		COUT "joined = " << joined ENDL;
 	}
 	else if (joined == 2)
 	{
 		server.send_reply(fd, J_ERR_BADCHANNELKEY, chan->getName(), ES, ES, ES);
-		return ;
 	}
 	else if (joined == 3)
 	{
-		server.send_reply(fd, J_ERR_INVITEONLYCHAN, chan->getName(), ES, ES, ES);
-		return ;		
+		server.send_reply(fd, J_ERR_CHANNELISFULL, chan->getName(), ES, ES, ES);
 	}
 	else if (joined == 4)
 	{
-		server.send_reply(fd, J_ERR_CHANNELISFULL, chan->getName(), ES, ES, ES);
-		return ;		
+		server.send_reply(fd, J_ERR_INVITEONLYCHAN, chan->getName(), ES, ES, ES);
 	}
 	else if (joined == 5)
 	{
 		server.send_reply(fd, J_ERR_BANNEDFROMCHAN, chan->getName(), ES, ES, ES);
-		return ;
 	}
-	else if (joined == 3)
-	{
-		server.send_reply(fd, J_ERR_CHANNELISFULL, chan->getName(), ES, ES, ES);
-	}
-	COUT "joined = " << joined ENDL;
 }
 
 int		ft_handle_two_tabs(std::vector<std::string> & tab1,

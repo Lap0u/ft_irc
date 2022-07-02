@@ -14,8 +14,8 @@
 #define C_ERR_CHANOPRIVSNEEDED 482
 
 #define TYPE_NO_PARAM "aimnqpsrt"
-#define TYPE_ONE_PARAM "kl"
-#define TYPE_PARAMS "OovbeI"
+#define TYPE_ONE_PARAM "klbeI"
+#define TYPE_PARAMS "Oov"
 
 //	o - give/take channel operator privilege;								// PARAMS
 //  v - give/take the voice privilege;										// PARAMS
@@ -144,13 +144,13 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 		}
 		else if (type == 2)
 		{
-			if (tab.size() < 3 + j && plus == true)
+			if (tab.size() < 3 + j && plus)
 			{
 				server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
 			}
 			else if (tab[2][i] == 'k')
 			{
-				if (plus == true)
+				if (plus)
 				{
 					chan->isKeyed() = true;
 					chan->setKey(tab[2 + j]);
@@ -165,7 +165,7 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 			}
 			else if (tab[2][i] == 'l')
 			{
-				if (plus == true)
+				if (plus)
 				{
 					chan->isUserLimited() = true;
 					chan->setUserLimit(strtol(tab[2 + j].c_str(), NULL, 10));
@@ -178,17 +178,30 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 					chan->delMode(USER_LIMIT);
 				}
 			}
+			else if (tab[2][i] == 'b')
+			{
+				if (plus && !chan->isInBanList(tab[2 + j]))
+					chan->addBanList(tab[2 + j]);
+				else if (!plus && chan->isInBanList(tab[2 + j]))
+					chan->removeBanList(tab[2 + j]);
+			}
+			else if (tab[2][i] == 'e')
+			{
+				if (plus && !chan->isInExceptList(tab[2 + j]))
+					chan->addExceptList(tab[2 + j]);
+				else if (!plus && chan->isInExceptList(tab[2 + j]))
+					chan->removeExceptList(tab[2 + j]);
+			}
+			else if (tab[2][i] == 'I')
+			{
+				if (plus && !chan->isInInviteList(tab[2 + j]))
+					chan->addInviteList(tab[2 + j]);
+				else if (!plus && chan->isInInviteList(tab[2 + j]))
+					chan->removeInviteList(tab[2 + j]);
+			}
 			j++;
 		}
-		else if (type == 3)
-		{
-			COUT "type 3" ENDL;
-			for (size_t i = 3; i < tab.size(); i++)
-			{
-
-			}
-		}
-		else
+		else if (type == 0)
 		{
 			std::string character(1, tab[2][i]);
 			server.send_reply(fd, C_ERR_UNKNOWNMODE, character, ES, ES, ES);
