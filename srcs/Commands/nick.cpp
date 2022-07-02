@@ -35,6 +35,8 @@ int	checkNickRestricted(User *newUser)
 int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 {
 	User* cur = server.findMatchingUser(fd);
+	if (!cur)
+		return 1;
 	if (size < 2)//nick not provided
 	{
 		server.send_reply(fd, 431, ES, ES, ES, ES);
