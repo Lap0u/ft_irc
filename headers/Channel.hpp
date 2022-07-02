@@ -33,8 +33,6 @@ class Channel
     std::string	            	_mode;
     std::string                 _flags;
 
-    size_t                      _user_limit;
-
     Clients      				_clients;
 
 
