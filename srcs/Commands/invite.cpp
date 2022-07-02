@@ -40,6 +40,10 @@ int     invite(const std::string &line, int fd, Server& server)
 {
 	std::vector<std::string>	word = ft_split(line, ' ');
 	User*						cur = server.findMatchingUser(fd);
+	Channel						*channel;
+	User*						invited;
+	std::string					message;
+
 	if (cur)
 	{
 		if (!cur->isRegistered())
@@ -48,11 +52,15 @@ int     invite(const std::string &line, int fd, Server& server)
 	if (checkError(fd, server, word, cur))
 		return 1;
 
-	User*			invited = server.getUser(word[1]);
-	std::string		message = ":" + cur->getNick() + "!" + server.getServerName() + "@localhost INVITE " +
-	invited->getNick() + " " + word[2] + "\r\n";
+	channel = server.findChannel(word[2]);
+	invited = server.getUser(word[1]);
 
+	message = ":" + cur->getNick() + "!" + server.getServerName() + "@localhost INVITE " +
+	invited->getNick() + " " + word[2] + "\r\n";
+	
+	channel->addWhiteList(invited->getNick());
 	server.send_reply(fd, 341, word[2], word[1], ES, ES); //RPL_INVITING
 	server.send_raw_message(invited->getSocket(), message); //MESSAGE POUR PREVENIR USER
+	
 	return 0;
 }

@@ -30,7 +30,15 @@ class Channel
     std::string             	_key;
     std::string	            	_mode;
     std::string                 _flags;
+
+    size_t                      _user_limit;
+
     Clients      				_clients;
+
+    std::set<std::string>       _whitelist;
+    std::set<std::string>       _banlist;
+    std::set<std::string>       _exceptlist;
+    std::set<std::string>       _invitelist;
     // Operators                   _operators;
 
     public:
@@ -54,6 +62,22 @@ class Channel
     void						setKey(std::string const & key);
     void                        addMode(std::string const mode);
     void                        delMode(std::string const mode);
+
+    void                        addWhiteList(std::string const &nick);
+    void                        removeWhiteList(std::string const &nick);
+    bool                        isInWhiteList(const std::string &nick) const;
+
+    void                        addBanList(std::string const &nick);
+    void                        removeBanList(std::string const &nick);
+    bool                        isInBanList(const std::string &nick) const;
+
+    void                        addExceptList(std::string const &nick);
+    void                        removeExceptList(std::string const &nick);
+    bool                        isInExceptList(const std::string &nick) const;
+
+    void                        addInviteList(std::string const &nick);
+    void                        removeInviteList(std::string const &nick);
+    bool                        isInInviteList(const std::string &nick) const;
 
     int                         joinChannel(User* const user, std::string const & key = ES);
     User*                       findClient(std::string const client);
