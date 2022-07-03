@@ -3,18 +3,33 @@
 
 #define C_RPL_UMODEIS 221
 
+#define C_RPL_CHANNELMODEIS 324
+
+#define C_RPL_INVITELIST 346
+#define C_RPL_ENDOFINVITELIST 347
+
+#define C_RPL_EXCEPTLIST 348
+#define C_RPL_ENDOFEXCEPTLIST 349
+
+#define C_RPL_BANLIST 367
+#define C_RPL_ENDOFBANLIST 368
+
 #define	C_ERR_NOSUCHCHANNEL 403
 
 #define C_ERR_USERNOTINCHANNEL 441
 
 #define C_ERR_NEEDMOREPARAMS 461
 
+#define C_ERR_KEY_SET 467
+
 #define C_ERR_UNKNOWNMODE 472
 
 #define C_ERR_CHANOPRIVSNEEDED 482
 
+
 #define TYPE_NO_PARAM "aimnqpsrt"
-#define TYPE_ONE_PARAM "klbeI"
+#define TYPE_ONE_PARAM "kl"
+#define TYPE_ONE_OR_ZERO "beI"
 #define TYPE_PARAMS "Oov"
 
 //	o - give/take channel operator privilege;								// PARAMS
@@ -87,13 +102,16 @@ int		check_type_of_mode(char const & mode)
 {
 	std::string no_param(TYPE_NO_PARAM);
 	std::string one_param(TYPE_ONE_PARAM);
+	std::string one_or_zero(TYPE_ONE_OR_ZERO);
 	std::string params(TYPE_PARAMS);
 	if (no_param.find(mode) != std::string::npos)
 		return 1;
 	if (one_param.find(mode) != std::string::npos)
 		return 2;
-	if (params.find(mode) != std::string::npos)
+	if (one_or_zero.find(mode) != std::string::npos)
 		return 3;
+	if (params.find(mode) != std::string::npos)
+		return 4;
 	return 0;
 }
 
@@ -118,45 +136,53 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 	// 	server.send_reply(fd, C_ERR_CHANOPRIVSNEEDED, chan->getName(), ES, ES, ES);
 	// 	return 1;
 	// }
-	if ((*tab[2].begin() != '-' && *tab[2].begin() != '+') || (tab[2].size() < 2 || tab[2].size() > 4))
-	{
-		return 1;
-	}
+	// if ((*tab[2].begin() != '-' && *tab[2].begin() != '+') || (tab[2].size() < 2 || tab[2].size() > 4))
+	// {
+	// 	return 1;
+	// }
 	std::string mode (tab[2].begin() + 1, tab[2].end());
 	COUT mode ENDL;
 	COUT line ENDL;
 	bool plus;
+	bool sign = false;
 	for (unsigned int i = 0, j = 1; i < tab[2].size(); i++)
 	{
 		if (tab[2][i] == '+' || tab[2][i] == '-')
 		{
+			sign = true;
 			plus = tab[2][i] == '+' ? true : false;
 			continue;
 		}
-
 		int type = check_type_of_mode(tab[2][i]);
 		if (type == 1)
 		{
-			if (plus == true)
+			if (sign && plus)
 				add_flag(chan, tab[2][i]);
-			else
+			else if (sign && !plus)
 				delete_flag(chan, tab[2][i]);
 		}
 		else if (type == 2)
 		{
-			if (tab.size() < 3 + j && plus)
+			if (tab.size() < 3 + j)
 			{
 				server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
 			}
 			else if (tab[2][i] == 'k')
 			{
-				if (plus)
+				if (sign && plus)
 				{
-					chan->isKeyed() = true;
-					chan->setKey(tab[2 + j]);
-					chan->addMode(KEY);
+					if (chan->getKey() == tab[2 + j])
+					{
+						server.send_reply(fd, C_ERR_KEY_SET, chan->getName(), ES, ES, ES);
+					}
+					else
+					{
+						chan->isKeyed() = true;
+						chan->setKey(tab[2 + j]);
+						chan->addMode(KEY);
+					}
 				}
-				else
+				else if (sign && !plus)
 				{
 					chan->isKeyed() = false;
 					chan->setKey(ES);
@@ -165,48 +191,72 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 			}
 			else if (tab[2][i] == 'l')
 			{
-				if (plus)
+				if (sign && plus)
 				{
 					chan->isUserLimited() = true;
 					chan->setUserLimit(strtol(tab[2 + j].c_str(), NULL, 10));
 					chan->addMode(USER_LIMIT);
 				}
-				else
+				else if (sign && !plus)
 				{
 					chan->isUserLimited() = false;
 					chan->setUserLimit(0);
 					chan->delMode(USER_LIMIT);
 				}
 			}
-			else if (tab[2][i] == 'b')
-			{
-				COUT "BAN" ENDL;
-				if (plus && !chan->isInBanList(tab[2 + j]))
-				{
-					COUT "boom" ENDL;
-					COUT tab[2+j] ENDL;
-					chan->addBanList(tab[2 + j]);
-				}
-				else if (!plus && chan->isInBanList(tab[2 + j]))
-				{
-					chan->removeBanList(tab[2 + j]);
-				}
-			}
-			else if (tab[2][i] == 'e')
-			{
-				if (plus && !chan->isInExceptList(tab[2 + j]))
-					chan->addExceptList(tab[2 + j]);
-				else if (!plus && chan->isInExceptList(tab[2 + j]))
-					chan->removeExceptList(tab[2 + j]);
-			}
-			else if (tab[2][i] == 'I')
-			{
-				if (plus && !chan->isInInviteList(tab[2 + j]))
-					chan->addInviteList(tab[2 + j]);
-				else if (!plus && chan->isInInviteList(tab[2 + j]))
-					chan->removeInviteList(tab[2 + j]);
-			}
 			j++;
+		}
+		else if (type == 3)
+		{
+			if (sign)
+			{
+				if (tab[2][i] == 'b')
+				{
+					COUT "BAN" ENDL;
+					if (plus && !chan->isInBanList(tab[2 + j]))
+					{
+						COUT "boom" ENDL;
+						COUT tab[2+j] ENDL;
+						chan->addBanList(tab[2 + j]);
+					}
+					else if (!plus && chan->isInBanList(tab[2 + j]))
+					{
+						chan->removeBanList(tab[2 + j]);
+					}
+				}
+				else if (tab[2][i] == 'e')
+				{
+					if (plus && !chan->isInExceptList(tab[2 + j]))
+						chan->addExceptList(tab[2 + j]);
+					else if (!plus && chan->isInExceptList(tab[2 + j]))
+						chan->removeExceptList(tab[2 + j]);
+				}
+				else if (tab[2][i] == 'I')
+				{
+					if (plus && !chan->isInInviteList(tab[2 + j]))
+						chan->addInviteList(tab[2 + j]);
+					else if (!plus && chan->isInInviteList(tab[2 + j]))
+						chan->removeInviteList(tab[2 + j]);
+				}
+			}
+			else
+			{
+				if (tab[2][i] == 'b')
+				{
+					server.send_reply(fd, C_RPL_BANLIST, chan->getName(), ES, ES, ES);
+					server.send_reply(fd, C_RPL_ENDOFBANLIST, chan->getName(), ES, ES, ES);
+				}
+				else if (tab[2][i] == 'e')
+				{
+					server.send_reply(fd, C_RPL_EXCEPTLIST, chan->getName(), ES, ES, ES);
+					server.send_reply(fd, C_RPL_ENDOFBANLIST, chan->getName(), ES, ES, ES);
+				}
+				else if (tab[2][i] == 'I')
+				{
+					server.send_reply(fd, C_RPL_INVITELIST, chan->getName(), ES, ES, ES);
+					server.send_reply(fd, C_RPL_ENDOFINVITELIST, chan->getName(), ES, ES, ES);
+				}
+			}
 		}
 		else if (type == 0)
 		{
@@ -215,6 +265,6 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 		}
 	}
 	COUT "" ENDL;
-	server.send_reply(fd, C_RPL_UMODEIS, chan->getMode(), ES, ES, ES);
+	server.send_reply(fd, C_RPL_CHANNELMODEIS, chan->getMode(), ES, ES, ES);
 	return 0;
 }
