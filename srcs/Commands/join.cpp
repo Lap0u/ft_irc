@@ -44,30 +44,33 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	Channel* chan = server.findChannel(chaname);
 	User* user = server.findMatchingUser(fd);
 	int joined = chan->joinChannel(user, key);
-
+	COUT "joined = " << joined ENDL;
 	if (joined == 0)
 	{
 		server.send_chan_message(user, "JOIN", chaname, ES);
 		if (chan->getTopic() != ES)
 			server.send_reply(fd, J_RPL_TOPIC, chan->getName(), chan->getTopic(), ES, ES);
 		server.parseCmd("NAMES " + chan->getName(), fd);
-		COUT "joined = " << joined ENDL;
 	}
 	else if (joined == 2)
 	{
 		server.send_reply(fd, J_ERR_BADCHANNELKEY, chan->getName(), ES, ES, ES);
+		COUT "joined 2" ENDL;
 	}
 	else if (joined == 3)
 	{
 		server.send_reply(fd, J_ERR_CHANNELISFULL, chan->getName(), ES, ES, ES);
+		COUT "joined 3" ENDL;
 	}
 	else if (joined == 4)
 	{
 		server.send_reply(fd, J_ERR_INVITEONLYCHAN, chan->getName(), ES, ES, ES);
+		COUT "joined 4" ENDL;
 	}
 	else if (joined == 5)
 	{
 		server.send_reply(fd, J_ERR_BANNEDFROMCHAN, chan->getName(), ES, ES, ES);
+		COUT "joined 5" ENDL;
 	}
 }
 
@@ -125,7 +128,7 @@ int     join(const std::string &line, int fd, Server& server)
             return 1;
     }
 
-	COUT line ENDL;
+	COUT "join == " << line ENDL;
     if (tab.size() == 1)
 	{
 		return not_enough_parameters(fd, server);

@@ -126,7 +126,7 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 	COUT mode ENDL;
 	COUT line ENDL;
 	bool plus;
-	for (unsigned int i = 0, j = 0; i < tab[2].size(); i++)
+	for (unsigned int i = 0, j = 1; i < tab[2].size(); i++)
 	{
 		if (tab[2][i] == '+' || tab[2][i] == '-')
 		{
@@ -180,10 +180,17 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 			}
 			else if (tab[2][i] == 'b')
 			{
+				COUT "BAN" ENDL;
 				if (plus && !chan->isInBanList(tab[2 + j]))
+				{
+					COUT "boom" ENDL;
+					COUT tab[2+j] ENDL;
 					chan->addBanList(tab[2 + j]);
+				}
 				else if (!plus && chan->isInBanList(tab[2 + j]))
+				{
 					chan->removeBanList(tab[2 + j]);
+				}
 			}
 			else if (tab[2][i] == 'e')
 			{
