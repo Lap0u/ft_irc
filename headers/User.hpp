@@ -21,9 +21,7 @@ protected:
 	std::string							_pass;
 	std::string							_mode;
 	bool								_registered;
-	std::map <Channel*, std::string>	_chan_and_modes;
-
-	
+	std::map <Channel*, std::string>	_chan_and_modes;	
 	
 public:
 	User( void );
@@ -56,12 +54,14 @@ public:
 	void	setServOp(bool status);
 	void	setChanOp(bool status);
 
-	void	addBuffer(std::string toadd);
-	bool	containsCommand() const;
+	void		addBuffer(std::string toadd);
+	bool		containsCommand() const;
 	std::string	getCommand() const;
-	void	eraseCommand();
+	void		eraseCommand();
 
 	bool	operator==(User* user) const;
+
+	std::string	getChannelList() const;
 
 };
 

@@ -39,7 +39,7 @@ int    whois(const std::string &line, int fd, Server& server)
             if (target->isOperator())
                 server.send_reply(fd, WI_RPL_WHOISOPERATOR, target->getNick(), ES, ES, ES);
             server.send_reply(fd, WI_RPL_WHOISIDLE, target->getNick(), "0", ES, ES);
-            server.send_reply(fd, WI_RPL_WHOISCHANNELS, target->getNick(), "make_function_to_get_user_channel", ES, ES);
+            server.send_reply(fd, WI_RPL_WHOISCHANNELS, target->getNick(), target->getChannelList(), ES, ES);
             if (target->getMode().find("a") != std::string::npos)
                 server.send_reply(fd, WI_RPL_AWAY, target->getNick(), " is away", ES, ES);
         }
