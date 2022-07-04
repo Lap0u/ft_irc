@@ -61,6 +61,13 @@ bool	User::isRegistered(void) const
 	return this->_registered;
 }
 
+bool	User::isRestricted(void) const
+{
+	if (getMode().find('r') != std::string::npos)
+		return true;
+	return false;
+}
+
 void	User::setSocket(int socket)
 {
 	_socket = socket;

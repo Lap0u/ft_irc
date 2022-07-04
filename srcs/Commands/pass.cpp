@@ -2,14 +2,12 @@
 
 int		pass(const std::string &line, int fd, Server& server)
 {
-	User* cur = server.findMatchingUser(fd);
+	User*						cur = server.findMatchingUser(fd);
+	std::vector<std::string>	parsedLine = ft_split(line, ' ');
 	DEB "Point pass fonction" ENDL;
-	std::vector<std::string>parsedLine = ft_split(line, ' ');
 	if (parsedLine.size() < 2)
 	{
 		server.send_reply(fd, 461, "PASS", ES, ES, ES);
-		// if (cur->isRegistered() == false)
-		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;		
 	}
 	if (cur)
@@ -22,11 +20,7 @@ int		pass(const std::string &line, int fd, Server& server)
 	}
 	if (parsedLine[1] != server.getServerPassword())
 	{
-		DEB "Password " << parsedLine[1] << " was wrong" ENDL;
-		// if (cur->isRegistered() == false)
-		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
-	DEB "Pass is matching" ENDL;
 	return 0;
 }

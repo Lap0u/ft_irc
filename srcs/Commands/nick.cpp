@@ -18,7 +18,6 @@ int	checkNickDelay(User *newUser)
 {
 	if (newUser == NULL)
 		return 0;
-	//check le delay du USER
 	return 0;
 }
 
@@ -26,8 +25,7 @@ int	checkNickRestricted(User *newUser)
 {
 	if (newUser == NULL)
 		return 0;
-	std::string mode = newUser->getMode();
-	if (mode.find('r') != std::string::npos)
+	if (newUser->isRestricted() == true)
 		return 1;
 	return 0;
 }
@@ -40,37 +38,26 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 	if (size < 2)//nick not provided
 	{
 		server.send_reply(fd, 431, ES, ES, ES, ES);
-		// if (cur->isRegistered() == false)
-			// server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
 	if (checkNickInSet(nick) == true) //nick respect nickname allowed characters
 	{
 		server.send_reply(fd, 432, nick, ES, ES, ES);
-		// if (cur->isRegistered() == false)
-		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
 	if (checkNickDoublon(nick, server) == true)//nick is not doublon
 	{
-		DEB "DOUBLON" ENDL;
 		server.send_reply(fd, 433, nick, ES, ES, ES);
-		// if (cur->isRegistered() == false)
-		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
 	if (checkNickDelay(cur) == true)//user has no delay to change nick again
 	{
 		server.send_reply(fd, 437, nick, ES, ES, ES);
-		// if (cur->isRegistered() == false)
-		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
 	if (checkNickRestricted(cur) == true)//user is allowed to change (mode)
 	{
 		server.send_reply(fd, 484, ES, ES, ES, ES);
-		// if (cur->isRegistered() == false)
-		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
 	if (nick == "anonymous")
@@ -79,7 +66,6 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 		return 1;
 	}
 	cur->setNick(nick);
-	DEB "Nick should be changed" ENDL;
 	if (!cur->getUserName().empty())
 	{
 		server.send_reply(fd, 001, cur->getNick(), cur->getUserName(), server.getServerName(), ES);

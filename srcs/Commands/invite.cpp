@@ -4,7 +4,7 @@
 int		checkError(int fd, Server& server,
 	std::vector<std::string>& word, User *&cur)
 {
-	Channel *channel = server.findChannel(word[2]);
+	Channel		*channel = server.findChannel(word[2]);
 
 	if (word.size() < 3)
 	{
@@ -49,6 +49,7 @@ int     invite(const std::string &line, int fd, Server& server)
 		if (!cur->isRegistered())
 			return 1;
 	}
+
 	if (checkError(fd, server, word, cur))
 		return 1;
 

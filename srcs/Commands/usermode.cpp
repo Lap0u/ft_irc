@@ -1,23 +1,5 @@
 #include "../../headers/Commands.hpp"
 
-/**
- * @brief 
- * 
- * Mandatory :
- * r - restricted user connection;
- * o - operator flag; // server_operator
- * O - local operator flag; // channel_operator
- * 
- * Optionals :
- * i - marks a users as invisible; 
- * w - user receives wallops;
- * 
- * Obsoletes :
- * s - marks a user for receipt of server notices.
- * a - user is flagged as away;
- * 
- */
-
 int		checkError(int fd, Server& server, std::vector<std::string> word,
 					int pos, std::string mode_read)
 {
@@ -53,7 +35,6 @@ int    mode(const std::string &line, int fd, Server& server)
 	int							pos = 1;
 	std::vector<std::string>	word = ft_split(line, ' ');
 	User* 						cur = server.findMatchingUser(fd);
-	COUT line ENDL;
     if (cur)
     {
         if (!cur->isRegistered())
