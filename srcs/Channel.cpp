@@ -156,30 +156,22 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 	COUT "ENDLIST" ENDL;
 	if (this->findClient(user->getNick()) != NULL)
 		return 1;
+	if (isInWhiteList(user->getNick()) || user->getMode().find("o") != std::string::npos)
+	{
+		_clients.push_back(user);
+		return 0;
+	}
 	if (this->isKeyed() && this->getKey() != key)
 		return 2;
 	if (this->isUserLimited() && this->getClientsSize() + 1 > this->getUserLimit())
 		return 3;
 	if (this->isInviteOnly() && !isInInviteList(user->getNick()))
 		return 4;
-	COUT user->getNick() ENDL;
-	COUT isInBanList(user->getNick()) ENDL;
-	COUT !isInExceptList(user->getNick()) ENDL;
 	if (isInBanList(user->getNick()) && !isInExceptList(user->getNick()))
 	{
 		return 5;
 	}
-	// if (isInWhiteList(user->getNick()) || user->getMode().find("o") != std::string::npos)
-	// {
-	// 	_clients.push_back(user);
-	// 	return 0;
-	// }
 	// if (isInExceptList(user->getNick()))
-	// {
-	// 	_clients.push_back(user);
-	// 	return 0;
-	// }
-	// if (isInInviteList(user->getNick()))
 	// {
 	// 	_clients.push_back(user);
 	// 	return 0;
