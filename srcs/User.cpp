@@ -9,7 +9,7 @@ User::User( void ) : _socket(0), _nick(ES),
 }
 User::User( int socket, std::string nick, std::string user_name,
 		std::string pass, std::string mode)
-		: _socket(socket), _nick(nick), _user_name(user_name),
+		: _socket(socket), _buffer(ES), _nick(nick), _user_name(user_name),
 			_real_name("Server"), _pass(pass), _mode(mode) , _registered(false)
 			{
 				if (DEBUG == 2)
@@ -147,4 +147,27 @@ bool	User::operator==(User* user) const
 	if (this->_nick == user->_nick)
 		return true;
 	return false;
+}
+
+void	User::addBuffer(std::string toadd)
+{
+	if (!toadd.empty())
+		_buffer += toadd;
+}
+
+bool	User::containsCommand() const
+{
+	if (_buffer.find("\r\n") != std::string::npos)
+		return true;
+	return false;
+}
+
+std::string User::getCommand() const
+{
+	return _buffer.substr(0, _buffer.find("\r\n"));
+}
+
+void	User::eraseCommand()
+{
+	_buffer.erase(0, _buffer.find("\r\n") + 2);
 }

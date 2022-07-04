@@ -117,6 +117,7 @@ void	test_reply(int fd, Server & server)
 void    launch_serv(std::string port, std::string password)
 {
 	Server		server(atoi(port.c_str()), password);
+	User		*cur = NULL;
 	int			ret_poll;
 	std::string	recvline;
 	std::string	separatedline;
@@ -150,15 +151,19 @@ void    launch_serv(std::string port, std::string password)
 					server.addUser(fd);
 				}
 				else
+				{
 					fd = server.getSocket(i)->fd;
+					cur = server.findMatchingUser(fd);
+				}
 				recvline = server.getPackage(fd);
 				if (recvline.empty())
 					continue ;
-				while (recvline.find("\r\n") != std::string::npos)
+				cur->addBuffer(recvline);
+				while (cur->containsCommand())
 				{
-					separatedline = recvline.substr(0, recvline.find("\r\n"));
+					separatedline = cur->getCommand();
 					server.parseCmd(separatedline, fd);
-					recvline.erase(0, recvline.find("\r\n") + 2);
+					cur->eraseCommand();
 				}
 				recvline.clear();
 			}
