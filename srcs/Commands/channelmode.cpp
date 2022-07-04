@@ -207,63 +207,61 @@ int     channel_mode(const std::string &line, int fd, Server& server)
 				j++;
 			}
 		}
-		else if (type == 3)
-		{
-			if (sign)
-			{
-				if (tab.size() < 3 + j && plus)
-				{
-					if (tab[2][i] == 'b')
-					{
-						server.send_reply(fd, C_RPL_BANLIST, chan->getName(), ES, ES, ES);
-						server.send_reply(fd, C_RPL_ENDOFBANLIST, chan->getName(), ES, ES, ES);
-					}
-					if (tab[2][i] == 'e')
-					{
-						server.send_reply(fd, C_RPL_EXCEPTLIST, chan->getName(), ES, ES, ES);
-						server.send_reply(fd, C_RPL_ENDOFBANLIST, chan->getName(), ES, ES, ES);
-					}
-					else if (tab[2][i] == 'I')
-					{
-						server.send_reply(fd, C_RPL_INVITELIST, chan->getName(), ES, ES, ES);
-						server.send_reply(fd, C_RPL_ENDOFINVITELIST, chan->getName(), ES, ES, ES);
-					}
-					else
-					{
-						server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
-					}
-				}
-				else if (tab[2][i] == 'b')
-				{
-					// COUT "BAN" ENDL;
-					if (plus && !chan->isInBanList(tab[2 + j]))
-					{
-						// COUT "boom" ENDL;
-						// COUT tab[2+j] ENDL;
-						chan->addBanList(tab[2 + j]);
-					}
-					else if (!plus && chan->isInBanList(tab[2 + j]))
-					{
-						chan->removeBanList(tab[2 + j]);
-					}
-				}
-				else if (tab[2][i] == 'e')
-				{
-					if (plus && !chan->isInExceptList(tab[2 + j]))
-						chan->addExceptList(tab[2 + j]);
-					else if (!plus && chan->isInExceptList(tab[2 + j]))
-						chan->removeExceptList(tab[2 + j]);
-				}
-				else if (tab[2][i] == 'I')
-				{
-					if (plus && !chan->isInInviteList(tab[2 + j]))
-						chan->addInviteList(tab[2 + j]);
-					else if (!plus && chan->isInInviteList(tab[2 + j]))
-						chan->removeInviteList(tab[2 + j]);
-				}
-				j++;
-			}
-		}
+		// else if (type == 3)
+		// {
+		// 	if (sign)
+		// 	{
+		// 		if (tab[2][i] == 'b')
+		// 		{
+		// 			if (tab.size() < 3 + j && plus)
+		// 			{
+		// 				server.send_reply(fd, C_RPL_BANLIST, chan->getName(), ES, ES, ES);
+		// 				server.send_reply(fd, C_RPL_ENDOFBANLIST, chan->getName(), ES, ES, ES);
+		// 			}
+		// 			else if (tab.size() < 3 + j && !plus)
+		// 			{
+		// 				server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+		// 			}
+		// 			else if (plus)
+		// 				chan->addBanList(tab[2 + j]);
+		// 			else if (!plus)
+		// 				chan->removeBanList(tab[2 + j]);
+		// 		}
+		// 		if (tab[2][i] == 'e')
+		// 		{
+		// 			if (tab.size() < 3 + j && plus)
+		// 			{
+		// 				server.send_reply(fd, C_RPL_EXCEPTLIST, chan->getName(), ES, ES, ES);
+		// 				server.send_reply(fd, C_RPL_ENDOFBANLIST, chan->getName(), ES, ES, ES);
+		// 			}
+		// 			else if (tab.size() < 3 + j && !plus)
+		// 			{
+		// 				server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+		// 			}
+		// 			else if (plus)
+		// 				chan->addExceptList(tab[2 + j]);
+		// 			else if (!plus)
+		// 				chan->removeExceptList(tab[2 + j]);
+		// 		}
+		// 		else if (tab[2][i] == 'I')
+		// 		{
+		// 			if (tab.size() < 3 + j && plus)
+		// 			{
+		// 				server.send_reply(fd, C_RPL_INVITELIST, chan->getName(), ES, ES, ES);
+		// 				server.send_reply(fd, C_RPL_ENDOFINVITELIST, chan->getName(), ES, ES, ES);
+		// 			}
+		// 			else if (tab.size() < 3 + j && !plus)
+		// 			{
+		// 				server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+		// 			}
+		// 			else if (plus)
+		// 				chan->addInviteList(tab[2 + j]);
+		// 			else if (!plus)
+		// 				chan->removeInviteList(tab[2 + j]);
+		// 		}
+		// 		j++;
+		// 	}
+		// }
 		else if (type == 0)
 		{
 			std::string character(1, tab[2][i]);
