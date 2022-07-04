@@ -8,8 +8,8 @@ int		checkUserErrors(const std::vector<std::string> & split, int fd, Server& ser
 	if (split.size() < 5) //not enough arguments
 	{
 		server.send_reply(fd, 461, "USER", ES, ES, ES);
-		if (cur->isRegistered() == false)
-			server.deleteUserSocket(server.findPosSocket(fd));
+		// if (cur->isRegistered() == false)
+		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
 	if (cur->isRegistered()) //user is already registered

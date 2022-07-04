@@ -48,6 +48,12 @@
 # define ERR_USERNOTINCHANNEL(nick, channel) (nick + " " + channel + " :They aren't on that channel")
 # define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask")
 # define ERR_NOPRIVILEGES ":Permission Denied- You're not an IRC operator"
+# define ERR_UNKNOWNMODE(char, channel) (char + " :is unknown mode char to me for " + channel)
+# define ERR_USERONCHANNEL(user, channel) (user + " " + channel + " :is already on channel")
+# define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
+# define ERR_CHANNELISFULL(channel) (channel + " :Cannot join channel (+l)")
+# define ERR_BANNEDFROMCHAN(channel) ( channel + " :Cannot join channel (+b)")
+# define ERR_CANNOTSENDTOCHAN(channel) ( channel + " :Cannot send to channel")
 // void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 
 #endif

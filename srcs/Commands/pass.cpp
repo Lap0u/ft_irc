@@ -8,8 +8,8 @@ int		pass(const std::string &line, int fd, Server& server)
 	if (parsedLine.size() < 2)
 	{
 		server.send_reply(fd, 461, "PASS", ES, ES, ES);
-		if (cur->isRegistered() == false)
-			server.deleteUserSocket(server.findPosSocket(fd));
+		// if (cur->isRegistered() == false)
+		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;		
 	}
 	if (cur)
@@ -23,8 +23,8 @@ int		pass(const std::string &line, int fd, Server& server)
 	if (parsedLine[1] != server.getServerPassword())
 	{
 		DEB "Password " << parsedLine[1] << " was wrong" ENDL;
-		if (cur->isRegistered() == false)
-			server.deleteUserSocket(server.findPosSocket(fd));
+		// if (cur->isRegistered() == false)
+		// 	server.deleteUserSocket(server.findPosSocket(fd));
 		return 1;
 	}
 	DEB "Pass is matching" ENDL;
