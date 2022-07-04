@@ -20,6 +20,8 @@ int		topic(const std::string &line, int fd, Server& server)
     chan = server.findChannel(split[1]);
     if (chan == NULL)
         return 0;
+    if (chan->isSecret())//channel is hidden in topic command
+        return 0;
     if (chan->findClient(sender->getNick()) == NULL)
     {
         server.send_reply(fd, 442, split[1], ES, ES, ES);

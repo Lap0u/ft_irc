@@ -28,7 +28,8 @@ int     names(const std::string &line, int fd, Server& server)
         DEB chanList[i] ENDL;
         if ((chan = server.findChannel(chanList[i])) == NULL)
             continue;
-        
+        if (chan->isSecret()) //chan is hidden for the names command
+            continue;
         for (unsigned int i = 0; i < chan->getClientsSize(); i++)
             user_list += chan->getAClient(i)->getNick() + " ";
         server.send_reply(fd, N_RPL_NAMREPLY, chan->getName(), user_list, ES, ES);
