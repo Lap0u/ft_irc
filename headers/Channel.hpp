@@ -48,10 +48,13 @@ class Channel
     bool                        _keyed;
     bool                        _userLimited;
 
-
+    
     std::string             	_key;
     size_t						_user_limit;
     
+    std::string                 _chan_creator;
+    std::set<std::string>       _chanop;
+    std::set<std::string>       _voice_priv;
     std::set<std::string>       _whitelist;
     std::set<std::string>       _banlist;
     std::set<std::string>       _exceptlist;
