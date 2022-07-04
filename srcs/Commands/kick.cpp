@@ -7,10 +7,12 @@ void    kickOne(Server &server, User *& tokick, Channel *& channel, std::string 
     server.send_chan_message(tokick, "PART", channel->getName(), message);
     channel->partWithAClient(tokick->getNick());
 }
+
 int     oneChan(int fd, Server& server, std::string chan, std::string sender, std::vector<std::string> users, std::string message)
 {
     Channel     *cur_chan = server.findChannel(chan);
     User*       target = NULL;
+
     if (cur_chan == NULL)
     {
         server.send_reply(fd, 403, chan, ES, ES, ES);// ERR_NOSUCHCHANNEL
@@ -33,9 +35,11 @@ int     oneChan(int fd, Server& server, std::string chan, std::string sender, st
     }
     return 0;
 }
+
 int     check_each_error(int fd, Server& server, std::string chan, std::string sender, std::string user)
 {
-    Channel *cur_chan = server.findChannel(chan);
+    Channel     *cur_chan = server.findChannel(chan);
+    User        *target = NULL;
     if (cur_chan == NULL)
     {
         server.send_reply(fd, 403, chan, ES, ES, ES);// ERR_NOSUCHCHANNEL
@@ -46,7 +50,7 @@ int     check_each_error(int fd, Server& server, std::string chan, std::string s
         server.send_reply(fd, 442, chan, ES, ES, ES);// ERR_NOTONCHANNEL
         return 1;
     }
-    User *target = cur_chan->findClient(user);
+    target = cur_chan->findClient(user);
     if (target == NULL)
     {
         server.send_reply(fd, 441, user, chan, ES, ES);// ERR_USERNOTINCHANNEL
@@ -57,33 +61,36 @@ int     check_each_error(int fd, Server& server, std::string chan, std::string s
 
 int     kick(const std::string &line, int fd, Server& server)
 {
-    User *sender = server.findMatchingUser(fd);
-    User *target = NULL;
+    User        *sender = server.findMatchingUser(fd);
+    User        *target = NULL;
     std::string message;
+    std::vector<std::string>    channels;
+    Channel*                    cur_chan = NULL;
+    std::vector<std::string>    users;
 
     if (sender)
     {
         if (!sender->isRegistered())
             return 1;
     }
+
     std::vector<std::string>split = ft_split(line, ' ');
     if (split.size() < 3)
     {
         server.send_reply(fd, 461, "KICK", ES, ES, ES);//ERR_NEEDMOREPARAMS
         return 1;
     }
-	if (sender->getMode().find('o') == std::string::npos) // O
+	if (!sender->isOperator()) // O
 	{
 		server.send_reply(fd, 482, split[2], ES, ES, ES); //ERR_CHANOPRIVSNEEDED
 		return 1;
 	}
     for (size_t i = 2; i < split.size(); i++)
         message += split[i] + " ";
-
-    std::vector<std::string>    channels = ft_split(split[1], ',');
-    std::vector<std::string>    users = ft_split(split[2], ',');
-    Channel*                    cur_chan = NULL;
-
+        
+    channels = ft_split(split[1], ',');
+    users = ft_split(split[2], ',');
+    
     if (channels.size() != 1 && channels.size() != users.size())//ERR_BADCHANMASK
     {
         server.send_reply(fd, 476, split[1], ES, ES, ES);

@@ -42,6 +42,7 @@ public:
 	const std::string	getMode(void) const;
 	const std::string	getRealName(void) const;
 	bool				isRegistered(void) const;
+	bool				isRestricted(void) const;
 
 	void	setNick(std::string nick);
 	void	setSocket(int socket);

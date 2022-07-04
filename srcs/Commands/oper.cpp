@@ -2,8 +2,8 @@
 
 int checkError(int fd, Server &server, std::vector<std::string> word)
 {
-	Server::operMap cur_operators = server.getOperators();
-	Server::operMap::iterator it = cur_operators.find(word[1]);
+	Server::operMap				cur_operators = server.getOperators();
+	Server::operMap::iterator	it = cur_operators.find(word[1]);
 
 	if (word.size() != 3)
 	{
@@ -22,8 +22,8 @@ int checkError(int fd, Server &server, std::vector<std::string> word)
 
 int oper(const std::string &line, int fd, Server &server)
 {
-	std::vector<std::string> word = ft_split(line, ' ');
-	User* cur = server.findMatchingUser(fd);
+	std::vector<std::string>	word = ft_split(line, ' ');
+	User*						cur = server.findMatchingUser(fd);
     if (cur)
     {
         if (!cur->isRegistered())

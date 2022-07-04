@@ -128,8 +128,6 @@ void					Channel::addMode(std::string mode)
 {
 	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
-		// if (*it == 'o' && *it == 'O')
-			// continue ;
 		if (_mode.empty())
 			_mode = *it;
 		else if (_mode.find(*it) == std::string::npos)
@@ -151,12 +149,9 @@ void					Channel::delMode(std::string mode)
 
 int						Channel::joinChannel(User* const user, std::string const & key)
 {
-	for(std::set<std::string>::iterator it = _whitelist.begin(); it != _whitelist.end(); it++)
-		COUT *it ENDL;
-	COUT "ENDLIST" ENDL;
 	if (this->findClient(user->getNick()) != NULL)
 		return 1;
-	if (isInWhiteList(user->getNick()) || user->getMode().find("o") != std::string::npos)
+	if (isInWhiteList(user->getNick()) || user->isOperator())
 	{
 		_clients.push_back(user);
 		return 0;
@@ -171,11 +166,6 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 	{
 		return 5;
 	}
-	// if (isInExceptList(user->getNick()))
-	// {
-	// 	_clients.push_back(user);
-	// 	return 0;
-	// }
 	_clients.push_back(user);
 	return 0;
 }

@@ -32,12 +32,12 @@ int checkChannelError(std::vector<std::string> split, int fd, Server& server, Ch
 {
     size_t size = split.size();
 
-    if (channel == NULL)
+    if (channel == NULL)//chan doesn't exist
     {
         server.send_reply(fd, 401, split[1], ES, ES, ES);
         return 1;
     }
-    if (channel->getMode().find('m') != std::string::npos && sender->getMode().find("o") == std::string::npos)
+    if (channel->getMode().find('m') != std::string::npos && !sender->isOperator())//channel is moderated
     {
         server.send_reply(fd, 404, channel->getName(), ES, ES, ES);
         return 1;
@@ -62,24 +62,25 @@ int checkChannelError(std::vector<std::string> split, int fd, Server& server, Ch
 
 int		privateMessage(const std::string &line, int fd, Server& server)
 {
-    User *sender = server.findMatchingUser(fd);
+    User*                       sender = server.findMatchingUser(fd);
+    std::vector<std::string>    split = ft_split(line, ' ');
+    User*                       receiver = server.getUser(split[1]);
+    std::string                 chan_first = "#&+!";
+    std::string                 message;
+    Channel*                    channel;
+    DEB "Private message function" ENDL;
+
     if (sender)
     {
         if (!sender->isRegistered())
             return 1;
     }
 
-    std::vector<std::string>split = ft_split(line, ' ');
-    User *receiver = server.getUser(split[1]);
-    std::string chan_first = "#&+!";
-    std::string message;
-
     for (size_t i = 2; i < split.size(); i++)
         message += split[i] + " ";
     if (split.size() > 1 && chan_first.find(split[1][0]) != std::string::npos)
     {
-        Channel*    channel = server.findChannel(split[1]);
-
+        channel = server.findChannel(split[1]);
         if (checkChannelError(split, fd, server, channel, sender) == 1)
             return 1;
         server.send_chan_message(sender, "PRIVMSG", split[1], message);
@@ -89,7 +90,6 @@ int		privateMessage(const std::string &line, int fd, Server& server)
     if (checkError(split, fd, server, receiver) == 1)
         return 1;
     std::string paquet = ":" + sender->getNick() + "!" + server.getServerName() + "@localhost" + " " + line + "\r\n";
-    DEB "Private message function" ENDL;
     server.send_raw_message(receiver->getSocket(), paquet);
     return 0;
 }
