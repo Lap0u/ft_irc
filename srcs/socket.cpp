@@ -174,7 +174,7 @@ void    launch_serv(std::string port, std::string password)
 	std::string	separatedline;
 	int			fd;
 	
-	test_reply(1, server);
+	// test_reply(1, server);
 	while(1)
 	{
 		ret_poll = poll(server.getSocket(0), server.getSocketSize(), 15000);
@@ -204,8 +204,8 @@ void    launch_serv(std::string port, std::string password)
 				else
 				{
 					fd = server.getSocket(i)->fd;
-					cur = server.findMatchingUser(fd);
 				}
+				cur = server.findMatchingUser(fd);
 				recvline = server.getPackage(fd);
 				if (recvline.empty())
 					continue ;

@@ -3,9 +3,10 @@
 
 int		topic(const std::string &line, int fd, Server& server)
 {
-    std::vector<std::string>split = ft_split(line, ' ');
-    User *sender = server.findMatchingUser(fd);
-    
+    std::vector<std::string>    split = ft_split(line, ' ');
+    User                        *sender = server.findMatchingUser(fd);
+    Channel                     *chan;
+
     if (sender)
     {
         if (!sender->isRegistered())
@@ -16,7 +17,7 @@ int		topic(const std::string &line, int fd, Server& server)
         server.send_reply(fd, 461, "TOPIC", ES, ES, ES);
         return 1;
     }
-    Channel* chan = server.findChannel(split[1]);
+    chan = server.findChannel(split[1]);
     if (chan == NULL)
         return 0;
     if (chan->findClient(sender->getNick()) == NULL)
@@ -24,7 +25,7 @@ int		topic(const std::string &line, int fd, Server& server)
         server.send_reply(fd, 442, split[1], ES, ES, ES);
         return 1;
     }
-    if (chan->getMode().find("t") != std::string::npos && sender->getMode().find("o") == std::string::npos)
+    if (chan->topicSettableForChanOpOnly() == true && sender->isOperator() == false)
     {
         server.send_reply(fd, 482, chan->getName(), ES, ES, ES);
         return 1;

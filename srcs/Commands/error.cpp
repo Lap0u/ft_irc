@@ -8,6 +8,7 @@ int    error(const std::string &line, int fd, Server& server)
         if (!cur->isRegistered())
             return 1;
     }
+    
     if (line.find(" ") == std::string::npos)
         return 0;
     std::string message(line.begin() + line.find(" "), line.end());
