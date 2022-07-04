@@ -151,8 +151,6 @@ void					Channel::delMode(std::string mode)
 
 int						Channel::joinChannel(User* const user, std::string const & key)
 {
-	// (void)key;
-	// (void)user;
 	for(std::set<std::string>::iterator it = _whitelist.begin(); it != _whitelist.end(); it++)
 		COUT *it ENDL;
 	COUT "ENDLIST" ENDL;
@@ -173,11 +171,11 @@ int						Channel::joinChannel(User* const user, std::string const & key)
 	{
 		return 5;
 	}
-	if (isInExceptList(user->getNick()))
-	{
-		_clients.push_back(user);
-		return 0;
-	}
+	// if (isInExceptList(user->getNick()))
+	// {
+	// 	_clients.push_back(user);
+	// 	return 0;
+	// }
 	_clients.push_back(user);
 	return 0;
 }
