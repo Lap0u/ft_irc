@@ -200,3 +200,16 @@ void	User::removeModeChannel(Channel *chan, const char &mode)
 	if (it != _chan_and_modes.end())
 		_chan_and_modes[chan].erase(mode);
 }
+
+bool	User::isModeInChannel(Channel *chan, const char &mode)
+{
+	std::map<Channel*,std::set<char> >::iterator it;
+	it = _chan_and_modes.find(chan);
+	if (it != _chan_and_modes.end())
+	{
+		std::set<char>::iterator it2 = _chan_and_modes[chan].find(mode);
+		if (it2 != _chan_and_modes[chan].end())
+			return true;
+	}
+	return false;
+}

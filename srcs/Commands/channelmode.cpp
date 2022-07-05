@@ -265,9 +265,19 @@ int channel_mode(const std::string &line, int fd, Server &server)
 				else if ((user = chan->findClient(tab[2 + j])) == NULL)
 					server.send_reply(fd, C_ERR_USERNOTINCHANNEL, tab[2 + j], chan->getName(), ES, ES);
 				else if (plus)
+				{
 					user->addChanAndMode(chan, tab[2][i]);
+					COUT user->isModeInChannel(chan, 'v') ENDL;
+					COUT user->isModeInChannel(chan, 'o') ENDL;
+					COUT user->isModeInChannel(chan, 'O') ENDL;
+				}
 				else
+				{
 					user->removeModeChannel(chan, tab[2][i]);
+					COUT user->isModeInChannel(chan, 'v') ENDL;
+					COUT user->isModeInChannel(chan, 'o') ENDL;
+					COUT user->isModeInChannel(chan, 'O') ENDL;
+				}
 			}
 		}
 		else if (type == 0)

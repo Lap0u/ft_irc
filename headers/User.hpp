@@ -64,6 +64,7 @@ public:
 
 	void	addChanAndMode(Channel *chan, const char &mode);
 	void	removeModeChannel(Channel *chan, const char &mode);
+	bool	isModeInChannel(Channel *chan, const char &mode);
 
 	bool	operator==(User* user) const;
 
