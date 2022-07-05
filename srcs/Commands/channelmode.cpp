@@ -118,9 +118,9 @@ int check_type_of_mode(char const &mode)
 int channel_mode(const std::string &line, int fd, Server &server)
 {
 	COUT "CHANNEL MODE" ENDL;
-	std::vector<std::string> tab = ft_split(line, ' ');
-	// User*						cur = server.findMatchingUser(fd);
-	Channel *chan;
+	std::vector<std::string> 	tab = ft_split(line, ' ');
+	User*						cur = server.findMatchingUser(fd);
+	Channel*					chan;
 	if ((chan = server.findChannel(tab[1])) == NULL)
 	{
 		server.send_reply(fd, C_ERR_NOSUCHCHANNEL, tab[1], ES, ES, ES);
@@ -131,12 +131,11 @@ int channel_mode(const std::string &line, int fd, Server &server)
 		server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
 		return 1;
 	}
-	// if (cur->isChanOp() == false) // WRONG CONDITION : isChanOP() not good
-	// {
-	// 	server.send_reply(fd, C_ERR_CHANOPRIVSNEEDED, chan->getName(), ES, ES, ES);
-	// 	return 1;
-	// }
-	COUT line ENDL;
+	if (!cur->isOperator() && cur->isModeInChannel(chan, 'O') == false && cur->isModeInChannel(chan, 'o') == false)
+	{
+		server.send_reply(fd, C_ERR_CHANOPRIVSNEEDED, chan->getName(), ES, ES, ES);
+		return 1;
+	}
 	bool plus;
 	bool sign = false;
 	for (unsigned int i = 0, j = 1; i < tab[2].size(); i++)
