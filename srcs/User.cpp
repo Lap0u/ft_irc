@@ -126,12 +126,12 @@ void	User::delMode(char todel, bool isOperator)
 		{
 			if (todel == 'o')
 				setServOp(false);
-			_mode.erase(i);
+			_mode.erase(i, 1);
 		}
 		return ;
 	}
 	if (i != std::string::npos && todel == 'i')
-		_mode.erase(i);
+		_mode.erase(i, 1);
 }
 
 void	User::updateMode(char sign, char mode, bool isOperator)
@@ -203,3 +203,4 @@ bool	User::isModeInChannel(Channel *chan, const char &mode)
 	}
 	return false;
 }
+

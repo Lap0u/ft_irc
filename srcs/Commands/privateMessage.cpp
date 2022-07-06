@@ -37,7 +37,10 @@ int checkChannelError(std::vector<std::string> split, int fd, Server& server, Ch
 		server.send_reply(fd, 401, split[1], ES, ES, ES);
 		return 1;
 	}
-	if (channel->getMode().find('m') != std::string::npos && !sender->isOperator())//channel is moderated
+	if (channel->isModerated() && !sender->isOperator()
+		&& !sender->isModeInChannel(channel, 'o')
+		&& !sender->isModeInChannel(channel, 'O')
+		&& !sender->isModeInChannel(channel, 'v')) //channel is moderated
 	{
 		server.send_reply(fd, 404, channel->getName(), ES, ES, ES);
 		return 1;

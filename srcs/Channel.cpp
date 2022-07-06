@@ -140,7 +140,7 @@ void					Channel::delMode(std::string mode)
 			return ;
 		size_t pos = _mode.find(*it);
 		if (pos != std::string::npos)
-			_mode.erase(pos);
+			_mode.erase(pos, 1);
 	}
 }
 
@@ -248,6 +248,11 @@ bool					Channel::isInBanList(const std::string &nick) const
 	return true;
 }
 
+std::set<std::string>	Channel::getBanList() const
+{
+	return _banlist;
+}
+
 void					Channel::addExceptList(const std::string &nick)
 {
 	_exceptlist.insert(nick);
@@ -266,6 +271,11 @@ bool					Channel::isInExceptList(const std::string &nick) const
 	return true;
 }
 
+std::set<std::string>	Channel::getExceptList() const
+{
+	return _exceptlist;
+}
+
 void					Channel::addInviteList(const std::string &nick)
 {
 	_invitelist.insert(nick);
@@ -282,4 +292,9 @@ bool					Channel::isInInviteList(const std::string &nick) const
 	if (it == _invitelist.end())
 		return false;
 	return true;
+}
+
+std::set<std::string>	Channel::getInviteList() const
+{
+	return _invitelist;
 }

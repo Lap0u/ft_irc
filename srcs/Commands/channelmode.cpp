@@ -115,20 +115,31 @@ int check_type_of_mode(char const &mode)
 	return 0;
 }
 
+void sendList(int fd, Server& server,
+		Channel* chan, std::set<std::string> list, int reply)
+{
+	for (std::set<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
+	{
+		server.send_reply(fd, reply, chan->getName(), *it, ES, ES);
+	}
+	server.send_reply(fd, reply + 1, chan->getName(), ES, ES, ES);
+}
+
 int channel_mode(const std::string &line, int fd, Server &server)
 {
 	COUT "CHANNEL MODE" ENDL;
 	std::vector<std::string> 	tab = ft_split(line, ' ');
 	User*						cur = server.findMatchingUser(fd);
 	Channel*					chan;
+
+	if (tab.size() < 3)
+	{
+		// server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+		return 1;
+	}
 	if ((chan = server.findChannel(tab[1])) == NULL)
 	{
 		server.send_reply(fd, C_ERR_NOSUCHCHANNEL, tab[1], ES, ES, ES);
-		return 1;
-	}
-	if (tab.size() < 3)
-	{
-		server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
 		return 1;
 	}
 	if (!cur->isOperator() && cur->isModeInChannel(chan, 'O') == false && cur->isModeInChannel(chan, 'o') == false)
@@ -213,8 +224,7 @@ int channel_mode(const std::string &line, int fd, Server &server)
 				{
 					if (tab.size() < 3 + j && plus)
 					{
-						server.send_reply(fd, C_RPL_BANLIST, chan->getName(), ES, ES, ES);
-						server.send_reply(fd, C_RPL_ENDOFBANLIST, chan->getName(), ES, ES, ES);
+						sendList(fd, server, chan, chan->getBanList(), C_RPL_BANLIST);
 					}
 					else if (tab.size() < 3 + j && !plus)
 						server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
@@ -227,8 +237,7 @@ int channel_mode(const std::string &line, int fd, Server &server)
 				{
 					if (tab.size() < 3 + j && plus)
 					{
-						server.send_reply(fd, C_RPL_EXCEPTLIST, chan->getName(), ES, ES, ES);
-						server.send_reply(fd, C_RPL_ENDOFBANLIST, chan->getName(), ES, ES, ES);
+						sendList(fd, server, chan, chan->getExceptList(), C_RPL_EXCEPTLIST);
 					}
 					else if (tab.size() < 3 + j && !plus)
 						server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
@@ -241,8 +250,7 @@ int channel_mode(const std::string &line, int fd, Server &server)
 				{
 					if (tab.size() < 3 + j && plus)
 					{
-						server.send_reply(fd, C_RPL_INVITELIST, chan->getName(), ES, ES, ES);
-						server.send_reply(fd, C_RPL_ENDOFINVITELIST, chan->getName(), ES, ES, ES);
+						sendList(fd, server, chan, chan->getInviteList(), C_RPL_EXCEPTLIST);	
 					}
 					else if (tab.size() < 3 + j && !plus)
 						server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
@@ -275,6 +283,6 @@ int channel_mode(const std::string &line, int fd, Server &server)
 			server.send_reply(fd, C_ERR_UNKNOWNMODE, character, ES, ES, ES);
 		}
 	}
-	server.send_reply(fd, C_RPL_CHANNELMODEIS, chan->getMode(), ES, ES, ES);
+	server.send_reply(fd, C_RPL_CHANNELMODEIS, chan->getName(), chan->getMode(), ES, ES);
 	return 0;
 }

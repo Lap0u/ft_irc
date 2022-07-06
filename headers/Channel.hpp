@@ -101,14 +101,17 @@ class Channel
     void                        addBanList(std::string const &nick);
     void                        removeBanList(std::string const &nick);
     bool                        isInBanList(const std::string &nick) const;
+    std::set<std::string>       getBanList() const;
 
     void                        addExceptList(std::string const &nick);
     void                        removeExceptList(std::string const &nick);
     bool                        isInExceptList(const std::string &nick) const;
+    std::set<std::string>       getExceptList() const;
 
     void                        addInviteList(std::string const &nick);
     void                        removeInviteList(std::string const &nick);
     bool                        isInInviteList(const std::string &nick) const;
+    std::set<std::string>       getInviteList() const;
 
     int                         joinChannel(User* const user, std::string const & key = ES);
     User*                       findClient(std::string const client);
