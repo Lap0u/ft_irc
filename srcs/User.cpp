@@ -181,24 +181,12 @@ void	User::eraseCommand()
 
 void	User::addChanAndMode(Channel *chan, const char &mode)
 {
-	std::map<Channel*,std::set<char> >::iterator it;
-	it = _chan_and_modes.find(chan);
-	if (it != _chan_and_modes.end())
-	{
-		_chan_and_modes[chan].insert(mode);
-		return;
-	}
-	std::set<char> modes;
-	modes.insert(mode);
-	_chan_and_modes.insert(std::pair<Channel*, std::set<char> >(chan, modes));
+	_chan_and_modes[chan].insert(mode);
 }
 
 void	User::removeModeChannel(Channel *chan, const char &mode)
 {
-	std::map<Channel*,std::set<char> >::iterator it;
-	it = _chan_and_modes.find(chan);
-	if (it != _chan_and_modes.end())
-		_chan_and_modes[chan].erase(mode);
+	_chan_and_modes[chan].erase(mode);
 }
 
 bool	User::isModeInChannel(Channel *chan, const char &mode)
