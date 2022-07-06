@@ -10,9 +10,5 @@ void	Server::parseCmd(std::string line, int fd)
 	if (it != _commands.end())
 		it->second(line, fd, *this);
 	else
-	{
-		// if (findMatchingUser(fd)->isRegistered() == false)
-		// 	deleteUserSocket(findPosSocket(fd));
 		DEB "Command not found" ENDL;
-	}
 }

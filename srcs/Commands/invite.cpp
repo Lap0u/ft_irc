@@ -44,11 +44,8 @@ int     invite(const std::string &line, int fd, Server& server)
 	User*						invited;
 	std::string					message;
 
-	if (cur)
-	{
-		if (!cur->isRegistered())
-			return 1;
-	}
+	if (cur && !cur->isRegistered())
+		return 1;
 
 	if (checkError(fd, server, word, cur))
 		return 1;

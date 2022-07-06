@@ -12,6 +12,7 @@ class Channel;
 class User
 {
 protected:
+
 	bool									_serv_op;
 	bool									_chan_op;
 	int										_socket;
@@ -23,6 +24,7 @@ protected:
 	std::string								_mode;
 	bool									_registered;
 	std::map <Channel*, std::set<char> >	_chan_and_modes;
+  bool								_passOK;
 
 	
 	
@@ -62,6 +64,8 @@ public:
 	std::string	getCommand() const;
 	void	eraseCommand();
 
+	void	setPassOK(void);
+	bool	getPassOK() const;
 	void	addChanAndMode(Channel *chan, const char &mode);
 	void	removeModeChannel(Channel *chan, const char &mode);
 	bool	isModeInChannel(Channel *chan, const char &mode);
