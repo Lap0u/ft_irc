@@ -64,7 +64,7 @@ int		privateMessage(const std::string &line, int fd, Server& server)
 {
     User*                       sender = server.findMatchingUser(fd);
     std::vector<std::string>    split = ft_split(line, ' ');
-    User*                       receiver = server.getUser(split[1]);
+    User*                       receiver;
     std::string                 chan_first = "#&+!";
     std::string                 message;
     Channel*                    channel;
@@ -89,6 +89,7 @@ int		privateMessage(const std::string &line, int fd, Server& server)
 
     if (checkError(split, fd, server, receiver) == 1)
         return 1;
+    receiver = server.getUser(split[1]);
     std::string paquet = ":" + sender->getNick() + "!" + server.getServerName() + "@localhost" + " " + line + "\r\n";
     server.send_raw_message(receiver->getSocket(), paquet);
     return 0;
