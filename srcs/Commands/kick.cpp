@@ -8,9 +8,9 @@ void    kickOne(Server &server, User *& tokick, Channel *& channel, std::string 
 	channel->partWithAClient(tokick->getNick());
 }
 
-int     oneChan(int fd, Server& server, std::string chan, std::string sender, std::vector<std::string> users, std::string message)
+int     oneChan(int fd, Server& server, std::string chan, User* sender, std::vector<std::string> users, std::string message)
 {
-	Channel     *cur_chan = server.findChannel(chan);
+	Channel*	cur_chan = server.findChannel(chan);
 	User*       target = NULL;
 
 	if (cur_chan == NULL)
@@ -18,7 +18,7 @@ int     oneChan(int fd, Server& server, std::string chan, std::string sender, st
 		server.send_reply(fd, 403, chan, ES, ES, ES);// ERR_NOSUCHCHANNEL
 		return 1;
 	}
-	if (cur_chan->findClient(sender) == NULL)
+	if (cur_chan->findClient(sender->getNick()) == NULL)
 	{
 		server.send_reply(fd, 442, chan, ES, ES, ES);// ERR_NOTONCHANNEL
 		return 1;
@@ -32,20 +32,28 @@ int     oneChan(int fd, Server& server, std::string chan, std::string sender, st
 			continue;
 		}
 		kickOne(server, target, cur_chan, message);
+		if (!sender->isOperator()
+			&& !sender->isModeInChannel(cur_chan, 'o')
+			&& !sender->isModeInChannel(cur_chan, 'O'))
+		{
+			server.send_reply(fd, 482, "cur_channel", ES, ES, ES); //ERR_CHANOPRIVSNEEDED
+			return 1;
+		}
 	}
 	return 0;
 }
 
-int     check_each_error(int fd, Server& server, std::string chan, std::string sender, std::string user)
+int     check_each_error(int fd, Server& server, std::string chan, User* sender, std::string user)
 {
-	Channel     *cur_chan = server.findChannel(chan);
-	User        *target = NULL;
+	Channel*	cur_chan = server.findChannel(chan);
+	User*		target = NULL;
+
 	if (cur_chan == NULL)
 	{
 		server.send_reply(fd, 403, chan, ES, ES, ES);// ERR_NOSUCHCHANNEL
 		return 1;
 	}
-	if (cur_chan->findClient(sender) == NULL)
+	if (cur_chan->findClient(sender->getNick()) == NULL)
 	{
 		server.send_reply(fd, 442, chan, ES, ES, ES);// ERR_NOTONCHANNEL
 		return 1;
@@ -56,6 +64,13 @@ int     check_each_error(int fd, Server& server, std::string chan, std::string s
 		server.send_reply(fd, 441, user, chan, ES, ES);// ERR_USERNOTINCHANNEL
 		return 1;
 	}
+	if (!sender->isOperator()
+		&& !sender->isModeInChannel(cur_chan, 'o')
+		&& !sender->isModeInChannel(cur_chan, 'O'))
+		{
+			server.send_reply(fd, 482, "cur_channel", ES, ES, ES); //ERR_CHANOPRIVSNEEDED
+			return 1;
+		}
 	return 0;
 }
 
@@ -77,11 +92,6 @@ int     kick(const std::string &line, int fd, Server& server)
 		server.send_reply(fd, 461, "KICK", ES, ES, ES);//ERR_NEEDMOREPARAMS
 		return 1;
 	}
-	if (!sender->isOperator()) // O
-	{
-		server.send_reply(fd, 482, split[2], ES, ES, ES); //ERR_CHANOPRIVSNEEDED
-		return 1;
-	}
 	for (size_t i = 2; i < split.size(); i++)
 		message += split[i] + " ";
 		
@@ -94,10 +104,10 @@ int     kick(const std::string &line, int fd, Server& server)
 		return 1;
 	}
 	if (channels.size() == 1)
-		return oneChan(fd, server, channels[0], sender->getNick(), users, message);
+		return oneChan(fd, server, channels[0], sender, users, message);
 	for (size_t i = 0; i < channels.size(); i++)
 	{
-		if (check_each_error(fd, server, channels[i], sender->getNick(), users[i]) == 1)
+		if (check_each_error(fd, server, channels[i], sender, users[i]) == 1)
 			continue;
 		cur_chan = server.findChannel(channels[i]);
 		target = server.getUser(users[i]);
