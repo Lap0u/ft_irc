@@ -125,6 +125,113 @@ void sendList(int fd, Server& server,
 	server.send_reply(fd, reply + 1, chan->getName(), ES, ES, ES);
 }
 
+void	userModeList(int fd, Server& server,
+		Channel* chan, char& mode, 
+		std::vector<std::string>& tab, size_t j, bool plus)
+{
+	std::set<std::string>	list;
+	int						reply;
+
+	DEB "usermodelist" ENDL;
+	if (mode == 'b')
+	{
+		reply = C_RPL_BANLIST;
+		list = chan->getBanList();
+	}
+	else if (mode == 'e')
+	{
+		reply = C_RPL_EXCEPTLIST;
+		list = chan->getExceptList();
+	}
+	else if (mode == 'I')
+	{
+		reply = C_RPL_INVITELIST;
+		list = chan->getInviteList();
+	}
+
+	if (tab.size() < 3 + j && plus)
+	{
+		sendList(fd, server, chan, list, reply);
+	}
+	else if (tab.size() < 3 + j && !plus)
+		server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+	else if (plus)
+	{
+		if (reply == C_RPL_BANLIST)
+			chan->addBanList(tab[2 + j]);
+		else if (reply == C_RPL_EXCEPTLIST)
+			chan->addExceptList(tab[2 + j]);
+		else if (reply == C_RPL_INVITELIST)
+			chan->addInviteList(tab[2 + j]);
+	}
+	else if (!plus)
+	{
+		if (reply == C_RPL_BANLIST)
+			chan->removeBanList(tab[2 + j]);
+		else if (reply == C_RPL_EXCEPTLIST)
+			chan->removeExceptList(tab[2 + j]);
+		else if (reply == C_RPL_INVITELIST)
+			chan->removeInviteList(tab[2 + j]);
+	}
+}
+
+void	keyMode(int fd, Server& server,
+			Channel* chan, std::vector<std::string>& tab,
+			size_t j, bool plus)
+{
+	if (plus)
+	{
+		if (chan->getKey() == tab[2 + j])
+		{
+			server.send_reply(fd, C_ERR_KEY_SET, chan->getName(), ES, ES, ES);
+		}
+		else
+		{
+			chan->isKeyed() = true;
+			chan->setKey(tab[2 + j]);
+			chan->addMode(KEY);
+		}
+	}
+	else
+	{
+		chan->isKeyed() = false;
+		chan->setKey(ES);
+		chan->delMode(KEY);
+	}
+}
+
+void	limitMode(std::vector<std::string>& tab,
+			Channel* chan, size_t j, bool plus)
+{
+	if (plus)
+	{
+		chan->isUserLimited() = true;
+		chan->setUserLimit(strtol(tab[2 + j].c_str(), NULL, 10));
+		chan->addMode(USER_LIMIT);
+	}
+	else
+	{
+		chan->isUserLimited() = false;
+		chan->setUserLimit(0);
+		chan->delMode(USER_LIMIT);
+	}
+}
+
+void	operatorsAndVoiceMode(int fd, Server& server,
+			std::vector<std::string>& tab,
+			Channel* chan, size_t j, bool plus, char &mode)
+{
+	User *user;
+	if (tab.size() < 3 + j)
+		server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+	else if ((user = chan->findClient(tab[2 + j])) == NULL)
+		server.send_reply(fd, C_ERR_USERNOTINCHANNEL, tab[2 + j], chan->getName(), ES, ES);
+	else if (plus)
+		user->addChanAndMode(chan, mode);
+	else
+		user->removeModeChannel(chan, mode);
+}
+
 int channel_mode(const std::string &line, int fd, Server &server)
 {
 	COUT "CHANNEL MODE" ENDL;
@@ -133,10 +240,7 @@ int channel_mode(const std::string &line, int fd, Server &server)
 	Channel*					chan;
 
 	if (tab.size() < 3)
-	{
-		// server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
 		return 1;
-	}
 	if ((chan = server.findChannel(tab[1])) == NULL)
 	{
 		server.send_reply(fd, C_ERR_NOSUCHCHANNEL, tab[1], ES, ES, ES);
@@ -148,134 +252,42 @@ int channel_mode(const std::string &line, int fd, Server &server)
 		return 1;
 	}
 	bool plus;
-	bool sign = false;
+	if (tab[2][0] != '+' && tab[2][0] != '-')
+		return 1;
 	for (unsigned int i = 0, j = 1; i < tab[2].size(); i++)
 	{
 		if (tab[2][i] == '+' || tab[2][i] == '-')
 		{
-			sign = true;
 			plus = tab[2][i] == '+' ? true : false;
 			continue;
 		}
 		int type = check_type_of_mode(tab[2][i]);
 		if (type == 1)
 		{
-			if (sign)
-			{
-				if (plus)
-					add_flag(chan, tab[2][i]);
-				else
-					delete_flag(chan, tab[2][i]);
-			}
+			if (plus)
+				add_flag(chan, tab[2][i]);
+			else
+				delete_flag(chan, tab[2][i]);
 		}
 		else if (type == 2)
 		{
-			if (sign)
-			{
-				if (tab.size() < 3 + j && plus)
-				{
-					server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
-				}
-				else if (tab[2][i] == 'k')
-				{
-					if (plus)
-					{
-						if (chan->getKey() == tab[2 + j])
-						{
-							server.send_reply(fd, C_ERR_KEY_SET, chan->getName(), ES, ES, ES);
-						}
-						else
-						{
-							chan->isKeyed() = true;
-							chan->setKey(tab[2 + j]);
-							chan->addMode(KEY);
-						}
-					}
-					else
-					{
-						chan->isKeyed() = false;
-						chan->setKey(ES);
-						chan->delMode(KEY);
-					}
-				}
-				else if (tab[2][i] == 'l')
-				{
-					if (plus)
-					{
-						chan->isUserLimited() = true;
-						chan->setUserLimit(strtol(tab[2 + j].c_str(), NULL, 10));
-						chan->addMode(USER_LIMIT);
-					}
-					else
-					{
-						chan->isUserLimited() = false;
-						chan->setUserLimit(0);
-						chan->delMode(USER_LIMIT);
-					}
-				}
-				j++;
-			}
+			if (tab.size() < 3 + j && plus)
+				server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
+			else if (tab[2][i] == 'k')
+				keyMode(fd, server, chan, tab, j, plus);
+			else if (tab[2][i] == 'l')
+				limitMode(tab, chan, j, plus);
+			j++;
 		}
 		else if (type == 3)
 		{
-			if (sign)
-			{
-				if (tab[2][i] == 'b')
-				{
-					if (tab.size() < 3 + j && plus)
-					{
-						sendList(fd, server, chan, chan->getBanList(), C_RPL_BANLIST);
-					}
-					else if (tab.size() < 3 + j && !plus)
-						server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
-					else if (plus)
-						chan->addBanList(tab[2 + j]);
-					else if (!plus)
-						chan->removeBanList(tab[2 + j]);
-				}
-				if (tab[2][i] == 'e')
-				{
-					if (tab.size() < 3 + j && plus)
-					{
-						sendList(fd, server, chan, chan->getExceptList(), C_RPL_EXCEPTLIST);
-					}
-					else if (tab.size() < 3 + j && !plus)
-						server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
-					else if (plus)
-						chan->addExceptList(tab[2 + j]);
-					else if (!plus)
-						chan->removeExceptList(tab[2 + j]);
-				}
-				else if (tab[2][i] == 'I')
-				{
-					if (tab.size() < 3 + j && plus)
-					{
-						sendList(fd, server, chan, chan->getInviteList(), C_RPL_EXCEPTLIST);	
-					}
-					else if (tab.size() < 3 + j && !plus)
-						server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
-					else if (plus)
-						chan->addInviteList(tab[2 + j]);
-					else if (!plus)
-						chan->removeInviteList(tab[2 + j]);
-				}
-				j++;
-			}
+			userModeList(fd, server, chan, tab[2][i], tab, j, plus);
+			j++;
 		}
 		else if (type == 4)
 		{
-			if (sign)
-			{
-				User *user;
-				if (tab.size() < 3 + j)
-					server.send_reply(fd, C_ERR_NEEDMOREPARAMS, "MODE", ES, ES, ES);
-				else if ((user = chan->findClient(tab[2 + j])) == NULL)
-					server.send_reply(fd, C_ERR_USERNOTINCHANNEL, tab[2 + j], chan->getName(), ES, ES);
-				else if (plus)
-					user->addChanAndMode(chan, tab[2][i]);
-				else
-					user->removeModeChannel(chan, tab[2][i]);
-			}
+			operatorsAndVoiceMode(fd, server, tab, chan, j, plus, tab[2][i]);
+			j++;
 		}
 		else if (type == 0)
 		{
