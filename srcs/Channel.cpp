@@ -147,18 +147,26 @@ void					Channel::delMode(std::string mode)
 int						Channel::joinChannel(User* const user, std::string const & key)
 {
 	if (this->findClient(user->getNick()) != NULL)
+	{
 		return 1;
+	}
 	if (isInWhiteList(user->getNick()) || user->isOperator())
 	{
 		_clients.push_back(user);
 		return 0;
 	}
 	if (this->isKeyed() && this->getKey() != key)
+	{
 		return 2;
+	}
 	if (this->isUserLimited() && this->getClientsSize() + 1 > this->getUserLimit())
+	{
 		return 3;
+	}
 	if (this->isInviteOnly() && !isInInviteList(user->getNick()))
+	{
 		return 4;
+	}
 	if (isInBanList(user->getNick()) && !isInExceptList(user->getNick()))
 	{
 		return 5;

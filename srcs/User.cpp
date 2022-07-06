@@ -180,6 +180,7 @@ void	User::eraseCommand()
 {
 	_buffer.erase(0, _buffer.find("\r\n") + 2);
 }
+
 void	User::setPassOK(void)
 {
 	_passOK = true;
@@ -187,4 +188,39 @@ void	User::setPassOK(void)
 bool	User::getPassOK() const
 {
 	return _passOK;
+}
+
+void	User::addChanAndMode(Channel *chan, const char &mode)
+{
+	std::map<Channel*,std::set<char> >::iterator it;
+	it = _chan_and_modes.find(chan);
+	if (it != _chan_and_modes.end())
+	{
+		_chan_and_modes[chan].insert(mode);
+		return;
+	}
+	std::set<char> modes;
+	modes.insert(mode);
+	_chan_and_modes.insert(std::pair<Channel*, std::set<char> >(chan, modes));
+}
+
+void	User::removeModeChannel(Channel *chan, const char &mode)
+{
+	std::map<Channel*,std::set<char> >::iterator it;
+	it = _chan_and_modes.find(chan);
+	if (it != _chan_and_modes.end())
+		_chan_and_modes[chan].erase(mode);
+}
+
+bool	User::isModeInChannel(Channel *chan, const char &mode)
+{
+	std::map<Channel*,std::set<char> >::iterator it;
+	it = _chan_and_modes.find(chan);
+	if (it != _chan_and_modes.end())
+	{
+		std::set<char>::iterator it2 = _chan_and_modes[chan].find(mode);
+		if (it2 != _chan_and_modes[chan].end())
+			return true;
+	}
+	return false;
 }

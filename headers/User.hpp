@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <set>
 #include "Irc.hpp"
 
 class Channel;
@@ -11,18 +12,19 @@ class Channel;
 class User
 {
 protected:
-	bool								_serv_op;
-	bool								_chan_op;
-	int									_socket;
-	std::string							_buffer;
-	std::string							_nick;
-	std::string							_user_name;
-	std::string							_real_name;
-	std::string							_pass;
-	std::string							_mode;
-	bool								_registered;
-	std::map <Channel*, std::string>	_chan_and_modes;
-	bool								_passOK;
+
+	bool									_serv_op;
+	bool									_chan_op;
+	int										_socket;
+	std::string								_buffer;
+	std::string								_nick;
+	std::string								_user_name;
+	std::string								_real_name;
+	std::string								_pass;
+	std::string								_mode;
+	bool									_registered;
+	std::map <Channel*, std::set<char> >	_chan_and_modes;
+  bool								_passOK;
 
 	
 	
@@ -64,6 +66,9 @@ public:
 
 	void	setPassOK(void);
 	bool	getPassOK() const;
+	void	addChanAndMode(Channel *chan, const char &mode);
+	void	removeModeChannel(Channel *chan, const char &mode);
+	bool	isModeInChannel(Channel *chan, const char &mode);
 
 	bool	operator==(User* user) const;
 
