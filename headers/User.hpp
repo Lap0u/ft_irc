@@ -22,6 +22,7 @@ protected:
 	std::string							_mode;
 	bool								_registered;
 	std::map <Channel*, std::string>	_chan_and_modes;
+	bool								_passOK;
 
 	
 	
@@ -60,6 +61,9 @@ public:
 	bool	containsCommand() const;
 	std::string	getCommand() const;
 	void	eraseCommand();
+
+	void	setPassOK(void);
+	bool	getPassOK() const;
 
 	bool	operator==(User* user) const;
 

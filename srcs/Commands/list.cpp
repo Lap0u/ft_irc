@@ -8,12 +8,8 @@ int		list(const std::string &line, int fd, Server& server)
     User*                       user = server.findMatchingUser(fd);
     std::vector<std::string>    all_chans;
 
-    if (user)
-    {
-        if (!user->isRegistered())
-            return 1;
-    }
-
+    if (user && !user->isRegistered())
+        return 1;
     if (split.size() <= 1)
     {
         server.listChannel(fd);

@@ -3,14 +3,16 @@
 
 User::User( void ) : _socket(0), _nick(ES),
 	_user_name(ES), _real_name("Server"),
-	_pass(ES), _mode(ES) , _registered(false)
+	_pass(ES), _mode(ES) , _registered(false),
+	_passOK(false)
 {
 	DEB  "Construct User " ENDL;
 }
 User::User( int socket, std::string nick, std::string user_name,
 		std::string pass, std::string mode)
 		: _socket(socket), _buffer(ES), _nick(nick), _user_name(user_name),
-			_real_name("Server"), _pass(pass), _mode(mode) , _registered(false)
+			_real_name("Server"), _pass(pass), _mode(mode),
+			_registered(false), _passOK(false)
 			{
 				if (DEBUG == 2)
 					COUT "Construct User " << this->_nick ENDL;
@@ -177,4 +179,12 @@ std::string User::getCommand() const
 void	User::eraseCommand()
 {
 	_buffer.erase(0, _buffer.find("\r\n") + 2);
+}
+void	User::setPassOK(void)
+{
+	_passOK = true;
+}
+bool	User::getPassOK() const
+{
+	return _passOK;
 }
