@@ -3,14 +3,16 @@
 
 User::User( void ) : _socket(0), _nick(ES),
 	_user_name(ES), _real_name("Server"),
-	_pass(ES), _mode(ES) , _registered(false)
+	_pass(ES), _mode(ES) , _registered(false),
+	_passOK(false)
 {
 	DEB  "Construct User " ENDL;
 }
 User::User( int socket, std::string nick, std::string user_name,
 		std::string pass, std::string mode)
 		: _socket(socket), _buffer(ES), _nick(nick), _user_name(user_name),
-			_real_name("Server"), _pass(pass), _mode(mode) , _registered(false)
+			_real_name("Server"), _pass(pass), _mode(mode),
+			_registered(false), _passOK(false)
 			{
 				if (DEBUG == 2)
 					COUT "Construct User " << this->_nick ENDL;
@@ -24,11 +26,6 @@ User::~User( void )
 bool    User::isOperator(void) const
 {
 	return _serv_op;
-}
-
-bool    User::isChanOp(void) const
-{
-	return _chan_op;
 }
 
 int		User::getSocket(void) const
@@ -103,50 +100,46 @@ void	User::setChanOp(bool status)
 	_chan_op = status;
 }
 
-void	User::addMode(std::string mode)
+void	User::addMode(char toadd, bool isOperator)
 {
-	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
+	if (isOperator)
 	{
-		if (*it == 'o' && !isOperator())
-			continue ;
-		if (*it == 'O' && !isChanOp())
-			continue ;
-		if (*it == 'a')
-			continue ;
-		if (_mode.empty())
-			_mode = *it;
-		else if (_mode.find(*it) == std::string::npos)
-			_mode += *it;
-	}
-}
-
-void	User::delMode(std::string mode)
-{
-	
-	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
-	{
-		if (_mode.empty())
-			return ;
-		if (*it == 'a' && *it != 'r')
-			continue ;
-		size_t pos = _mode.find(*it);
-		if (pos != std::string::npos)
+		if (_mode.find(toadd) == std::string::npos)
 		{
-			if (*it == 'o')
-				setServOp(false);
-			else if (*it == 'O')
-				setChanOp(false);
-			_mode.erase(pos, 1);
+			if (toadd == 'o')
+				setServOp(true);
+			_mode += toadd;
 		}
+		return ;
 	}
+	if (_mode.find(toadd) == std::string::npos &&
+			(toadd == 'r' || toadd == 'i'))
+		_mode += toadd;
 }
 
-void	User::updateMode(std::string mode, char op)
+void	User::delMode(char todel, bool isOperator)
 {
-	if (op == '+')
-		addMode(mode);
+	size_t i = _mode.find(todel);
+	if (isOperator)
+	{
+		if (i != std::string::npos)
+		{
+			if (todel == 'o')
+				setServOp(false);
+			_mode.erase(i);
+		}
+		return ;
+	}
+	if (i != std::string::npos && todel == 'i')
+		_mode.erase(i);
+}
+
+void	User::updateMode(char sign, char mode, bool isOperator)
+{
+	if (sign == '+')
+		addMode(mode, isOperator);
 	else
-		delMode(mode);
+		delMode(mode, isOperator);
 }
 
 bool	User::operator==(User* user) const
@@ -177,6 +170,15 @@ std::string User::getCommand() const
 void	User::eraseCommand()
 {
 	_buffer.erase(0, _buffer.find("\r\n") + 2);
+}
+
+void	User::setPassOK(void)
+{
+	_passOK = true;
+}
+bool	User::getPassOK() const
+{
+	return _passOK;
 }
 
 void	User::addChanAndMode(Channel *chan, const char &mode)

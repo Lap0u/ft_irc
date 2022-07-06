@@ -19,7 +19,6 @@ SRC			=	main.cpp \
 				srcs/Server/ServerParser.cpp \
 				srcs/Server/ServerUtils.cpp \
 				srcs/Server/ServerChannel.cpp \
-				srcs/Message.cpp \
 				srcs/Commands.cpp \
 				srcs/MessageBuilder.cpp \
 				srcs/Commands/cap.cpp \
@@ -42,7 +41,7 @@ SRC			=	main.cpp \
 				srcs/Commands/kick.cpp \
 				srcs/Commands/topic.cpp \
 				srcs/Commands/list.cpp \
-				srcs/Channel.cpp \
+				srcs/Channel.cpp
 				
 
 OBJ			=	$(SRC:%.cpp=%.o)

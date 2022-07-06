@@ -101,13 +101,10 @@ int     join(const std::string &line, int fd, Server& server)
     std::vector<std::string>	tab = ft_split(line, ' ');
 	User*						cur = server.findMatchingUser(fd);
 
-    if (cur)
-    {
-        if (!cur->isRegistered())
-            return 1;
-    }
+    if (cur && !cur->isRegistered())
+		return 1;
 
-	COUT "join == " << line ENDL;
+	DEB "join == " << line ENDL;
     if (tab.size() == 1)
 	{
 		return not_enough_parameters(fd, server);

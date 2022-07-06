@@ -33,8 +33,12 @@ int	checkNickRestricted(User *newUser)
 int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 {
 	User* cur = server.findMatchingUser(fd);
+
 	if (!cur)
+	{
+		DEB "not exists" ENDL;
 		return 1;
+	}
 	if (size < 2)//nick not provided
 	{
 		server.send_reply(fd, 431, ES, ES, ES, ES);
@@ -65,6 +69,11 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 		DEB "anonymous is a protected nick" ENDL;
 		return 1;
 	}
+	if (cur->getPassOK() == false)
+	{
+		DEB "Pass not set yet" ENDL;
+		return 1;
+	}
 	cur->setNick(nick);
 	if (!cur->getUserName().empty())
 	{
@@ -77,6 +86,7 @@ int		checkNickErrors(const std::string &nick, int fd, Server& server, int size)
 			cur->setRegister();
 		}
 	}
+
 	return 0;
 }
 

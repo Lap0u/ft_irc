@@ -149,7 +149,6 @@ void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::st
 
 void    Server::send_chan_message(User *&sender, std::string cmd, std::string chan, std::string message) const
 {
-    (void)sender;
     std::string     reply;
     Channel*        curr_chan = findChannel(chan);
     size_t          users = findChannel(chan)->getClientsSize();

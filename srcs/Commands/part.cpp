@@ -15,11 +15,8 @@ int     part(const std::string &line, int fd, Server& server)
 	std::string						message;
 	std::vector<std::string>		chanList;
 
-	if (client)
-    {
-        if (!client->isRegistered())
-            return 1;
-    }
+	if (client && !client->isRegistered())
+        return 1;
 
 	if (splited.size() == 1)
 	{

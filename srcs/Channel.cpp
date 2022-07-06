@@ -13,9 +13,6 @@ Channel::Channel(std::string name, std::string key) :
 		this->isKeyed() = true;
 		this->addMode(KEY);
 	}
-	//Simulate mode
-	_mode = "i";
-	_user_limit = 2; // A VIRER PLUS TARD
 }
 
 Channel::~Channel()
