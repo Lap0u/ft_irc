@@ -28,11 +28,6 @@ bool    User::isOperator(void) const
 	return _serv_op;
 }
 
-bool    User::isChanOp(void) const
-{
-	return _chan_op;
-}
-
 int		User::getSocket(void) const
 {
 	return _socket;
@@ -105,50 +100,46 @@ void	User::setChanOp(bool status)
 	_chan_op = status;
 }
 
-void	User::addMode(std::string mode)
+void	User::addMode(char toadd, bool isOperator)
 {
-	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
+	if (isOperator)
 	{
-		if (*it == 'o' && !isOperator())
-			continue ;
-		if (*it == 'O' && !isChanOp())
-			continue ;
-		if (*it == 'a')
-			continue ;
-		if (_mode.empty())
-			_mode = *it;
-		else if (_mode.find(*it) == std::string::npos)
-			_mode += *it;
-	}
-}
-
-void	User::delMode(std::string mode)
-{
-	
-	for (std::string::iterator it = mode.begin(); it != mode.end(); ++it)
-	{
-		if (_mode.empty())
-			return ;
-		if (*it == 'a' && *it != 'r')
-			continue ;
-		size_t pos = _mode.find(*it);
-		if (pos != std::string::npos)
+		if (_mode.find(toadd) == std::string::npos)
 		{
-			if (*it == 'o')
-				setServOp(false);
-			else if (*it == 'O')
-				setChanOp(false);
-			_mode.erase(pos, 1);
+			if (toadd == 'o')
+				setServOp(true);
+			_mode += toadd;
 		}
+		return ;
 	}
+	if (_mode.find(toadd) == std::string::npos &&
+			(toadd == 'r' || toadd == 'i'))
+		_mode += toadd;
 }
 
-void	User::updateMode(std::string mode, char op)
+void	User::delMode(char todel, bool isOperator)
 {
-	if (op == '+')
-		addMode(mode);
+	size_t i = _mode.find(todel);
+	if (isOperator)
+	{
+		if (i != std::string::npos)
+		{
+			if (todel == 'o')
+				setServOp(false);
+			_mode.erase(i);
+		}
+		return ;
+	}
+	if (i != std::string::npos && todel == 'i')
+		_mode.erase(i);
+}
+
+void	User::updateMode(char sign, char mode, bool isOperator)
+{
+	if (sign == '+')
+		addMode(mode, isOperator);
 	else
-		delMode(mode);
+		delMode(mode, isOperator);
 }
 
 bool	User::operator==(User* user) const

@@ -26,7 +26,6 @@
 # define MAXLINE 4096
 # define SA struct sockaddr
 # define OP_PASS "oppass"
-# define USER_MODE "aiwroOs"
 # define CHANNEL_MODE "OovaimnqpsrtklbeI"
 # define NICK_CHAR "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[]\\`_^{|}"
 # define NICK_LAST_CHAR "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[]\\`_^{|}1234567890-"
