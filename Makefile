@@ -41,7 +41,7 @@ SRC			=	main.cpp \
 				srcs/Commands/kick.cpp \
 				srcs/Commands/topic.cpp \
 				srcs/Commands/list.cpp \
-				srcs/Channel.cpp \
+				srcs/Channel.cpp
 				
 
 OBJ			=	$(SRC:%.cpp=%.o)
