@@ -239,6 +239,7 @@ int channel_mode(const std::string &line, int fd, Server &server)
 	User*						cur = server.findMatchingUser(fd);
 	Channel*					chan;
 	int							type;
+	bool						plus;
 
 	if (tab.size() < 3)
 		return 1;
