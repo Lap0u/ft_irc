@@ -3,11 +3,17 @@
 int		checkUserErrors(const std::vector<std::string> & split, int fd, Server& server)
 {
 	User	*cur = server.findMatchingUser(fd);
+
 	if (cur == NULL)
 		return 1;
 	if (split.size() < 5) //not enough arguments
 	{
 		server.send_reply(fd, 461, "USER", ES, ES, ES);
+		return 1;
+	}
+	if (cur->getPassOK() == false)
+	{
+		DEB "Pass not set yet" ENDL;
 		return 1;
 	}
 	if (cur->isRegistered()) //user is already registered

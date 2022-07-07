@@ -29,12 +29,13 @@ bool    	Server::isUserUnique(const std::string &nick) const
 void		Server::addUser(int fd)
 {
 	User *user = new User();
+
 	user->setSocket(fd);
 	if (fd == _main_socket)
 	{
+		user->setPass("Server");
 		user->setNick("Server");
 		user->setUserName("Server");
-		user->setPass("Server");
 	}
 	_user_tab.push_back(user);
 }
@@ -75,9 +76,8 @@ User*		Server::findMatchingUser(int socket) const
 t_pollfd	Server::findMatchingSocket(std::string user) const
 {
 	userVector::const_iterator	it = _user_tab.begin();
-	int							i = 0;
 
-	for (; it != _user_tab.end(); it++, i++)
+	for (int i = 0; it != _user_tab.end(); it++, i++)
 	{
 		if ((*it)->getNick() == user)
 			return _socket_tab[i];
@@ -118,7 +118,7 @@ std::string	Server::getPackage(int fd)
 	}
 	if (n == 0)
 	{
-		CERR "Socket close by client" ENDL;
+		DEB "Socket close by client" ENDL;
 		if (findMatchingUser(fd))
 			deleteUserSocket(findPosSocket(fd));
 		close(fd);

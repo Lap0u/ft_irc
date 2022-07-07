@@ -4,24 +4,27 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <set>
 #include "Irc.hpp"
+# define USER_MODE "iroO"
 
 class Channel;
 
 class User
 {
 protected:
-	bool								_serv_op;
-	bool								_chan_op;
-	int									_socket;
-	std::string							_buffer;
-	std::string							_nick;
-	std::string							_user_name;
-	std::string							_real_name;
-	std::string							_pass;
-	std::string							_mode;
-	bool								_registered;
-	std::map <Channel*, std::string>	_chan_and_modes;	
+	bool									_serv_op;
+	bool									_chan_op;
+	int										_socket;
+	std::string								_buffer;
+	std::string								_nick;
+	std::string								_user_name;
+	std::string								_real_name;
+	std::string								_pass;
+	std::string								_mode;
+	bool									_registered;
+	std::map <Channel*, std::set<char> >	_chan_and_modes;
+	bool									_passOK;
 	
 public:
 	User( void );
@@ -31,7 +34,6 @@ public:
 		std::string pass, std::string mode);
 
 	bool    isOperator(void) const; // isServOp()
-	bool    isChanOp(void) const;
 
 	int					getSocket(void) const;
 	const std::string	getNick(void) const;
@@ -47,9 +49,9 @@ public:
 	void	setUserName(std::string user);
 	void	setRealName(std::string user);
 	void	setPass(std::string pass);
-	void	updateMode(std::string mode, char op);
-	void	addMode(std::string mode);
-	void	delMode(std::string mode);
+	void	updateMode(char sign, char mode, bool isOperator);
+	void	addMode(char mode, bool isOperator);
+	void	delMode(char mode, bool isOperator);
 	void	setRegister(void);
 	void	setServOp(bool status);
 	void	setChanOp(bool status);
@@ -58,6 +60,12 @@ public:
 	bool		containsCommand() const;
 	std::string	getCommand() const;
 	void		eraseCommand();
+
+	void	setPassOK(void);
+	bool	getPassOK() const;
+	void	addChanAndMode(Channel *chan, const char &mode);
+	void	removeModeChannel(Channel *chan, const char &mode);
+	bool	isModeInChannel(Channel *chan, const char &mode);
 
 	bool	operator==(User* user) const;
 

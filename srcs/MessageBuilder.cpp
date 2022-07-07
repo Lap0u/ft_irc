@@ -35,16 +35,32 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return RPL_LIST(arg1, arg2, arg3);
         case 323:
             return RPL_LISTEND;
+        case 324:
+            return RPL_CHANNELMODEIS(arg1, arg2, arg3);
+        case 325:
+            return RPL_UNIQOPIS(arg1, arg2);
         case 331:
             return RPL_NOTOPIC(arg1);
         case 332:
             return RPL_TOPIC(arg1, arg2);
         case 341:
             return RPL_INVITING(arg1, arg2);
+        case 346 :
+            return RPL_INVITELIST(arg1, arg2);
+        case 347 :
+            return RPL_ENDOFINVITELIST(arg1);
+        case 348 :
+            return RPL_EXCEPTLIST(arg1, arg2);
+        case 349 :
+            return RPL_ENDOFEXCEPTLIST(arg1);
         case 353:
             return RPL_NAMREPLY(arg1, arg2);
         case 366:
             return RPL_ENDOFNAMES(arg1);
+        case 367 :
+            return RPL_BANLIST(arg1, arg2);
+        case 368 :
+            return RPL_ENDOFBANLIST(arg1);
         case 381:
             return RPL_YOUREOPER;
         case 401:
@@ -81,6 +97,8 @@ std::string    find_reply(int code, std::string arg1, std::string arg2, std::str
             return ERR_ALREADYREGISTRED;
         case 464:
             return ERR_PASSWDMISMATCH;
+        case 467:
+            return ERR_KEYSET(arg1);
         case 471:
             return ERR_CHANNELISFULL(arg1);
         case 472:
@@ -126,7 +144,6 @@ void    Server::send_reply(int fd, int code, std::string arg1, std::string arg2,
     else
         str_code = temp;
     std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + user + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n";
-    // std::string message = ":" + user + "!" + getServerName() + "@localhost " + str_code + " " + user + " " + find_reply(code, arg1, arg2, arg3, arg4) + "\r\n"; //used for debug!!
     DEB "fd : " << fd << " ->reply sent " << message ENDL;
     if (send(fd, message.c_str(), message.length(), 0) < 0)
     // if (write(fd, message.c_str(), message.length()) < 0) //used for debug!!
@@ -149,7 +166,6 @@ void    Server::send_reply_no_header(int fd, int code, std::string arg1, std::st
 
 void    Server::send_chan_message(User *&sender, std::string cmd, std::string chan, std::string message) const
 {
-    (void)sender;
     std::string     reply;
     Channel*        curr_chan = findChannel(chan);
     size_t          users = findChannel(chan)->getClientsSize();

@@ -7,19 +7,14 @@
 
 int     names(const std::string &line, int fd, Server& server)
 {
-    std::vector<std::string>    splited = ft_split(line, ' ');
-    std::string                 user_list;
-    User*                       cur = server.findMatchingUser(fd);
-    std::vector<std::string>    chanList;
-    Channel*                    chan;
+	std::vector<std::string>    splited = ft_split(line, ' ');
+	std::string                 user_list;
+	User*                       cur = server.findMatchingUser(fd);
+	std::vector<std::string>    chanList;
+	Channel*                    chan;
 
-
-    if (cur)
-    {
-        if (!cur->isRegistered())
-            return 1;
-    }
-    
+	if (cur && !cur->isRegistered())
+		return 1;    
     if (splited.size() == 1)
         return 1;
     chanList = ft_split(splited[1], ',');

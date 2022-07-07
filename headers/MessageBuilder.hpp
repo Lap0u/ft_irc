@@ -54,6 +54,15 @@
 # define ERR_CHANNELISFULL(channel) (channel + " :Cannot join channel (+l)")
 # define ERR_BANNEDFROMCHAN(channel) ( channel + " :Cannot join channel (+b)")
 # define ERR_CANNOTSENDTOCHAN(channel) ( channel + " :Cannot send to channel")
-// void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 
+# define RPL_UNIQOPIS(channel, nickname) (channel + " " + nickname)
+# define ERR_KEYSET(channel) ( channel + " :Channel key already set")
+# define RPL_INVITELIST(channel, list) (channel + " " + list)
+# define RPL_ENDOFINVITELIST(channel) (channel + " :End of channel invite list")
+# define RPL_EXCEPTLIST(channel, list) (channel + " " + list)
+# define RPL_ENDOFEXCEPTLIST(channel) (channel + " :End of channel exception list")
+# define RPL_BANLIST(channel, list) (channel + " " + list)
+# define RPL_ENDOFBANLIST(channel) (channel + " :End of channel ban list")
+# define RPL_CHANNELMODEIS(channel, mode, mode_params) (channel + " " + mode + " " + mode_params)
+// void    send_reply(int fd, int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 #endif

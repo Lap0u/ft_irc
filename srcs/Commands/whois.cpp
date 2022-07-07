@@ -13,27 +13,24 @@
 
 int    whois(const std::string &line, int fd, Server& server)
 {
-    DEB "pointer whois" ENDL;
-    std::vector<std::string>    tab = ft_split(line, " ,");
-    User*                       cur = server.findMatchingUser(fd);
-    User*                       target;
-    if (cur)
-    {
-        if (!cur->isRegistered())
-            return 1;
-    }
-    if (tab.size() == 1)
-    {
-        server.send_reply(fd, WI_ERR_NONICKNAMEGIVEN, ES, ES, ES, ES);
-        return 1;
-    }
-    for (unsigned int i = 1; i < tab.size(); i++)
-    {
-        target = server.getUser(tab[i]);
-        if (target == NULL || target->getMode().find('i') != std::string::npos)
-            server.send_reply(fd, WI_ERR_NOSUCHNICK, tab[i], ES, ES, ES);
-        else
-        {
+	DEB "pointer whois" ENDL;
+	std::vector<std::string>    tab = ft_split(line, " ,");
+	User*                       cur = server.findMatchingUser(fd);
+	User*                       target;
+	if (cur && !cur->isRegistered())
+		return 1;
+	if (tab.size() == 1)
+	{
+		server.send_reply(fd, WI_ERR_NONICKNAMEGIVEN, ES, ES, ES, ES);
+		return 1;
+	}
+	for (unsigned int i = 1; i < tab.size(); i++)
+	{
+		target = server.getUser(tab[i]);
+		if (target == NULL || target->getMode().find('i') != std::string::npos)
+			server.send_reply(fd, WI_ERR_NOSUCHNICK, tab[i], ES, ES, ES);
+		else
+		{
 			server.send_reply(fd, WI_RPL_WHOISUSER, target->getNick(), target->getUserName(), server.getServerName(), target->getRealName());
 			server.send_reply(fd, WI_RPL_WHOISSERVER, target->getNick(), server.getServerName(), server.getServerInfos(), ES);
             if (target->isOperator())

@@ -29,11 +29,9 @@ int    kill(const std::string &line, int fd, Server& server)
 	std::string					cur_mode;
 	User*						target = NULL;
 	std::string					message;
-    if (cur)
-    {
-        if (!cur->isRegistered())
+
+    if (cur && !cur->isRegistered())
             return 1;
-    }
 	cur_mode = cur->getMode();
 	if (checkError(fd, server, word, cur_mode))
 		return 1;

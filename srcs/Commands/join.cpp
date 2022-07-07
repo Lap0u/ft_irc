@@ -31,7 +31,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	Channel*	chan = server.findChannel(chaname);
 	User*		user = server.findMatchingUser(fd);
 	int			joined = chan->joinChannel(user, key);
-	COUT "joined = " << joined ENDL;
+	DEB "joined = " << joined ENDL;
 
 	if (joined == 0)//join autorized
 	{
@@ -53,10 +53,20 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 int		ft_handle_two_tabs(std::vector<std::string> & tab1,
 			std::vector<std::string> const & tab2, int fd, Server& server)
 {
+	User *cur = server.findMatchingUser(fd);
 	for (unsigned int i = 0; i < tab1.size(); i++)
 	{
 		if (server.findChannel(tab1[i]) == NULL)
+		{
+			if (cur->isRestricted())
+			{
+				DEB "User is restricted and can't create server";
+				return 1;
+			}
 			server.addChannel(new Channel(tab1[i], tab2[i]));
+			Channel *chan = server.findChannel(tab1[i]);
+			cur->addChanAndMode(chan, 'O');
+		}
 		if (i < tab2.size())
 			joinChannel_and_send_replies(fd, server, tab1[i], tab2[i]);
 		else
@@ -65,8 +75,9 @@ int		ft_handle_two_tabs(std::vector<std::string> & tab1,
 	return 0;
 }
 
-int		ft_handle_one_tab(std::vector<std::string> & tab, int fd, Server& server, User *& cur)
+int		ft_handle_one_tab(std::vector<std::string> & tab, int fd, Server& server)
 {
+	User *cur = server.findMatchingUser(fd);
 	for (unsigned int i = 0; i < tab.size(); i++)
 	{
 		if (server.findChannel(tab[i]) == NULL)
@@ -77,6 +88,8 @@ int		ft_handle_one_tab(std::vector<std::string> & tab, int fd, Server& server, U
 				return 1;
 			}
 			server.addChannel(new Channel(tab[i]));
+			Channel *chan = server.findChannel(tab[i]);
+			cur->addChanAndMode(chan, 'O');
 		}
 		joinChannel_and_send_replies(fd, server, tab[i], ES);
 	}
@@ -88,13 +101,10 @@ int     join(const std::string &line, int fd, Server& server)
     std::vector<std::string>	tab = ft_split(line, ' ');
 	User*						cur = server.findMatchingUser(fd);
 
-    if (cur)
-    {
-        if (!cur->isRegistered())
-            return 1;
-    }
+    if (cur && !cur->isRegistered())
+		return 1;
 
-	COUT "join == " << line ENDL;
+	DEB "join == " << line ENDL;
     if (tab.size() == 1)
 	{
 		return not_enough_parameters(fd, server);
@@ -102,7 +112,7 @@ int     join(const std::string &line, int fd, Server& server)
 	std::vector<std::string> tab1 = ft_split(tab[1].data(), ',');
 	if (tab.size() == 2)
 	{
-		return ft_handle_one_tab(tab1, fd, server, cur);
+		return ft_handle_one_tab(tab1, fd, server);
 	}
 	if (tab.size() == 3)
 	{
