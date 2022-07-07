@@ -253,7 +253,6 @@ int channel_mode(const std::string &line, int fd, Server &server)
 		server.send_reply(fd, C_ERR_CHANOPRIVSNEEDED, chan->getName(), ES, ES, ES);
 		return 1;
 	}
-	bool plus;
 	if (tab[2][0] != '+' && tab[2][0] != '-')
 		return 1;
 	for (unsigned int i = 0, j = 1; i < tab[2].size(); i++)
