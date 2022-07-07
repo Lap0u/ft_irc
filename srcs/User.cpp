@@ -175,7 +175,7 @@ void	User::eraseCommand()
 std::string	User::getChannelList() const
 {
 	std::string list;
-	for (std::map <Channel*, std::string>::const_iterator it = _chan_and_modes.begin();
+	for (std::map <Channel*, std::set<char> >::const_iterator it = _chan_and_modes.begin();
 	it != _chan_and_modes.end(); it++)
 	{
 		if (!it->first->isPrivate() && !it->first->isSecret())//chan is not private nor secret
