@@ -31,7 +31,7 @@ void	joinChannel_and_send_replies(int fd, Server& server, std::string& chaname, 
 	Channel*	chan = server.findChannel(chaname);
 	User*		user = server.findMatchingUser(fd);
 	int			joined = chan->joinChannel(user, key);
-	COUT "joined = " << joined ENDL;
+	DEB "joined = " << joined ENDL;
 
 	if (joined == 0)//join autorized
 	{

@@ -234,10 +234,11 @@ void	operatorsAndVoiceMode(int fd, Server& server,
 
 int channel_mode(const std::string &line, int fd, Server &server)
 {
-	COUT "CHANNEL MODE" ENDL;
+	DEB "CHANNEL MODE" ENDL;
 	std::vector<std::string> 	tab = ft_split(line, ' ');
 	User*						cur = server.findMatchingUser(fd);
 	Channel*					chan;
+	int							type;
 
 	if (tab.size() < 3)
 		return 1;
@@ -261,7 +262,7 @@ int channel_mode(const std::string &line, int fd, Server &server)
 			plus = tab[2][i] == '+' ? true : false;
 			continue;
 		}
-		int type = check_type_of_mode(tab[2][i]);
+		type = check_type_of_mode(tab[2][i]);
 		if (type == 1)
 		{
 			if (plus)

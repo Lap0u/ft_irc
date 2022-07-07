@@ -118,7 +118,7 @@ std::string	Server::getPackage(int fd)
 	}
 	if (n == 0)
 	{
-		CERR "Socket close by client" ENDL;
+		DEB "Socket close by client" ENDL;
 		if (findMatchingUser(fd))
 			deleteUserSocket(findPosSocket(fd));
 		close(fd);
