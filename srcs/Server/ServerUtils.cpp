@@ -120,7 +120,11 @@ std::string	Server::getPackage(int fd)
 	{
 		DEB "Socket close by client" ENDL;
 		if (findMatchingUser(fd))
+		{
+			deleteUserQuittingChannel(findMatchingUser(fd));
 			deleteUserSocket(findPosSocket(fd));
+		}
+		// quit("QUIT socket closed", fd, *this);
 		close(fd);
 		return (ES);
 	}

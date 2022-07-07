@@ -224,7 +224,7 @@ void    launch_serv(std::string port, std::string password)
 		if (ret_poll == -1)
 		{
 			perror("poll");
-			exit (1); // need a clean exit closing all fds
+			exit (1);
 		}
 		else if (ret_poll == 0)
 			continue ;
@@ -263,5 +263,4 @@ void    launch_serv(std::string port, std::string password)
 			}
 		}
 	}
-	// close(temp_fd);//
 }

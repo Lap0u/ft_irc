@@ -87,9 +87,9 @@ void	privateMessage(const std::string &line, int fd, Server& server)
         return ;
     }
 
+    receiver = server.getUser(split[1]);
     if (checkError(split, fd, server, receiver) == 1)
         return ;
-    receiver = server.getUser(split[1]);
     std::string paquet = ":" + sender->getNick() + "!" + server.getServerName() + "@localhost" + " " + line + "\r\n";
     server.send_raw_message(receiver->getSocket(), paquet);
 }
