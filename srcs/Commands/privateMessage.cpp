@@ -63,7 +63,7 @@ int checkChannelError(std::vector<std::string> split, int fd, Server& server, Ch
 	return 0;
 }
 
-int		privateMessage(const std::string &line, int fd, Server& server)
+void	privateMessage(const std::string &line, int fd, Server& server)
 {
     User*                       sender = server.findMatchingUser(fd);
     std::vector<std::string>    split = ft_split(line, ' ');
@@ -74,7 +74,7 @@ int		privateMessage(const std::string &line, int fd, Server& server)
     DEB "Private message function" ENDL;
 
 	if (sender && !sender->isRegistered())
-		return 1;
+		return ;
 
     for (size_t i = 2; i < split.size(); i++)
         message += split[i] + " ";
@@ -82,15 +82,14 @@ int		privateMessage(const std::string &line, int fd, Server& server)
     {
         channel = server.findChannel(split[1]);
         if (checkChannelError(split, fd, server, channel, sender) == 1)
-            return 1;
+            return ;
         server.send_chan_message(sender, "PRIVMSG", split[1], message);
-        return 0;
+        return ;
     }
 
     if (checkError(split, fd, server, receiver) == 1)
-        return 1;
+        return ;
     receiver = server.getUser(split[1]);
     std::string paquet = ":" + sender->getNick() + "!" + server.getServerName() + "@localhost" + " " + line + "\r\n";
     server.send_raw_message(receiver->getSocket(), paquet);
-    return 0;
 }

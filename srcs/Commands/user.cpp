@@ -24,7 +24,7 @@ int		checkUserErrors(const std::vector<std::string> & split, int fd, Server& ser
 	return 0;
 }
 
-int		user(const std::string &line, int fd, Server& server)
+void	user(const std::string &line, int fd, Server& server)
 {
 	std::vector<std::string>	split = ft_split(line, ' ');
 	std::string					real_name;
@@ -33,13 +33,13 @@ int		user(const std::string &line, int fd, Server& server)
 	DEB "Pointeur user fonction" ENDL;
 
 	if (checkUserErrors(split, fd, server) == 1)
-		return 1;
+		return ;
 	real_name = split[4];
 	real_name.erase(real_name.begin());
 
 	cur = server.findMatchingUser(fd);
 	if (cur == NULL)//user is not made to create a new user, just add infos during connection
-		return 0;
+		return ;
 	cur->setUserName(split[1]);
 	for (std::vector<std::string>::iterator it = split.begin() + 5; it != split.end(); it++)
 		real_name += " " + *it;
@@ -52,5 +52,4 @@ int		user(const std::string &line, int fd, Server& server)
 		server.send_reply(fd, 003, server.getDate(), ES, ES, ES);
 		server.send_reply(fd, 004, server.getServerName(), server.getVersion(), USER_MODE, CHANNEL_MODE);
 	}
-	return 0;
 }

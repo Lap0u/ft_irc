@@ -232,7 +232,7 @@ void	operatorsAndVoiceMode(int fd, Server& server,
 		user->removeModeChannel(chan, mode);
 }
 
-int channel_mode(const std::string &line, int fd, Server &server)
+void channel_mode(const std::string &line, int fd, Server &server)
 {
 	DEB "CHANNEL MODE" ENDL;
 	std::vector<std::string> 	tab = ft_split(line, ' ');
@@ -242,19 +242,19 @@ int channel_mode(const std::string &line, int fd, Server &server)
 	bool						plus;
 
 	if (tab.size() < 3)
-		return 1;
+		return ;
 	if ((chan = server.findChannel(tab[1])) == NULL)
 	{
 		server.send_reply(fd, C_ERR_NOSUCHCHANNEL, tab[1], ES, ES, ES);
-		return 1;
+		return ;
 	}
 	if (!cur->isOperator() && cur->isModeInChannel(chan, 'O') == false && cur->isModeInChannel(chan, 'o') == false)
 	{
 		server.send_reply(fd, C_ERR_CHANOPRIVSNEEDED, chan->getName(), ES, ES, ES);
-		return 1;
+		return ;
 	}
 	if (tab[2][0] != '+' && tab[2][0] != '-')
-		return 1;
+		return ;
 	for (unsigned int i = 0, j = 1; i < tab[2].size(); i++)
 	{
 		if (tab[2][i] == '+' || tab[2][i] == '-')
@@ -297,5 +297,4 @@ int channel_mode(const std::string &line, int fd, Server &server)
 		}
 	}
 	server.send_reply(fd, C_RPL_CHANNELMODEIS, chan->getName(), chan->getMode(), ES, ES);
-	return 0;
 }

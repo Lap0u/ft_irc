@@ -7,7 +7,7 @@
 
 #define P_ERR_NOTONCHANNEL 442
 
-int     part(const std::string &line, int fd, Server& server)
+void	part(const std::string &line, int fd, Server& server)
 {
     std::vector<std::string>		splited = ft_split(line, ' ');
 	User*							client = server.findMatchingUser(fd);
@@ -16,12 +16,12 @@ int     part(const std::string &line, int fd, Server& server)
 	std::vector<std::string>		chanList;
 
 	if (client && !client->isRegistered())
-        return 1;
+        return ;
 
 	if (splited.size() == 1)
 	{
 		server.send_reply(fd, P_ERR_NEEDMOREPARAMS, "part:", ES, ES, ES);
-		return 1;
+		return ;
 	}
 	if (splited.size() >= 2 && splited.size() <= 3)
 	{
@@ -46,5 +46,4 @@ int     part(const std::string &line, int fd, Server& server)
 			}
 		}
 	}
-    return 0;
 }

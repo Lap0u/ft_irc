@@ -22,7 +22,7 @@ int		checkError(int fd, Server& server,
 	return 0;
 }
 
-int    kill(const std::string &line, int fd, Server& server)
+void    kill(const std::string &line, int fd, Server& server)
 {
 	std::vector<std::string>	word = ft_split(line, ' ');
 	User*						cur = server.findMatchingUser(fd);
@@ -31,20 +31,19 @@ int    kill(const std::string &line, int fd, Server& server)
 	std::string					message;
 
     if (cur && !cur->isRegistered())
-            return 1;
+		return ;
 	cur_mode = cur->getMode();
 	if (checkError(fd, server, word, cur_mode))
-		return 1;
+		return ;
 	target = server.getUser(word[1]);
 	if (target->isOperator())
 	{
 		DEB "Server Operators can't be killed" ENDL;
-		return 1;
+		return ;
 	}
 	for (std::vector<std::string>::const_iterator it = word.begin() + 2; it != word.end(); it++)
 		message += *it + " ";
 	std::string newline("QUIT ");
 	newline += message;
 	quit(newline, target->getSocket(), server);
-	return 0;
 }

@@ -1,15 +1,15 @@
 #include "../../headers/Commands.hpp"
 
-int    error(const std::string &line, int fd, Server& server)
+void    error(const std::string &line, int fd, Server& server)
 {
 	User*   cur = server.findMatchingUser(fd);
 
 	if (cur && !cur->isRegistered())
-		return 1;	
+		return ;	
 	if (line.find(" ") == std::string::npos)
-		return 0;
+		return ;
 	std::string message(line.begin() + line.find(" "), line.end());
 	message += "\r\n";
 	server.send_raw_message(fd, message);
-	return 0;
+	return ;
 }

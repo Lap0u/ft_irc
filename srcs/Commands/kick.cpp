@@ -8,7 +8,7 @@ void    kickOne(Server &server, User *& tokick, Channel *& channel, std::string 
 	channel->partWithAClient(tokick->getNick());
 }
 
-int     oneChan(int fd, Server& server, std::string chan, User* sender, std::vector<std::string> users, std::string message)
+void     oneChan(int fd, Server& server, std::string chan, User* sender, std::vector<std::string> users, std::string message)
 {
 	Channel*	cur_chan = server.findChannel(chan);
 	User*       target = NULL;
@@ -16,12 +16,19 @@ int     oneChan(int fd, Server& server, std::string chan, User* sender, std::vec
 	if (cur_chan == NULL)
 	{
 		server.send_reply(fd, 403, chan, ES, ES, ES);// ERR_NOSUCHCHANNEL
-		return 1;
+		return ;
 	}
 	if (cur_chan->findClient(sender->getNick()) == NULL)
 	{
 		server.send_reply(fd, 442, chan, ES, ES, ES);// ERR_NOTONCHANNEL
-		return 1;
+		return ;
+	}
+	if (!sender->isOperator()
+		&& !sender->isModeInChannel(cur_chan, 'o')
+		&& !sender->isModeInChannel(cur_chan, 'O'))
+	{
+		server.send_reply(fd, 482, "cur_channel", ES, ES, ES); //ERR_CHANOPRIVSNEEDED
+		return ;
 	}
 	for (size_t i = 0; i < users.size(); i++)
 	{
@@ -32,15 +39,7 @@ int     oneChan(int fd, Server& server, std::string chan, User* sender, std::vec
 			continue;
 		}
 		kickOne(server, target, cur_chan, message);
-		if (!sender->isOperator()
-			&& !sender->isModeInChannel(cur_chan, 'o')
-			&& !sender->isModeInChannel(cur_chan, 'O'))
-		{
-			server.send_reply(fd, 482, "cur_channel", ES, ES, ES); //ERR_CHANOPRIVSNEEDED
-			return 1;
-		}
 	}
-	return 0;
 }
 
 int     check_each_error(int fd, Server& server, std::string chan, User* sender, std::string user)
@@ -67,14 +66,14 @@ int     check_each_error(int fd, Server& server, std::string chan, User* sender,
 	if (!sender->isOperator()
 		&& !sender->isModeInChannel(cur_chan, 'o')
 		&& !sender->isModeInChannel(cur_chan, 'O'))
-		{
-			server.send_reply(fd, 482, "cur_channel", ES, ES, ES); //ERR_CHANOPRIVSNEEDED
-			return 1;
-		}
+	{
+		server.send_reply(fd, 482, "cur_channel", ES, ES, ES); //ERR_CHANOPRIVSNEEDED
+		return 1;
+	}
 	return 0;
 }
 
-int     kick(const std::string &line, int fd, Server& server)
+void	kick(const std::string &line, int fd, Server& server)
 {
 	User*						sender = server.findMatchingUser(fd);
 	User*						target = NULL;
@@ -84,13 +83,13 @@ int     kick(const std::string &line, int fd, Server& server)
 	std::vector<std::string>	users;
 
 	if (sender && !sender->isRegistered())
-		return 1;
+		return ;
 
 	std::vector<std::string>split = ft_split(line, ' ');
 	if (split.size() < 3)
 	{
 		server.send_reply(fd, 461, "KICK", ES, ES, ES);//ERR_NEEDMOREPARAMS
-		return 1;
+		return ;
 	}
 	for (size_t i = 2; i < split.size(); i++)
 		message += split[i] + " ";
@@ -101,7 +100,7 @@ int     kick(const std::string &line, int fd, Server& server)
 	if (channels.size() != 1 && channels.size() != users.size())//ERR_BADCHANMASK
 	{
 		server.send_reply(fd, 476, split[1], ES, ES, ES);
-		return 1;
+		return ;
 	}
 	if (channels.size() == 1)
 		return oneChan(fd, server, channels[0], sender, users, message);
@@ -113,5 +112,5 @@ int     kick(const std::string &line, int fd, Server& server)
 		target = server.getUser(users[i]);
 		kickOne(server, target, cur_chan, message);
 	}
-	return 0;
+	return ;
 }

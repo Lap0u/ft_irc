@@ -28,21 +28,21 @@ int		checkErrors(int fd, Server& server, std::vector<std::string> word)
 	return 0;
 }
 
-int    mode(const std::string &line, int fd, Server& server)
+void	mode(const std::string &line, int fd, Server& server)
 {
 	std::vector<std::string>	word = ft_split(line, ' ');
 	User* 						cur = server.findMatchingUser(fd);
 
     if (cur && !cur->isRegistered())
-		return 1;
+		return ;
 
 	if (word.size() > 1 && server.check_first_char_channel(word[1]) == 0)
 		return (channel_mode(line, fd, server));
 	if (checkErrors(fd, server, word))
-		return (1);
+		return ;
 	User*	target = server.getUser(word[1]);
 
 	target->updateMode(word[2][0], word[2][1], cur->isOperator());
 	server.send_reply(target->getSocket(), 221, target->getMode(), ES, ES, ES); // RPL_UMODEIS
-    return 0;
+    return ;
 }

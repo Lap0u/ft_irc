@@ -20,19 +20,18 @@ int checkError(int fd, Server &server, std::vector<std::string> word)
 	return 0;
 }
 
-int oper(const std::string &line, int fd, Server &server)
+void oper(const std::string &line, int fd, Server &server)
 {
 	std::vector<std::string>	word = ft_split(line, ' ');
 	User*						cur = server.findMatchingUser(fd);
 
 	if (cur && !cur->isRegistered())
-        return 1;
+        return ;
 
 	if (checkError(fd, server, word))
-		return 1;
+		return ;
 	cur->setServOp(true);
 	server.send_reply(fd, 381, ES, ES, ES, ES); // RPL_YOUREOPER
 	std::string modeLine = "MODE " + cur->getNick() + " +o";
 	mode(modeLine, fd, server);
-	return 0;
 }
