@@ -13,7 +13,6 @@ class Channel;
 class User
 {
 protected:
-
 	bool									_serv_op;
 	bool									_chan_op;
 	int										_socket;
@@ -26,8 +25,6 @@ protected:
 	bool									_registered;
 	std::map <Channel*, std::set<char> >	_chan_and_modes;
 	bool									_passOK;
-
-	
 	
 public:
 	User( void );
@@ -59,10 +56,10 @@ public:
 	void	setServOp(bool status);
 	void	setChanOp(bool status);
 
-	void	addBuffer(std::string toadd);
-	bool	containsCommand() const;
+	void		addBuffer(std::string toadd);
+	bool		containsCommand() const;
 	std::string	getCommand() const;
-	void	eraseCommand();
+	void		eraseCommand();
 
 	void	setPassOK(void);
 	bool	getPassOK() const;
@@ -71,6 +68,8 @@ public:
 	bool	isModeInChannel(Channel *chan, const char &mode);
 
 	bool	operator==(User* user) const;
+
+	std::string	getChannelList() const;
 
 };
 

@@ -19,7 +19,7 @@ int		list(const std::string &line, int fd, Server& server)
     for (std::vector<std::string>::iterator it = all_chans.begin(); it != all_chans.end(); it++)
     {
         cur = server.findChannel(*it);
-        if (cur != NULL)
+        if (cur != NULL && !cur->isSecret()) //channel exists and is not secret
             server.send_reply(fd, 322, cur->getName(), "visible", cur->getTopic(), ES);
     }
     server.send_reply(fd, 323, ES, ES, ES, ES);
