@@ -278,7 +278,8 @@ void channel_mode(const std::string &line, int fd, Server &server)
 				keyMode(fd, server, chan, tab, j, plus);
 			else if (tab[2][i] == 'l')
 				limitMode(tab, chan, j, plus);
-			j++;
+			if (plus)
+				j++;
 		}
 		else if (type == 3)
 		{

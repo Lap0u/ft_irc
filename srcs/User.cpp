@@ -1,7 +1,7 @@
 #include "../headers/User.hpp"
 #include "../headers/Channel.hpp"
 
-User::User( void ) : _socket(0), _nick(ES),
+User::User( void ) : _serv_op(false), _chan_op(false), _socket(0), _nick(ES),
 	_user_name(ES), _real_name("Server"),
 	_pass(ES), _mode(ES) , _registered(false),
 	_passOK(false)

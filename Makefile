@@ -43,12 +43,18 @@ SRC			=	main.cpp \
 				srcs/Commands/list.cpp \
 				srcs/Channel.cpp
 				
+INC			= 	headers/Channel.hpp \
+				headers/Commands.hpp \
+				headers/Irc.hpp \
+				headers/MessageBuilder.hpp \
+				headers/Server.hpp \
+				headers/User.hpp
 
 OBJ			=	$(SRC:%.cpp=%.o)
 
 all:		$(NAME)
 
-$(NAME):	$(OBJ)
+$(NAME):	$(OBJ) $(INC)
 			$(CXX) $(CXXFLAGS) -MMD $(OBJ) -o $(NAME)
 
 clean:
