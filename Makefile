@@ -42,14 +42,6 @@ SRC			=	srcs/main.cpp \
 				srcs/Commands/topic.cpp \
 				srcs/Commands/list.cpp \
 				srcs/Channel.cpp
-				
-INC			= 	headers/Channel.hpp \
-				headers/Commands.hpp \
-				headers/Irc.hpp \
-				headers/MessageBuilder.hpp \
-				headers/Server.hpp \
-				headers/User.hpp
-
 
 DEP			=	$(SRC:.cpp=.d)
 
@@ -61,7 +53,7 @@ $(NAME):	$(OBJ)
 			$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 
-%.o: %.cpp
+%.o: 		%.cpp
 			$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
