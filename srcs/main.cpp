@@ -1,6 +1,6 @@
-#include "headers/Irc.hpp"
-#include "headers/Server.hpp"
-#include "headers/User.hpp"
+#include "../headers/Irc.hpp"
+#include "../headers/Server.hpp"
+#include "../headers/User.hpp"
 
 #include <sys/types.h>
 #include <sys/stat.h>

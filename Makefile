@@ -1,7 +1,7 @@
 NAME		=	ircserv
 
 CXX			=	c++
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g3
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g3 -MMD
 
 ifeq ($(D), 3)
 	CXXFLAGS += -D DEBUG=2
@@ -11,7 +11,7 @@ else ifeq ($(D), 1)
     CXXFLAGS += -fsanitize=address    
 endif
 
-SRC			=	main.cpp \
+SRC			=	srcs/main.cpp \
 				srcs/socket.cpp \
 				srcs/User.cpp \
 				srcs/Server/Server.cpp \
@@ -50,15 +50,23 @@ INC			= 	headers/Channel.hpp \
 				headers/Server.hpp \
 				headers/User.hpp
 
-OBJ			=	$(SRC:%.cpp=%.o)
+
+DEP			=	$(SRC:.cpp=.d)
+
+OBJ			=	$(DEP:.d=.o)
 
 all:		$(NAME)
 
-$(NAME):	$(OBJ) $(INC)
-			$(CXX) $(CXXFLAGS) -MMD $(OBJ) -o $(NAME)
+$(NAME):	$(OBJ)
+			$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
+
+
+%.o: %.cpp
+			$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 			rm -rf $(OBJ)
+			rm -rf $(DEP)
 
 fclean:		clean
 			rm -rf $(NAME)
@@ -67,5 +75,7 @@ re:			fclean all
 
 run:
 			make all && ./$(NAME)
+
+-include $(DEP)
 
 .PHONY:		all clean fclean re
